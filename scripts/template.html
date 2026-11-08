@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>매일 아침 피드</title>
-<meta name="description" content="AI·IT 소식과 주식·코인 시장을 초보 눈높이로 정리한 하루 3분 브리핑">
+<meta name="description" content="AI·IT, 주식·코인, 피부미용의료 소식을 쉽게 정리한 아침 브리핑">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="아침 피드">
 <meta name="theme-color" content="#f3f5f8" media="(prefers-color-scheme: light)">
@@ -15,7 +15,7 @@
 :root{
   --bg:#f3f5f8; --surface:#ffffff; --ink:#152033; --muted:#5a6678; --line:#dde3ec;
   --it:#1f5fd1; --it-soft:#e6eefc; --money:#b86a00; --money-soft:#fbf0de;
-  --up:#d1342f; --down:#1f5fd1;
+  --up:#d1342f; --down:#1f5fd1; --skin:#b0306a; --skin-soft:#fbe8f0;
   --display:"Do Hyeon","Apple SD Gothic Neo",sans-serif;
   --body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
   color-scheme:light;
@@ -23,7 +23,7 @@
 @media (prefers-color-scheme: dark){:root{
   --bg:#0f141c; --surface:#18202c; --ink:#e7ecf3; --muted:#9aa6b8; --line:#2a3443;
   --it:#7aa7ff; --it-soft:#1c2a44; --money:#f0b356; --money-soft:#33280f;
-  --up:#ff7a70; --down:#7aa7ff; color-scheme:dark}}
+  --up:#ff7a70; --down:#7aa7ff; --skin:#f58bb8; --skin-soft:#3a1a29; color-scheme:dark}}
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.65;
@@ -37,6 +37,14 @@ h2{font-family:var(--display);font-weight:400;font-size:1.4rem;margin:0 0 10px;d
 h2 .chip{font-family:var(--body);font-size:.72rem;padding:1px 8px;border-radius:999px;font-weight:500}
 .m .chip{background:var(--money-soft);color:var(--money)}
 .a .chip{background:var(--it-soft);color:var(--it)}
+.s .chip{background:var(--skin-soft);color:var(--skin)}
+h4{font-size:.85rem;color:var(--muted);font-weight:500;letter-spacing:.04em;margin:16px 0 8px}
+.s h4:first-of-type{margin-top:0}
+.jr{font-size:.72rem;color:var(--skin);font-weight:500;letter-spacing:.03em}
+.papers p.so{margin-top:6px}
+.basic{background:var(--skin-soft);border-radius:12px;padding:14px 16px}
+.basic b{font-size:1.05rem}
+.basic p{margin:4px 0 0}
 .tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 .tile{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-width:0}
 .tile .k{font-size:.75rem;color:var(--muted)}
@@ -74,7 +82,7 @@ a:focus-visible,summary:focus-visible{outline:2px solid var(--it);outline-offset
 <div class="wrap">
   %%home%%
   <header>
-    <div class="date">%%date%% · 3분 읽기</div>
+    <div class="date">%%date%% · 약 15분 읽기</div>
     <h1>%%headline%%</h1>
     <p class="lede">%%lede%%</p>
   </header>
@@ -95,6 +103,16 @@ a:focus-visible,summary:focus-visible{outline:2px solid var(--it);outline-offset
     <ol class="news">%%news%%</ol>
   </section>
 
+  <section class="s">
+    <h2>피부미용의료 <span class="chip">기술·논문</span></h2>
+    <h4>새 기술 · 기기 소식</h4>
+    %%skin_tech%%
+    <h4>이번 주 논문</h4>
+    %%skin_papers%%
+    <h4>기초 지식</h4>
+    <div class="basic"><b>%%skin_basic_name%%</b><p>%%skin_basic_explain%%</p></div>
+  </section>
+
   <details>
     <summary>출처 보기</summary>
     <ul>%%sources%%</ul>
@@ -105,7 +123,7 @@ a:focus-visible,summary:focus-visible{outline:2px solid var(--it);outline-offset
     <div class="arch">%%archive%%</div>
   </details>
 
-  <p class="small">공부용 요약이에요. 특정 종목이나 코인을 사고팔라는 추천이 아니에요. 숫자는 표시된 시점 기준이에요.</p>
+  <p class="small">공부용 요약이에요. 특정 종목·코인 매매나 특정 시술·제품을 권하는 내용이 아니에요. 숫자는 표시된 시점 기준이에요.</p>
   <p class="small">%%updated%% 업데이트 · %%mode%%</p>
 </div>
 </body>
