@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>매일 아침 피드</title>
+<meta name="description" content="AI·IT 소식과 주식·코인 시장을 초보 눈높이로 정리한 하루 3분 브리핑">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="아침 피드">
+<meta name="theme-color" content="#f3f5f8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f141c" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231f5fd1'/%3E%3Ctext x='32' y='44' font-size='34' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='700'%3E아%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=IBM+Plex+Sans+KR:wght@400;500;700&display=swap">
+<style>
+:root{
+  --bg:#f3f5f8; --surface:#ffffff; --ink:#152033; --muted:#5a6678; --line:#dde3ec;
+  --it:#1f5fd1; --it-soft:#e6eefc; --money:#b86a00; --money-soft:#fbf0de;
+  --up:#d1342f; --down:#1f5fd1;
+  --display:"Do Hyeon","Apple SD Gothic Neo",sans-serif;
+  --body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#0f141c; --surface:#18202c; --ink:#e7ecf3; --muted:#9aa6b8; --line:#2a3443;
+  --it:#7aa7ff; --it-soft:#1c2a44; --money:#f0b356; --money-soft:#33280f;
+  --up:#ff7a70; --down:#7aa7ff; color-scheme:dark}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.65;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-top:max(20px,env(safe-area-inset-top,0px));padding-bottom:max(40px,env(safe-area-inset-bottom,0px))}
+.wrap{max-width:600px;margin:0 auto;display:flex;flex-direction:column;gap:26px}
+.date{font-size:.8rem;letter-spacing:.06em;color:var(--muted);font-weight:500}
+h1{font-family:var(--display);font-weight:400;font-size:2rem;line-height:1.2;margin:2px 0 0;text-wrap:balance}
+.lede{margin:10px 0 0;font-size:1.02rem}
+h2{font-family:var(--display);font-weight:400;font-size:1.4rem;margin:0 0 10px;display:flex;align-items:center;gap:8px}
+h2 .chip{font-family:var(--body);font-size:.72rem;padding:1px 8px;border-radius:999px;font-weight:500}
+.m .chip{background:var(--money-soft);color:var(--money)}
+.a .chip{background:var(--it-soft);color:var(--it)}
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-width:0}
+.tile .k{font-size:.75rem;color:var(--muted)}
+.tile .v{font-weight:700;font-size:1.05rem;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tile .d{font-size:.78rem;font-variant-numeric:tabular-nums}
+.dn{color:var(--down)} .up{color:var(--up)}
+.tile .when{font-size:.68rem;color:var(--muted)}
+ul.why{margin:12px 0 0;padding-left:1.1em}
+ul.why li+li{margin-top:6px}
+.term{background:var(--money-soft);border-radius:12px;padding:14px 16px}
+.term b{font-size:1.05rem}
+.term p{margin:4px 0 0}
+ol.news{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+ol.news li{padding:14px 16px;border-top:1px solid var(--line)}
+ol.news li:first-child{border-top:0}
+ol.news h3{margin:0;font-size:1rem;line-height:1.45;text-wrap:balance}
+ol.news h3 a{color:var(--ink);text-decoration:none}
+ol.news h3 a::after{content:" ↗";color:var(--muted);font-weight:400}
+ol.news p{margin:4px 0 0;color:var(--muted);font-size:.92rem;overflow-wrap:anywhere}
+ol.news .so{color:var(--ink)}
+details{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 16px;font-size:.88rem}
+summary{cursor:pointer;font-weight:500}
+details ul{margin:8px 0 0;padding-left:1.1em}
+details a{color:var(--it);overflow-wrap:anywhere}
+.arch{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.arch a{color:var(--it);border:1px solid var(--line);border-radius:6px;padding:2px 8px;text-decoration:none;font-variant-numeric:tabular-nums}
+.home{color:var(--it);text-decoration:none;font-size:.9rem}
+.small{color:var(--muted);font-size:.8rem;margin:0}
+a:focus-visible,summary:focus-visible{outline:2px solid var(--it);outline-offset:2px}
+@media (max-width:380px){.tiles{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  
+  <header>
+    <div class="date">2026년 11월 8일 (일) · 3분 읽기</div>
+    <h1>오늘의 AI·IT와 시장 소식</h1>
+    <p class="lede">주요 숫자와 헤드라인을 모았어요. (AI 요약을 켜면 초보 눈높이 설명이 붙어요.)</p>
+  </header>
+
+  <section class="m">
+    <h2>시장 한눈에 <span class="chip">주식·코인</span></h2>
+    <div class="tiles"><div class="tile"><div class="k">코스피</div><div class="v">5,059.69</div><div class="d dn">▼ 6.02%</div><div class="when">11/6 기준</div></div><div class="tile"><div class="k">나스닥</div><div class="v">24,579</div><div class="d up">▲ 1.09%</div><div class="when">11/7 기준</div></div><div class="tile"><div class="k">비트코인</div><div class="v">$75,954</div><div class="d up">▲ 0.15%</div><div class="when">11/8 22시 (24시간)</div></div></div>
+    <ul class="why"><li><b>한국경제 증권:</b> &#x27;코스피 대탈출&#x27; 경고음…8조 던진 외국인 심상치 않다</li><li><b>한국경제 증권:</b> 티어니 르루 IDA 부문장 &quot;데이터센터 유치 前 산업기반부터 갖춰야&quot;</li><li><b>한국경제 증권:</b> &quot;이러다 전기 다 빨린다&quot;…국가전력 30% 먹는 &#x27;흡혈귀&#x27; 정체</li><li><b>한국경제 증권:</b> &#x27;反데이터센터&#x27;의 역습…AI 판 흔든다</li></ul>
+  </section>
+
+  <section class="term">
+    <b>오늘의 용어 · 인플레이션</b>
+    <p>물가가 계속 오르는 현상이에요. 같은 돈으로 살 수 있는 게 줄어든다는 뜻이에요.</p>
+  </section>
+
+  <section class="a">
+    <h2>AI · IT 소식 <span class="chip">IT</span></h2>
+    <ol class="news"><li><h3><a href="https://news.hada.io/topic?id=36811" target="_blank" rel="noopener">Show GN: Boxdawn guard - Claude Code가 위험한 명령을 실행하기 전에 판정하는 플러그인</a></h3><p>Claude Code가 Bash·PowerShell 명령을 실행하기 직전에 읽고, 위험한 명령은 거부하거나 확인을 받는 플러그인입니다. 나머지는 Claude Code 권한 설정에 그대로 맡깁니다. [기능] 프로젝트 밖 삭제·덮어쓰기, force push·reset --hard, DROP·WHERE 없는 DELETE, terraform destroy·kubectl delete 등을 거부하거나 …</p></li><li><h3><a href="https://news.hada.io/topic?id=36809" target="_blank" rel="noopener">GitHub, 또 장애인가?</a></h3><p>Linux 커널 은 Linux 운영체제의 핵심으로, 하드웨어와 시스템 자원을 관리하고 다른 소프트웨어에 기본 서비스를 제공함 저장소 README는 역할별 문서 안내 를 중심으로 신규 개발자, 연구자, 보안 전문가, 관리자 등이 필요한 자료를 찾도록 구성됨 개발과 유지보수 자료는 패치 제출과 검토 , 안정 버전 관리, 백포트, 드라이버 개발, 배포판 패키징까지 다룸 AI 코딩 도구 가 커널 개…</p></li><li><h3><a href="https://news.hada.io/topic?id=36807" target="_blank" rel="noopener">Meridian - Servo와 GPUI로 만든 실험적 웹 브라우저</a></h3><p>Meridian 은 macOS용 웹 브라우저로, 현재 JavaScript와 레이아웃 기능 사용이 적은 웹사이트를 탐색하는 데 유용한 수준임 글꼴, 단축키, 색상, 탭 등을 폭넓게 설정할 수 있으며, 세로 탭과 가로 탭을 모두 지원함 자동 완성 주소창, 북마크와 방문 기록 등 탐색 기능에 더해 읽기 모드, 탭 미리보기 를 지원함 Rust 로 작성됐으며, Servo가 웹페이지와 브라우저 상태를 …</p></li><li><h3><a href="https://news.hada.io/topic?id=36806" target="_blank" rel="noopener">Google, 와이오밍주 남동부의 Crusoe 데이터센터 부지 인수</a></h3><p>Google이 Crusoe의 와이오밍주 남동부 데이터센터 부지 를 인수하면서, Crusoe가 맡았던 해당 프로젝트의 사전 개발 업무가 완료됨 사전 개발 범위는 부지 선정, 정부 인허가, 전력 전략 으로, 향후 건설과 운영을 위한 기반을 마련함 Crusoe와 Tallgrass Energy 는 전력 인프라와 데이터센터 인프라를 공동 개발하며 캠퍼스 조성을 시작함 캠퍼스의 하이브리드 전력 전략 은…</p></li><li><h3><a href="https://news.hada.io/topic?id=36805" target="_blank" rel="noopener">Show GN: 라플라스의 가위 - LLM을 재학습하지 않고, 출력 가중치만 안전하게 수정.</a></h3><p>모델을 재학습하지 않고, 출력 가중치의 방향을 조절해서 답변을 바꿀 수 있게 도와줍니다. 기존 정답도 안전하게 유지합니다.</p></li></ol>
+  </section>
+
+  <details>
+    <summary>출처 보기</summary>
+    <ul><li><a href="https://www.hankyung.com/article/2026110833407" target="_blank" rel="noopener">한국경제 증권 · &#x27;코스피 대탈출&#x27; 경고음…8조 던진 외국인 심상치 않다</a></li><li><a href="https://www.hankyung.com/article/2026110832831" target="_blank" rel="noopener">한국경제 증권 · 티어니 르루 IDA 부문장 &quot;데이터센터 유치 前 산업기반부터 갖춰야&quot;</a></li><li><a href="https://www.hankyung.com/article/2026110832841" target="_blank" rel="noopener">한국경제 증권 · &quot;이러다 전기 다 빨린다&quot;…국가전력 30% 먹는 &#x27;흡혈귀&#x27; 정체</a></li><li><a href="https://www.hankyung.com/article/2026110833141" target="_blank" rel="noopener">한국경제 증권 · &#x27;反데이터센터&#x27;의 역습…AI 판 흔든다</a></li><li><a href="https://news.hada.io/topic?id=36811" target="_blank" rel="noopener">긱뉴스 · Show GN: Boxdawn guard - Claude Code가 위험</a></li><li><a href="https://news.hada.io/topic?id=36809" target="_blank" rel="noopener">긱뉴스 · GitHub, 또 장애인가?</a></li><li><a href="https://news.hada.io/topic?id=36807" target="_blank" rel="noopener">긱뉴스 · Meridian - Servo와 GPUI로 만든 실험적 웹 브라우저</a></li><li><a href="https://news.hada.io/topic?id=36806" target="_blank" rel="noopener">긱뉴스 · Google, 와이오밍주 남동부의 Crusoe 데이터센터 부지 인수</a></li><li><a href="https://news.hada.io/topic?id=36805" target="_blank" rel="noopener">긱뉴스 · Show GN: 라플라스의 가위 - LLM을 재학습하지 않고, 출력 가중</a></li></ul>
+  </details>
+
+  <details>
+    <summary>지난 브리핑</summary>
+    <div class="arch"><a href="archive/2026-11-08.html">11/08</a></div>
+  </details>
+
+  <p class="small">공부용 요약이에요. 특정 종목이나 코인을 사고팔라는 추천이 아니에요. 숫자는 표시된 시점 기준이에요.</p>
+  <p class="small">2026-11-08 22:37 업데이트 · 기본 모드</p>
+</div>
+</body>
+</html>
