@@ -2,7 +2,10 @@ name: 매일 아침 브리핑
 
 on:
   schedule:
-    - cron: "0 22 * * *"   # 매일 22:00 UTC = 한국 시간 아침 7시 (GitHub 사정으로 몇 분~수십 분 늦을 수 있음)
+    # GitHub 예약 실행은 정각에 몰려서 가끔 건너뛰어요. 그래서 정각을 피하고, 예비 실행을 두 번 더 둬요.
+    - cron: "23 21 * * *"  # 06:23 KST (본 실행)
+    - cron: "47 22 * * *"  # 07:47 KST (예비: 오늘 것이 없을 때만)
+    - cron: "17 0 * * *"   # 09:17 KST (예비: 오늘 것이 없을 때만)
   workflow_dispatch:        # GitHub 앱/웹에서 'Run workflow'로 바로 실행
 
 permissions:
@@ -19,20 +22,31 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: 오늘 브리핑이 이미 있는지 확인
+        id: check
+        run: |
+          if [ "${{ github.event_name }}" = "schedule" ] && [ -f "docs/archive/$(TZ=Asia/Seoul date +%Y-%m-%d).html" ]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"; echo "오늘 브리핑이 이미 있어서 건너뛰어요."
+          fi
+
       - uses: actions/setup-python@v5
+        if: steps.check.outputs.skip != 'true'
         with:
           python-version: "3.12"
 
       - name: 패키지 설치
+        if: steps.check.outputs.skip != 'true'
         run: pip install "anthropic>=1,<2"
 
       - name: 브리핑 만들기
+        if: steps.check.outputs.skip != 'true'
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           BRIEFING_MODEL: ${{ vars.BRIEFING_MODEL }}
         run: python scripts/build.py
 
       - name: 결과 저장 (GitHub Pages에 자동 반영)
+        if: steps.check.outputs.skip != 'true'
         run: |
           git config user.name "daily-briefing-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
