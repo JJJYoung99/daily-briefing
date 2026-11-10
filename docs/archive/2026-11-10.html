@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>매일 아침 피드</title>
+<meta name="description" content="AI·IT, 주식·코인, 피부미용의료 소식을 쉽게 정리한 아침 브리핑">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="아침 피드">
+<meta name="theme-color" content="#f3f5f8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f141c" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231f5fd1'/%3E%3Ctext x='32' y='44' font-size='34' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='700'%3E아%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=IBM+Plex+Sans+KR:wght@400;500;700&display=swap">
+<style>
+:root{
+  --bg:#f3f5f8; --surface:#ffffff; --ink:#152033; --muted:#5a6678; --line:#dde3ec;
+  --it:#1f5fd1; --it-soft:#e6eefc; --money:#b86a00; --money-soft:#fbf0de;
+  --up:#d1342f; --down:#1f5fd1; --skin:#b0306a; --skin-soft:#fbe8f0;
+  --display:"Do Hyeon","Apple SD Gothic Neo",sans-serif;
+  --body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#0f141c; --surface:#18202c; --ink:#e7ecf3; --muted:#9aa6b8; --line:#2a3443;
+  --it:#7aa7ff; --it-soft:#1c2a44; --money:#f0b356; --money-soft:#33280f;
+  --up:#ff7a70; --down:#7aa7ff; --skin:#f58bb8; --skin-soft:#3a1a29; color-scheme:dark}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.65;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-top:max(20px,env(safe-area-inset-top,0px));padding-bottom:max(40px,env(safe-area-inset-bottom,0px))}
+.wrap{max-width:600px;margin:0 auto;display:flex;flex-direction:column;gap:26px}
+.date{font-size:.8rem;letter-spacing:.06em;color:var(--muted);font-weight:500}
+h1{font-family:var(--display);font-weight:400;font-size:2rem;line-height:1.2;margin:2px 0 0;text-wrap:balance}
+.lede{margin:10px 0 0;font-size:1.02rem}
+h2{font-family:var(--display);font-weight:400;font-size:1.4rem;margin:0 0 10px;display:flex;align-items:center;gap:8px}
+h2 .chip{font-family:var(--body);font-size:.72rem;padding:1px 8px;border-radius:999px;font-weight:500}
+.m .chip{background:var(--money-soft);color:var(--money)}
+.a .chip{background:var(--it-soft);color:var(--it)}
+.s .chip{background:var(--skin-soft);color:var(--skin)}
+h4{font-size:.85rem;color:var(--muted);font-weight:500;letter-spacing:.04em;margin:16px 0 8px}
+.s h4:first-of-type{margin-top:0}
+.jr{font-size:.72rem;color:var(--skin);font-weight:500;letter-spacing:.03em}
+.papers p.so{margin-top:6px}
+.basic{background:var(--skin-soft);border-radius:12px;padding:14px 16px}
+.basic b{font-size:1.05rem}
+.basic p{margin:4px 0 0}
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-width:0}
+.tile .k{font-size:.75rem;color:var(--muted)}
+.tile .v{font-weight:700;font-size:1.05rem;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tile .d{font-size:.78rem;font-variant-numeric:tabular-nums}
+.dn{color:var(--down)} .up{color:var(--up)}
+.tile .when{font-size:.68rem;color:var(--muted)}
+ul.why{margin:12px 0 0;padding-left:1.1em}
+ul.why li+li{margin-top:6px}
+.term{background:var(--money-soft);border-radius:12px;padding:14px 16px}
+.term b{font-size:1.05rem}
+.term p{margin:4px 0 0}
+ol.news{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+ol.news li{padding:14px 16px;border-top:1px solid var(--line)}
+ol.news li:first-child{border-top:0}
+ol.news h3{margin:0;font-size:1rem;line-height:1.45;text-wrap:balance}
+ol.news h3 a{color:var(--ink);text-decoration:none}
+ol.news h3 a::after{content:" ↗";color:var(--muted);font-weight:400}
+ol.news p{margin:4px 0 0;color:var(--muted);font-size:.92rem;overflow-wrap:anywhere}
+ol.news .so{color:var(--ink)}
+details{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 16px;font-size:.88rem}
+summary{cursor:pointer;font-weight:500}
+details ul{margin:8px 0 0;padding-left:1.1em}
+details a{color:var(--it);overflow-wrap:anywhere}
+.arch{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.arch a{color:var(--it);border:1px solid var(--line);border-radius:6px;padding:2px 8px;text-decoration:none;font-variant-numeric:tabular-nums}
+.home{color:var(--it);text-decoration:none;font-size:.9rem}
+.small{color:var(--muted);font-size:.8rem;margin:0}
+a:focus-visible,summary:focus-visible{outline:2px solid var(--it);outline-offset:2px}
+@media (max-width:420px){.tile{padding:8px 9px}.tile .v{font-size:.92rem}}
+@media (max-width:330px){.tiles{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="home" href="../index.html">← 오늘 브리핑</a>
+  <header>
+    <div class="date">2026년 11월 10일 (화) · 약 15분 읽기</div>
+    <h1>미국 반도체 반등에 코스피 4%대 급등, 매수 사이드카까지</h1>
+    <p class="lede">어젯밤 뉴욕 증시가 유가 하락과 반도체 반등으로 크게 오르자, 오늘 아침 코스피와 코스닥이 함께 급등해 매수 사이드카가 발동됐어요. 반면 비트코인은 거의 제자리였어요. 주식과 코인이 늘 같이 움직이지는 않는다는 걸 보여 준 날이에요.</p>
+  </header>
+
+  <section class="m">
+    <h2>시장 한눈에 <span class="chip">주식·코인</span></h2>
+    <div class="tiles"><div class="tile"><div class="k">코스피</div><div class="v">5,276.06</div><div class="d up">▲ 4.28%</div><div class="when">11/10 기준</div></div><div class="tile"><div class="k">나스닥</div><div class="v">25,253</div><div class="d up">▲ 2.74%</div><div class="when">11/10 기준</div></div><div class="tile"><div class="k">비트코인</div><div class="v">$75,073</div><div class="d up">▲ 0.19%</div><div class="when">11/10 9시 (24시간)</div></div></div>
+    <ul class="why"><li><b>반도체 급반등:</b> 뉴욕에서 반도체주가 다시 오르자 삼성전자·SK하이닉스가 5~8% 뛰며 코스피를 끌어올렸어요. 상승은 자동차·배터리로도 번졌어요.</li><li><b>유가 급락:</b> 국제유가가 크게 내리고 중동 긴장 완화 기대가 커지면서 다우가 1104포인트, 나스닥이 2.7% 올랐어요. 중간선거 뒤 AI 규제 걱정으로 움츠렸던 심리도 회복됐어요.</li><li><b>코인은 따로 놀아:</b> 비트코인은 나스닥 상승에도 7만5000달러 근처에서 제자리였어요. 현물 ETF(상장지수펀드)에서 돈이 빠지고, 빚을 낸 투자(레버리지)가 대규모로 청산된 게 부담이었어요.</li><li><b>남은 변수:</b> 엔비디아 젠슨 황 CEO 논란과 미국 연준의 금리 불확실성이 상승세를 제한할 수 있다는 분석이 나왔어요. 미국 국채금리도 4.88%로 올랐어요.</li></ul>
+  </section>
+
+  <section class="term">
+    <b>오늘의 용어 · 사이드카 (Sidecar)</b>
+    <p>주가지수 선물 가격이 짧은 시간에 크게 오르거나 내리면, 컴퓨터가 자동으로 주문을 내는 &#x27;프로그램 매매&#x27;를 잠깐 멈추는 제도예요. 시장이 너무 과열되거나 공포에 빠지지 않게 숨 고를 시간을 주는 장치라고 보면 돼요. 오늘은 코스피에서 9거래일 만에, 이어 코스닥에서도 &#x27;매수&#x27; 사이드카가 발동돼 프로그램 매수 주문이 5분간 멈췄어요.</p>
+  </section>
+
+  <section class="a">
+    <h2>AI · IT 소식 <span class="chip">IT</span></h2>
+    <ol class="news"><li><h3><a href="https://www.aitimes.com/news/articleView.html?idxno=217196" target="_blank" rel="noopener">앤트로픽 새 AI &#x27;클로드 페이블 5.2&#x27;, 성능 평가 1위 되찾고 가격도 20% 내려</a></h3><p>앤트로픽이 최상위 모델 &#x27;페이블 5.2&#x27;와 &#x27;미소스 5.2&#x27;를 내놨어요. 페이블 5.2는 아티피셜 애널리시스 평가에서 65점으로 구글을 제치고 1위를 되찾았고, API 가격은 20% 낮췄어요. <span class="so">성능은 올리고 값은 내리는 경쟁이 치열해져서, 기업들이 AI를 더 싸게 쓸 수 있는 흐름이 빨라지고 있어요.</span></p></li><li><h3><a href="https://www.aitimes.com/news/articleView.html?idxno=217194" target="_blank" rel="noopener">젠슨 황 &#x27;중국 스파이 의혹&#x27; 파장…엔비디아 주가 장중 8.8% 급락</a></h3><p>젠슨 황 엔비디아 CEO가 불륜을 인정하고, 상대 여성이 중국 정보기관과 연계됐다는 의혹이 나오면서 주가가 장중 최대 8.8% 떨어졌어요. 주요 투자자들은 실망하면서도 황 CEO의 경영 지속을 지지했어요. <span class="so">AI 반도체 대장 기업의 리더 리스크라서, 회사 주가는 물론 미국 의회의 중국 칩 수출 정책 논란까지 번지고 있어요.</span></p></li><li><h3><a href="https://www.aitimes.com/news/articleView.html?idxno=217188" target="_blank" rel="noopener">엔비디아, 한국 AI 스타트업 3곳에 투자…업스테이지·모티프·리얼월드</a></h3><p>엔비디아가 서울에서 열린 스타트업 포럼에서 국내 AI 스타트업 3곳 투자 계획을 공개했어요. 리얼월드는 로봇용 AI, 업스테이지와 모티프는 거대언어모델(LLM, 글을 이해하고 쓰는 대형 AI) 분야 기업이에요. <span class="so">세계 최대 AI 칩 기업이 한국 AI 회사들에 직접 돈을 넣는다는 건 국내 AI 생태계가 주목받고 있다는 신호예요.</span></p></li><li><h3><a href="https://news.hada.io/topic?id=36908" target="_blank" rel="noopener">구글 제미나이, 연결된 개인 메일·드라이브 파일이 &#x27;사람 검토&#x27; 대상 될 수 있어</a></h3><p>구글은 2023년엔 Gmail·Docs·Drive 개인 콘텐츠를 사람이 검토하지 않는다고 했지만, 바뀐 안내에는 제미나이에 연결된 이메일과 파일이 사람 검토 대상이 될 수 있다고 적었어요. 테스트에선 별도 지시 없이도 대화 중 이 데이터를 조회한 사례가 확인됐어요. <span class="so">AI 비서를 내 메일·파일에 연결할 때 개인정보가 어떻게 쓰이는지 꼭 확인해야 한다는 경고예요.</span></p></li><li><h3><a href="https://www.aitimes.com/news/articleView.html?idxno=217187" target="_blank" rel="noopener">카카오모빌리티·엔비디아, 레벨4 자율주행 손잡아…기아 PBV에 먼저 적용</a></h3><p>카카오모빌리티가 엔비디아와 레벨4(정해진 조건에서 사람 개입 없이 달리는 수준) 자율주행 협력 MOU를 맺었어요. 강남 도심에서 검증한 자체 AI 모델을 고도화해 기아 목적기반차량(PBV)에 우선 적용해요. <span class="so">국내 자율주행 서비스가 실제 차량에 한 걸음 더 다가가고 있다는 의미예요.</span></p></li></ol>
+  </section>
+
+  <section class="s">
+    <h2>피부미용의료 <span class="chip">기술·논문</span></h2>
+    <h4>새 기술 · 기기 소식</h4>
+    <ol class="news"><li><h3><a href="https://news.google.com/rss/articles/CBMiZEFVX3lxTE9OYkI3OVFrR21DT3MzTS1yQm5CWVk5SFoxY1VNdFhrQ2ZFbUFOTHJwQ0tPV2pXX0VDbDhkM2piZHB4alRiTUVNZTR2NWQxN3VRX0Vza0xCdVFGWDJQSnhRbkVFeTM?oc=5" target="_blank" rel="noopener">라메디텍, 스킨부스터 특화 레이저 &#x27;레인젯&#x27; 식약처 허가</a></h3><p>가정용 레이저를 팔던 라메디텍이 스킨부스터(피부 속에 영양·재생 성분을 넣는 시술) 전용 레이저 &#x27;레인젯&#x27;의 식약처 허가를 받았어요. 병원용 스킨부스터 시장에 본격 진출하고 국내외 공략에 나선다는 소식이에요. <span class="so">주사 대신 레이저로 성분을 전달하는 기기가 늘면서 스킨부스터 시술 방식이 다양해지고 있어요.</span></p></li><li><h3><a href="https://news.google.com/rss/articles/CBMiiwFBVV95cUxNWEdPSWdsMTdMd0REbmU1SEwwZFpIRlRPOEJvS21COEVOSnNNa1ZDdlZ0YjhjWFd5dDlJQmlyTVMyZEplV3huQUJCT1V0VWdrVHdvbW8xb1ptbmF6ODN4WUwyTFJwUEVZcUlaSk8zQkNvellKZjMxczhpYjJPUl9tUXkzVWtvYmhOdEQ0?oc=5" target="_blank" rel="noopener">앨러간 에스테틱스, &#x27;오젬픽 페이스&#x27;를 주사 시술로 겨냥한 연구 진행</a></h3><p>앨러간 에스테틱스가 &#x27;오젬픽 페이스&#x27;(비만약 사용 후 급격한 체중 감소로 얼굴이 꺼지고 처지는 현상)를 주사 치료로 다루는 연구를 하고 있다는 소식이에요. 국내에서도 휴메딕스가 GLP-1 관련 체중 감량에 초점을 둔 미용 시술 세미나를 열었어요. <span class="so">비만약 사용이 늘면서 그 뒤에 생기는 얼굴 변화가 미용의료의 새 시장으로 떠오르고 있어요.</span></p></li><li><h3><a href="https://news.google.com/rss/articles/CBMiogFBVV95cUxNbzdxREZYZzdWQkhhOUhCTTVVOFFyNWNfU0I2bUVpdmszeU1aaEc5Z0I1TzhERGctZnc5ZGU2a21MdUVZMUh1SVRBcm1UaG9jeGJtR2F0VzhwRUhvYjUwb2NZSVdFQjcxS2ozRnlfMmlXNDBBejE1Y01fb0F0VjJ0c1lXalhieFVCWUhtOUEyaXp0RGI4cnU3Y1FlMkxTaUN0NGc?oc=5" target="_blank" rel="noopener">아폴로메드, 모듈형 레이저 플랫폼 &#x27;아폴로 원&#x27; 공개</a></h3><p>아폴로메드가 미용의료 클리닉용 모듈형 레이저 플랫폼 &#x27;아폴로 원(Apolo One)&#x27;을 선보였어요. 모듈형이란 하나의 본체에 필요한 기능을 조립하듯 붙여 쓰는 방식을 말해요. <span class="so">장비 여러 대 대신 한 플랫폼을 확장하는 흐름은 클리닉의 공간·비용 부담과 연결된 업계 트렌드예요.</span></p></li></ol>
+    <h4>이번 주 논문</h4>
+    <ol class="news papers"><li><div class="jr">Dermatol Surg</div><h3><a href="https://pubmed.ncbi.nlm.nih.gov/42975541/" target="_blank" rel="noopener">위축성 여드름 흉터에 대한 프랙셔널 마이크로니들 고주파의 임상 결과와 환자 중심 이점: 후향적 연구</a></h3><p>프랙셔널 마이크로니들 고주파(MNRF)를 4회 받은 여드름 흉터 환자 55명(남 38명, 여 17명)의 의무기록을 되짚어 분석했어요. 흉터 중증도는 Goodman-Baron 척도로, 개선 정도는 결과를 모르는 피부과 의사가 평가했고 통증(VAS)과 삶의 질(DLQI)도 함께 봤어요. 남성의 평균 점수는 6.88±0.49에서 2.32±0.10으로 떨어졌어요.</p><p class="so">피부가 어두운 편이라 색소 부작용 걱정이 큰 환자군에서도 MNRF가 여드름 흉터 개선과 삶의 질에 도움이 될 수 있음을 보여 줘요. 다만 과거 기록을 본 후향적 연구이고 비교군이 없어 효과를 단정하긴 어려워요.</p></li><li><div class="jr">Front Med (Lausanne)</div><h3><a href="https://pubmed.ncbi.nlm.nih.gov/42984828/" target="_blank" rel="noopener">증례 보고: 눈 주위 미용 HIFU 시술 후 발생한 양쪽 눈 시력 위협 전안부 손상</a></h3><p>38세 여성이 눈꺼풀 지방 감소와 회춘 목적으로 눈 주위 HIFU(고강도 집속 초음파)를 받은 직후 양쪽 눈의 통증·충혈·흐린 시야가 생겼어요. 교정시력은 오른쪽 0.5m 앞 손가락 개수를 세는 정도, 왼쪽 20/40이었고 안압은 30·26mmHg로 높았어요. 양쪽 전방 포도막염, 각막 부종, 홍채 손상, 열 손상으로 추정되는 수정체 혼탁이 관찰됐어요.</p><p class="so">안구 가까이에서 집속된 열에너지가 눈 앞쪽 구조를 여러 군데 동시에 다치게 할 수 있다는 경고로, 눈 주위 시술 시 부위·깊이 선택과 안구 보호가 매우 중요해요. 환자 한 명의 증례라 얼마나 자주 생기는지는 알 수 없어요.</p></li></ol>
+    <h4>기초 지식</h4>
+    <div class="basic"><b>선택적 광열분해 (Selective Photothermolysis)</b><p>레이저 시술의 기본 원리예요. 멜라닌(색소), 헤모글로빈(혈관), 물처럼 빛을 흡수하는 대상(발색단, chromophore)마다 잘 흡수하는 파장이 달라서, 파장을 고르면 원하는 표적만 골라 데울 수 있어요. 여기에 빛을 쏘는 시간(펄스 폭)을 표적이 열을 식히는 시간(열이완시간)보다 짧게 맞추면 주변 조직은 덜 다치고 표적만 파괴돼요. 그래서 기미·혈관·제모 등 목적에 따라 파장과 펄스 폭이 다른 기기를 쓰고, 오늘 소개한 모듈형 플랫폼처럼 여러 파장을 한 장비에 담으려는 흐름도 생겨요. 반대로 눈의 홍채·망막에도 색소가 많아 빛과 열에 약하니, 시술 중 보호안경과 눈 주위 에너지 관리가 꼭 필요해요. 오늘 논문의 HIFU 눈 손상 사례도 &#x27;에너지는 표적 밖으로 새면 위험하다&#x27;는 같은 교훈을 줘요.</p></div>
+  </section>
+
+  <details>
+    <summary>출처 보기</summary>
+    <ul><li><a href="https://www.hankyung.com/article/202611106634i" target="_blank" rel="noopener">한국경제 증권 · [마켓라이브]미국 반도체 급반등에 삼전닉스 강세…자동차·배터리로 반등 확</a></li><li><a href="https://www.hankyung.com/article/2026111066456" target="_blank" rel="noopener">한국경제 증권 · [속보] 급등장에 코스피 이어 코스닥도 매수 사이드카</a></li><li><a href="https://www.hankyung.com/article/2026111066326" target="_blank" rel="noopener">한국경제 증권 · [속보] 반도체주 강세…삼전닉스 5~8% 급등</a></li><li><a href="https://www.hankyung.com/article/2026111066247" target="_blank" rel="noopener">한국경제 증권 · [속보] 코스피, 9거래일 만에 &#x27;매수 사이드카&#x27;…지수 5.23%↑</a></li><li><a href="https://news.hada.io/topic?id=36908" target="_blank" rel="noopener">긱뉴스 · Google Gemini, 개인 Drive 파일과 이메일을 사람 검토자에</a></li><li><a href="https://www.aitimes.com/news/articleView.html?idxno=217196" target="_blank" rel="noopener">AI타임스 · 앤트로픽 &#x27;페이블 5.2&#x27;, AI 성능 평가 1위 탈환…API 가격도 2</a></li><li><a href="https://www.aitimes.com/news/articleView.html?idxno=217194" target="_blank" rel="noopener">AI타임스 · 엔비디아 주가 장중 8.8% 급락…주요 투자자들은 젠슨 황 잔류 지지</a></li><li><a href="https://www.aitimes.com/news/articleView.html?idxno=217188" target="_blank" rel="noopener">AI타임스 · 엔비디아, 국내 AI 스타트업 3곳 투자 낙점...리얼월드·업스테이지·모</a></li><li><a href="https://www.aitimes.com/news/articleView.html?idxno=217187" target="_blank" rel="noopener">AI타임스 · 카카오모빌리티-엔비디아, 레벨4 자율주행 협력…기아 PBV 우선 적용</a></li><li><a href="https://news.google.com/rss/articles/CBMiZEFVX3lxTE9OYkI3OVFrR21DT3MzTS1yQm5CWVk5SFoxY1VNdFhrQ2ZFbUFOTHJwQ0tPV2pXX0VDbDhkM2piZHB4alRiTUVNZTR2NWQxN3VRX0Vza0xCdVFGWDJQSnhRbkVFeTM?oc=5" target="_blank" rel="noopener">피부미용 뉴스 · 라메디텍, 스킨부스터 특화 레이저 &#x27;레인젯&#x27; 식약처 허가 - 서울경제TV</a></li><li><a href="https://news.google.com/rss/articles/CBMiiwFBVV95cUxNWEdPSWdsMTdMd0REbmU1SEwwZFpIRlRPOEJvS21COEVOSnNNa1ZDdlZ0YjhjWFd5dDlJQmlyTVMyZEplV3huQUJCT1V0VWdrVHdvbW8xb1ptbmF6ODN4WUwyTFJwUEVZcUlaSk8zQkNvellKZjMxczhpYjJPUl9tUXkzVWtvYmhOdEQ0?oc=5" target="_blank" rel="noopener">Aesthetic news · Allergan Aesthetics studies target “Ozem</a></li><li><a href="https://news.google.com/rss/articles/CBMiogFBVV95cUxNbzdxREZYZzdWQkhhOUhCTTVVOFFyNWNfU0I2bUVpdmszeU1aaEc5Z0I1TzhERGctZnc5ZGU2a21MdUVZMUh1SVRBcm1UaG9jeGJtR2F0VzhwRUhvYjUwb2NZSVdFQjcxS2ozRnlfMmlXNDBBejE1Y01fb0F0VjJ0c1lXalhieFVCWUhtOUEyaXp0RGI4cnU3Y1FlMkxTaUN0NGc?oc=5" target="_blank" rel="noopener">Aesthetic news · Apolomed Introduces Apolo One Modular La</a></li><li><a href="https://pubmed.ncbi.nlm.nih.gov/42975541/" target="_blank" rel="noopener">Dermatol Surg · Clinical Outcomes and Patient-Centered B</a></li><li><a href="https://pubmed.ncbi.nlm.nih.gov/42984828/" target="_blank" rel="noopener">Front Med (Lausanne) · Case Report: Bilateral vision-threatenin</a></li></ul>
+  </details>
+
+  <details>
+    <summary>지난 브리핑</summary>
+    <div class="arch"><a href="2026-11-10.html">11/10</a><a href="2026-11-09.html">11/09</a><a href="2026-11-08.html">11/08</a></div>
+  </details>
+
+  <p class="small">공부용 요약이에요. 특정 종목·코인 매매나 특정 시술·제품을 권하는 내용이 아니에요. 숫자는 표시된 시점 기준이에요.</p>
+  <p class="small">2026-11-10 09:33 업데이트 · Claude 요약</p>
+</div>
+</body>
+</html>
