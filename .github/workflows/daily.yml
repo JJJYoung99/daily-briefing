@@ -6,6 +6,8 @@ on:
     - cron: "23 21 * * *"  # 06:23 KST (본 실행)
     - cron: "47 22 * * *"  # 07:47 KST (예비: 오늘 것이 없을 때만)
     - cron: "17 0 * * *"   # 09:17 KST (예비: 오늘 것이 없을 때만)
+  push:                     # 클라우드 알람(Claude 루틴)이 trigger/ 폴더를 건드리면 실행
+    paths: ["trigger/**"]
   workflow_dispatch:        # GitHub 앱/웹에서 'Run workflow'로 바로 실행
 
 permissions:
@@ -21,11 +23,13 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: 오늘 브리핑이 이미 있는지 확인
         id: check
         run: |
-          if [ "${{ github.event_name }}" = "schedule" ] && [ -f "docs/archive/$(TZ=Asia/Seoul date +%Y-%m-%d).html" ]; then
+          if [ "${{ github.event_name }}" != "workflow_dispatch" ] && [ -f "docs/archive/$(TZ=Asia/Seoul date +%Y-%m-%d).html" ]; then
             echo "skip=true" >> "$GITHUB_OUTPUT"; echo "오늘 브리핑이 이미 있어서 건너뛰어요."
           fi
 
@@ -53,4 +57,5 @@ jobs:
           git add docs
           git diff --cached --quiet && echo "변경 없음" && exit 0
           git commit -m "브리핑 $(TZ=Asia/Seoul date +%Y-%m-%d)"
-          git push
+          git pull --rebase origin main
+          git push origin HEAD:main
