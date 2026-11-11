@@ -40,7 +40,13 @@ jobs:
 
       - name: 패키지 설치
         if: steps.check.outputs.skip != 'true'
-        run: pip install "anthropic>=1,<2"
+        # 인터넷이 잠깐 끊겨도 3번까지 다시 받아요. 끝내 실패해도 멈추지 않고 '기본 브리핑'으로 넘어가요.
+        run: |
+          for i in 1 2 3; do
+            pip install --retries 5 --timeout 60 "anthropic>=1,<2" && exit 0
+            echo "설치 실패 ($i/3), 20초 뒤 다시 시도"; sleep 20
+          done
+          echo "::warning::anthropic 설치 실패: 기본 브리핑으로 만들어요."
 
       - name: 브리핑 만들기
         if: steps.check.outputs.skip != 'true'
@@ -59,3 +65,7 @@ jobs:
           git commit -m "브리핑 $(TZ=Asia/Seoul date +%Y-%m-%d)"
           git pull --rebase origin main
           git push origin HEAD:main
+
+      - name: 알람용 임시 브랜치 정리
+        if: always() && startsWith(github.ref_name, 'trigger/')
+        run: git push origin --delete "${{ github.ref_name }}" || true
