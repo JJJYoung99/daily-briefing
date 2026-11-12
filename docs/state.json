@@ -8,14 +8,16 @@
     "IPO (기업공개, Initial Public Offering)",
     "사이드카 (Sidecar)",
     "빅스텝 (Big Step)",
-    "매파 (Hawkish)"
+    "매파 (Hawkish)",
+    "강제 청산 (Liquidation)"
   ],
-  "last_run": "2026-11-12T06:17:52.534307+09:00",
+  "last_run": "2026-11-13T06:17:48.151057+09:00",
   "recent_skin": [
     "HIFU(고강도 집속 초음파)의 원리와 안전",
     "마이크로니들 고주파(MNRF)의 원리",
     "선택적 광열분해 (Selective Photothermolysis)",
     "콜라겐 재생 유도 (Neocollagenesis)와 스킨부스터·바이오스티뮬레이터",
-    "혈관 레이저의 파장 선택: 왜 585~595nm 근처일까"
+    "혈관 레이저의 파장 선택: 왜 585~595nm 근처일까",
+    "피코초 레이저(Picosecond Laser)의 원리: 열 대신 '충격'으로 깨기"
   ]
 }
