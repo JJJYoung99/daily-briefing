@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>매일 아침 피드</title>
+<meta name="description" content="AI·IT, 주식·코인, 피부미용의료 소식을 쉽게 정리한 아침 브리핑">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="아침 피드">
+<meta name="theme-color" content="#f3f5f8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f141c" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231f5fd1'/%3E%3Ctext x='32' y='44' font-size='34' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='700'%3E아%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=IBM+Plex+Sans+KR:wght@400;500;700&display=swap">
+<style>
+:root{
+  --bg:#f3f5f8; --surface:#ffffff; --ink:#152033; --muted:#5a6678; --line:#dde3ec;
+  --it:#1f5fd1; --it-soft:#e6eefc; --money:#b86a00; --money-soft:#fbf0de;
+  --up:#d1342f; --down:#1f5fd1; --skin:#b0306a; --skin-soft:#fbe8f0;
+  --display:"Do Hyeon","Apple SD Gothic Neo",sans-serif;
+  --body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#0f141c; --surface:#18202c; --ink:#e7ecf3; --muted:#9aa6b8; --line:#2a3443;
+  --it:#7aa7ff; --it-soft:#1c2a44; --money:#f0b356; --money-soft:#33280f;
+  --up:#ff7a70; --down:#7aa7ff; --skin:#f58bb8; --skin-soft:#3a1a29; color-scheme:dark}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.65;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-top:max(20px,env(safe-area-inset-top,0px));padding-bottom:max(40px,env(safe-area-inset-bottom,0px))}
+.wrap{max-width:600px;margin:0 auto;display:flex;flex-direction:column;gap:26px}
+.date{font-size:.8rem;letter-spacing:.06em;color:var(--muted);font-weight:500}
+h1{font-family:var(--display);font-weight:400;font-size:2rem;line-height:1.2;margin:2px 0 0;text-wrap:balance}
+.lede{margin:10px 0 0;font-size:1.02rem}
+h2{font-family:var(--display);font-weight:400;font-size:1.4rem;margin:0 0 10px;display:flex;align-items:center;gap:8px}
+h2 .chip{font-family:var(--body);font-size:.72rem;padding:1px 8px;border-radius:999px;font-weight:500}
+.m .chip{background:var(--money-soft);color:var(--money)}
+.a .chip{background:var(--it-soft);color:var(--it)}
+.s .chip{background:var(--skin-soft);color:var(--skin)}
+h4{font-size:.85rem;color:var(--muted);font-weight:500;letter-spacing:.04em;margin:16px 0 8px}
+.s h4:first-of-type{margin-top:0}
+.jr{font-size:.72rem;color:var(--skin);font-weight:500;letter-spacing:.03em}
+.papers p.so{margin-top:6px}
+.basic{background:var(--skin-soft);border-radius:12px;padding:14px 16px}
+.basic b{font-size:1.05rem}
+.basic p{margin:4px 0 0}
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-width:0}
+.tile .k{font-size:.75rem;color:var(--muted)}
+.tile .v{font-weight:700;font-size:1.05rem;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tile .d{font-size:.78rem;font-variant-numeric:tabular-nums}
+.dn{color:var(--down)} .up{color:var(--up)}
+.tile .when{font-size:.68rem;color:var(--muted)}
+ul.why{margin:12px 0 0;padding-left:1.1em}
+ul.why li+li{margin-top:6px}
+.term{background:var(--money-soft);border-radius:12px;padding:14px 16px}
+.term b{font-size:1.05rem}
+.term p{margin:4px 0 0}
+ol.news{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+ol.news li{padding:14px 16px;border-top:1px solid var(--line)}
+ol.news li:first-child{border-top:0}
+ol.news h3{margin:0;font-size:1rem;line-height:1.45;text-wrap:balance}
+ol.news h3 a{color:var(--ink);text-decoration:none}
+ol.news h3 a::after{content:" ↗";color:var(--muted);font-weight:400}
+ol.news p{margin:4px 0 0;color:var(--muted);font-size:.92rem;overflow-wrap:anywhere}
+ol.news .so{color:var(--ink)}
+details{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 16px;font-size:.88rem}
+summary{cursor:pointer;font-weight:500}
+details ul{margin:8px 0 0;padding-left:1.1em}
+details a{color:var(--it);overflow-wrap:anywhere}
+.arch{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.arch a{color:var(--it);border:1px solid var(--line);border-radius:6px;padding:2px 8px;text-decoration:none;font-variant-numeric:tabular-nums}
+.home{color:var(--it);text-decoration:none;font-size:.9rem}
+.small{color:var(--muted);font-size:.8rem;margin:0}
+a:focus-visible,summary:focus-visible{outline:2px solid var(--it);outline-offset:2px}
+@media (max-width:420px){.tile{padding:8px 9px}.tile .v{font-size:.92rem}}
+@media (max-width:330px){.tiles{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="home" href="../index.html">← 오늘 브리핑</a>
+  <header>
+    <div class="date">2026년 11월 16일 (월) · 약 15분 읽기</div>
+    <h1>비트코인 6만2천달러 급락 후 반등, 이번 주 엔비디아·앤트로픽 주목</h1>
+    <p class="lede">주말 사이 비트코인이 크게 흔들렸다가 일부 회복했어요. 이번 주에는 엔비디아 실적, 연준 의사록, 앤트로픽 상장이 48시간 안에 몰려 있어서 AI 주식과 코인 모두 출렁일 수 있어요.</p>
+  </header>
+
+  <section class="m">
+    <h2>시장 한눈에 <span class="chip">주식·코인</span></h2>
+    <div class="tiles"><div class="tile"><div class="k">코스피</div><div class="v">5,290.53</div><div class="d dn">▼ 0.98%</div><div class="when">11/13 기준</div></div><div class="tile"><div class="k">나스닥</div><div class="v">25,136</div><div class="d dn">▼ 0.91%</div><div class="when">11/14 기준</div></div><div class="tile"><div class="k">비트코인</div><div class="v">$64,993</div><div class="d up">▲ 1.02%</div><div class="when">11/16 6시 (24시간)</div></div></div>
+    <ul class="why"><li><b>AI주 약세:</b> 젠슨 황 전 CEO 사임 논란 속에 AI 주식이 최근 하락세였고, 그 흐름이 디지털자산 시장으로 번지고 있다는 분석이 나왔어요. 나스닥은 0.91%, 코스피는 0.98% 내렸어요.</li><li><b>물가 부담:</b> 미국 10월 생산자물가가 1년 전보다 6.5% 올라 약 4년 만에 가장 높았어요. 예상치(6.6%)보다는 조금 낮았지만 금리 상승 우려를 키울 수 있어요.</li><li><b>코인 매도 압력:</b> 대형 투자자(고래) 매도, 미국 현물 ETF 자금 이탈, 레버리지 연쇄 청산이 겹치며 비트코인이 한때 6만2천달러대까지 밀렸어요.</li><li><b>저가 반발 매수:</b> 급락 뒤 매수세가 들어오면서 비트코인은 6만4,993달러로 24시간 기준 1.02% 올랐어요. 다만 200주 이동평균선을 밑돌아 경계감은 남아 있어요.</li></ul>
+  </section>
+
+  <section class="term">
+    <b>오늘의 용어 · 이동평균선 (Moving Average)</b>
+    <p>일정 기간의 가격 평균을 이어 그린 선이에요. 예를 들어 200주 이동평균선은 최근 200주 동안의 평균 가격으로, 아주 긴 흐름을 보여주는 기준선처럼 쓰여요. 오늘 비트코인이 이 200주 이동평균선 아래로 내려가면서 장기 지지선이 무너졌다는 말이 나온 거예요.</p>
+  </section>
+
+  <section class="a">
+    <h2>AI · IT 소식 <span class="chip">IT</span></h2>
+    <ol class="news"><li><h3><a href="https://www.aitimes.com/news/articleView.html?idxno=217428" target="_blank" rel="noopener">물러난 젠슨 황, 며칠 만에 엔비디아 CEO 복귀 논의</a></h3><p>사생활과 중국 관련 논란으로 사임한 젠슨 황 전 CEO가 측근들과 복귀 가능성을 논의 중이라고 FT가 보도했어요. 실리콘밸리 주요 경영진이 복귀를 위한 로비와 백악관 지원 확보에 나섰다고 해요. <span class="so">엔비디아는 AI 칩 시장의 중심이라, 경영진 혼란은 이번 주 실적 발표와 함께 AI 주식 전체 분위기에 영향을 줄 수 있어요.</span></p></li><li><h3><a href="https://www.aitimes.com/news/articleView.html?idxno=217426" target="_blank" rel="noopener">세무사 시험 수석 합격자, &#x27;초소형 카메라+생성 AI&#x27; 부정행위 자백</a></h3><p>제63회 세무사 시험 수석 합격자가 카메라로 문제를 찍고 생성 AI로 답을 받아 확인했다고 자백하고 경찰에 자수했어요. 정부는 올해 치른 모든 국가자격시험을 전수조사하고 수석 합격 취소를 추진해요. <span class="so">AI가 시험 공정성까지 흔들 수 있다는 걸 보여줘서, 앞으로 자격시험 방식과 감독 규정이 바뀔 수 있어요.</span></p></li><li><h3><a href="https://www.aitimes.com/news/articleView.html?idxno=217416" target="_blank" rel="noopener">메타, 사진 무단 접근으로 이탈리아서 약 1.2조원 벌금</a></h3><p>이탈리아 개인정보 당국이 페이스북 앱이 안드로이드 사용자 동의 없이 사진·동영상에 접근했다며 메타에 8억8,700만달러(약 1조1,886억원) 벌금을 매겼어요. 사진 추천 기능이 충분히 고지되지 않았다는 이유예요. <span class="so">AI 추천 기능이 개인 데이터를 쓰는 방식에 대해 유럽 규제가 점점 강해지고 있다는 신호예요.</span></p></li><li><h3><a href="https://www.aitimes.com/news/articleView.html?idxno=217415" target="_blank" rel="noopener">구글 제미나이, &#x27;구글 월렛&#x27; 연결해 소비 분석·저축 계획까지</a></h3><p>구글이 제미나이의 개인화 기능에 구글 월렛을 연동했어요. 소비 내역과 계좌 정보를 바탕으로 지출 패턴을 분석하고 예산·저축 계획을 제안해요. <span class="so">AI 비서가 내 돈 관리까지 들어오는 흐름이라, 편리함과 개인정보 보호 사이의 균형이 중요한 문제가 될 거예요.</span></p></li><li><h3><a href="https://www.aitimes.com/news/articleView.html?idxno=217417" target="_blank" rel="noopener">테슬라 자율주행차 &#x27;사이버캡&#x27; 개인 사전주문 시작</a></h3><p>테슬라가 일부 고객에게 사이버캡 사전주문을 받기 시작했어요. 차값은 약 4,000만원이지만 운행하려면 매달 40만원 구독료를 내야 하고 지역과 상업 운행도 제한돼요. <span class="so">자동차도 &#x27;한 번 사고 끝&#x27;이 아니라 매달 돈을 내는 구독 모델로 바뀔 수 있다는 걸 보여줘요.</span></p></li></ol>
+  </section>
+
+  <section class="s">
+    <h2>피부미용의료 <span class="chip">기술·논문</span></h2>
+    <h4>새 기술 · 기기 소식</h4>
+    <p class="small">이번 주에는 눈에 띄는 기기·기술 소식이 없었어요.</p>
+    <h4>이번 주 논문</h4>
+    <ol class="news papers"><li><div class="jr">Diagnostics (Basel)</div><h3><a href="https://pubmed.ncbi.nlm.nih.gov/43028430/" target="_blank" rel="noopener">윗눈꺼풀에 실수로 HIFU가 닿은 뒤 생긴 외상성 백내장: 드문 안구 합병증 증례</a></h3><p>34세 여성이 얼굴 HIFU(고강도 집속 초음파) 시술 중 기기 끝(어플리케이터)이 오른쪽 윗눈꺼풀로 미끄러졌고, 약 30분 뒤 갑자기 시력이 떨어졌어요. 교정시력은 오른쪽 0.2, 왼쪽 1.0이었고 수정체 아래쪽에 짙은 혼탁과 뒤쪽에 꽃잎(로제트) 모양 혼탁이 보였어요. 눈꺼풀 피부와 각막은 멀쩡했고 수정체 막 파열은 없었어요.</p><p class="so">겉 피부가 괜찮아도 초음파 에너지는 눈 속 수정체까지 손상시킬 수 있어서 눈 주변 시술 시 보호와 기기 위치 관리가 중요하다는 경고예요. 다만 환자 한 명의 증례 보고라 얼마나 자주 생기는지는 알 수 없어요.</p></li><li><div class="jr">Cornea</div><h3><a href="https://pubmed.ncbi.nlm.nih.gov/43014704/" target="_blank" rel="noopener">히알루론산 미용 필러가 실수로 각막 실질 안에 주입된 증례</a></h3><p>34세 여성이 왼쪽 윗눈꺼풀 고랑에 히알루론산 필러를 맞다가 바늘이 눈꺼풀을 완전히 뚫고 각막 실질(stroma, 각막의 중간층)에 필러가 들어갔어요. 시력 저하, 중간 정도 통증, 난시가 생겼고, 1개월 뒤 각막 안에 히알루로니다아제를 주사하는 수술을 받았어요. 필러가 일부 제거되고 시력은 좋아졌지만 10개월 뒤에도 일부가 남아 있었어요.</p><p class="so">눈꺼풀은 아주 얇아서 주입 깊이·각도 실수가 바로 안구 손상으로 이어질 수 있고, 녹이는 효소를 써도 완전히 제거되지 않을 수 있다는 점을 보여줘요. 한 명의 증례라 일반화에는 한계가 있어요.</p></li></ol>
+    <h4>기초 지식</h4>
+    <div class="basic"><b>히알루로니다아제 (Hyaluronidase): 히알루론산 필러를 녹이는 효소</b><p>히알루로니다아제는 히알루론산(HA)의 긴 사슬을 잘게 끊어 분해하는 효소예요. HA 필러는 사슬을 서로 묶은(가교, cross-linking) 젤이라 오래 유지되는데, 이 효소가 사슬을 끊으면 젤이 풀리면서 몸에 흡수돼요. 그래서 필러가 원치 않는 곳에 들어갔거나 모양이 마음에 들지 않을 때, 또 혈관을 막는 응급 상황에서 되돌리는 수단으로 쓰여요. 다만 가교 정도나 필러가 놓인 위치에 따라 녹는 정도가 달라서, 오늘 각막 증례처럼 일부가 남을 수도 있어요. 결국 &#x27;녹일 수 있으니 괜찮다&#x27;가 아니라 처음부터 해부 구조를 알고 정확한 깊이에 주입하는 게 가장 중요해요.</p></div>
+  </section>
+
+  <details>
+    <summary>출처 보기</summary>
+    <ul><li><a href="https://www.yna.co.kr/view/AKR20261115043700003" target="_blank" rel="noopener">연합뉴스 경제 · 서리풀1지구 주택 79% 임대로…미리내집에 장기공공임대 추가</a></li><li><a href="https://www.yna.co.kr/view/AKR20261113161000051" target="_blank" rel="noopener">연합뉴스 경제 · 공유수면 매립 기본계획 변경…홍원항 등 4곳 매립 예정지 포함</a></li><li><a href="https://www.yna.co.kr/view/AKR20261114042400003" target="_blank" rel="noopener">연합뉴스 경제 · 국토부, 한파·폭설 대비 전국 건설현장 3천여곳 안전점검</a></li><li><a href="https://www.yna.co.kr/view/AKR20261115041100003" target="_blank" rel="noopener">연합뉴스 경제 · &quot;대기업·스타트업 협업, 개념검증·R＆D 편중…상용화는 26%뿐&quot;</a></li><li><a href="https://www.aitimes.com/news/articleView.html?idxno=217428" target="_blank" rel="noopener">AI타임스 · 젠슨 황, 엔비디아 CEO 복귀 논의…측근들 백악관 설득 추진</a></li><li><a href="https://www.aitimes.com/news/articleView.html?idxno=217426" target="_blank" rel="noopener">AI타임스 · 세무사 시험 수석 합격자 &quot;생성 AI로 부정행위&quot; 자백</a></li><li><a href="https://www.aitimes.com/news/articleView.html?idxno=217415" target="_blank" rel="noopener">AI타임스 · 구글, 제미나이에 &#x27;월렛&#x27; 연결…개인 소비 분석부터 저축 계획까지</a></li><li><a href="https://www.aitimes.com/news/articleView.html?idxno=217417" target="_blank" rel="noopener">AI타임스 · 테슬라, &#x27;사이버캡&#x27; 사전 주문 시작…월 40만원 안 내면 운행 불가</a></li><li><a href="https://www.aitimes.com/news/articleView.html?idxno=217416" target="_blank" rel="noopener">AI타임스 · 메타, 사용자 사진 무단 접근으로 이탈리아서 1.2조 벌금</a></li><li><a href="https://pubmed.ncbi.nlm.nih.gov/43014704/" target="_blank" rel="noopener">Cornea · Inadvertent Intrastromal Injection of Hy</a></li><li><a href="https://pubmed.ncbi.nlm.nih.gov/43028430/" target="_blank" rel="noopener">Diagnostics (Basel) · Traumatic Cataract Following Accidental </a></li></ul>
+  </details>
+
+  <details>
+    <summary>지난 브리핑</summary>
+    <div class="arch"><a href="2026-11-16.html">11/16</a><a href="2026-11-15.html">11/15</a><a href="2026-11-14.html">11/14</a><a href="2026-11-13.html">11/13</a><a href="2026-11-12.html">11/12</a><a href="2026-11-11.html">11/11</a><a href="2026-11-10.html">11/10</a><a href="2026-11-09.html">11/09</a><a href="2026-11-08.html">11/08</a></div>
+  </details>
+
+  <p class="small">공부용 요약이에요. 특정 종목·코인 매매나 특정 시술·제품을 권하는 내용이 아니에요. 숫자는 표시된 시점 기준이에요.</p>
+  <p class="small">2026-11-16 06:17 업데이트 · Claude 요약</p>
+</div>
+</body>
+</html>
