@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>매일 아침 피드</title>
+<meta name="description" content="AI·IT, 주식·코인, 피부미용의료 소식을 쉽게 정리한 아침 브리핑">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="아침 피드">
+<meta name="theme-color" content="#f3f5f8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f141c" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231f5fd1'/%3E%3Ctext x='32' y='44' font-size='34' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='700'%3E아%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=IBM+Plex+Sans+KR:wght@400;500;700&display=swap">
+<style>
+:root{
+  --bg:#f3f5f8; --surface:#ffffff; --ink:#152033; --muted:#5a6678; --line:#dde3ec;
+  --it:#1f5fd1; --it-soft:#e6eefc; --money:#b86a00; --money-soft:#fbf0de;
+  --up:#d1342f; --down:#1f5fd1; --skin:#b0306a; --skin-soft:#fbe8f0;
+  --display:"Do Hyeon","Apple SD Gothic Neo",sans-serif;
+  --body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#0f141c; --surface:#18202c; --ink:#e7ecf3; --muted:#9aa6b8; --line:#2a3443;
+  --it:#7aa7ff; --it-soft:#1c2a44; --money:#f0b356; --money-soft:#33280f;
+  --up:#ff7a70; --down:#7aa7ff; --skin:#f58bb8; --skin-soft:#3a1a29; color-scheme:dark}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.65;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-top:max(20px,env(safe-area-inset-top,0px));padding-bottom:max(40px,env(safe-area-inset-bottom,0px))}
+.wrap{max-width:600px;margin:0 auto;display:flex;flex-direction:column;gap:26px}
+.date{font-size:.8rem;letter-spacing:.06em;color:var(--muted);font-weight:500}
+h1{font-family:var(--display);font-weight:400;font-size:2rem;line-height:1.2;margin:2px 0 0;text-wrap:balance}
+.lede{margin:10px 0 0;font-size:1.02rem}
+h2{font-family:var(--display);font-weight:400;font-size:1.4rem;margin:0 0 10px;display:flex;align-items:center;gap:8px}
+h2 .chip{font-family:var(--body);font-size:.72rem;padding:1px 8px;border-radius:999px;font-weight:500}
+.m .chip{background:var(--money-soft);color:var(--money)}
+.a .chip{background:var(--it-soft);color:var(--it)}
+.s .chip{background:var(--skin-soft);color:var(--skin)}
+h4{font-size:.85rem;color:var(--muted);font-weight:500;letter-spacing:.04em;margin:16px 0 8px}
+.s h4:first-of-type{margin-top:0}
+.jr{font-size:.72rem;color:var(--skin);font-weight:500;letter-spacing:.03em}
+.papers p.so{margin-top:6px}
+.basic{background:var(--skin-soft);border-radius:12px;padding:14px 16px}
+.basic b{font-size:1.05rem}
+.basic p{margin:4px 0 0}
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-width:0}
+.tile .k{font-size:.75rem;color:var(--muted)}
+.tile .v{font-weight:700;font-size:1.05rem;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tile .d{font-size:.78rem;font-variant-numeric:tabular-nums}
+.dn{color:var(--down)} .up{color:var(--up)}
+.tile .when{font-size:.68rem;color:var(--muted)}
+ul.why{margin:12px 0 0;padding-left:1.1em}
+ul.why li+li{margin-top:6px}
+.term{background:var(--money-soft);border-radius:12px;padding:14px 16px}
+.term b{font-size:1.05rem}
+.term p{margin:4px 0 0}
+ol.news{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+ol.news li{padding:14px 16px;border-top:1px solid var(--line)}
+ol.news li:first-child{border-top:0}
+ol.news h3{margin:0;font-size:1rem;line-height:1.45;text-wrap:balance}
+ol.news h3 a{color:var(--ink);text-decoration:none}
+ol.news h3 a::after{content:" ↗";color:var(--muted);font-weight:400}
+ol.news p{margin:4px 0 0;color:var(--muted);font-size:.92rem;overflow-wrap:anywhere}
+ol.news .so{color:var(--ink)}
+details{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 16px;font-size:.88rem}
+summary{cursor:pointer;font-weight:500}
+details ul{margin:8px 0 0;padding-left:1.1em}
+details a{color:var(--it);overflow-wrap:anywhere}
+.arch{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.arch a{color:var(--it);border:1px solid var(--line);border-radius:6px;padding:2px 8px;text-decoration:none;font-variant-numeric:tabular-nums}
+.home{color:var(--it);text-decoration:none;font-size:.9rem}
+.small{color:var(--muted);font-size:.8rem;margin:0}
+a:focus-visible,summary:focus-visible{outline:2px solid var(--it);outline-offset:2px}
+@media (max-width:420px){.tile{padding:8px 9px}.tile .v{font-size:.92rem}}
+@media (max-width:330px){.tiles{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="home" href="../index.html">← 오늘 브리핑</a>
+  <header>
+    <div class="date">2026년 11월 19일 (목) · 약 15분 읽기</div>
+    <h1>엔비디아 호실적에도 AI 수익성 우려…비트코인 6.2만 달러대로</h1>
+    <p class="lede">AI 대장주 엔비디아가 예상보다 좋은 실적을 냈는데도 주가가 상승분을 반납했어요. &#x27;AI에 쏟은 돈이 정말 돈이 될까?&#x27;라는 의심이 다시 커지면서 주식과 코인 시장 분위기가 엇갈렸어요.</p>
+  </header>
+
+  <section class="m">
+    <h2>시장 한눈에 <span class="chip">주식·코인</span></h2>
+    <div class="tiles"><div class="tile"><div class="k">코스피</div><div class="v">5,067.44</div><div class="d dn">▼ 0.65%</div><div class="when">11/18 기준</div></div><div class="tile"><div class="k">나스닥</div><div class="v">24,430</div><div class="d up">▲ 0.42%</div><div class="when">11/19 기준</div></div><div class="tile"><div class="k">비트코인</div><div class="v">$62,395</div><div class="d dn">▼ 2.54%</div><div class="when">11/19 6시 (24시간)</div></div></div>
+    <ul class="why"><li><b>엔비디아 반락:</b> 엔비디아가 시장 예상을 웃도는 실적을 냈지만 주가가 오름폭을 반납했어요. 그래서 AI 투자 수익성 우려가 다시 떠올랐어요. 다우는 1% 넘게 내렸지만 나스닥은 올라 지수별로 엇갈렸어요.</li><li><b>코인 자금 이탈:</b> 비트코인이 6만 2천 달러 선까지 밀렸어요. 시티그룹이 비트코인 목표가를 낮췄어요. 여기에 현물 ETF 자금 유출과 빚을 낀 투자의 청산이 겹쳐 투자심리가 크게 얼어붙었어요.</li><li><b>금리 인상 압박:</b> 미국 연준의 월러 이사가 물가가 예상보다 높다며 12월에 금리를 0.5%p 올리거나 두 달 연속 0.25%p씩 올려야 한다고 말했어요. 금리가 오르면 위험자산엔 부담이 될 수 있어요.</li><li><b>코스피 5천 공방:</b> 코스피는 5,000선을 지키려는 공방 속에 연초 수준으로 후퇴했어요. 금융지주들은 연말까지 &#x27;기술적 반등&#x27;에 그칠 수 있다고 봤어요. 18일 하락의 직접 이유는 아직 뚜렷하게 보도되지 않았어요.</li></ul>
+  </section>
+
+  <section class="term">
+    <b>오늘의 용어 · 현물 ETF (Spot ETF)</b>
+    <p>ETF(상장지수펀드)는 주식처럼 거래소에서 사고팔 수 있는 펀드예요. &#x27;현물&#x27; ETF는 선물 같은 계약이 아니라 실제 자산(예: 비트코인)을 직접 사서 보관하는 방식이에요. 그래서 이 ETF에서 돈이 빠지면 실제 비트코인을 파는 압력으로 이어질 수 있어요. 오늘 비트코인 약세의 이유 중 하나로 이 현물 ETF 자금 유출이 꼽혔어요.</p>
+  </section>
+
+  <section class="a">
+    <h2>AI · IT 소식 <span class="chip">IT</span></h2>
+    <ol class="news"><li><h3><a href="https://www.aitimes.com/news/articleView.html?idxno=217531" target="_blank" rel="noopener">구글 제미나이 &#x27;태스크 모드&#x27;, 한국에서도 무료로 쓴다</a></h3><p>구글이 제미나이의 &#x27;태스크 모드(Task Mode)&#x27;를 한국·미국 등 6개국 수억 명에게 무료로 넓혀요. 새 모델 &#x27;제미나이 4 하이드로젠&#x27; 기반으로 전화 예약, 온라인 쇼핑, 결제까지 대신 처리하는 기능이에요. 일부 고급 기능은 미국부터 제공돼요. <span class="so">AI가 &#x27;대답하는 도구&#x27;에서 &#x27;일을 대신 해주는 비서&#x27;로 바뀌는 흐름을 한국 사용자도 직접 체험하게 됐어요.</span></p></li><li><h3><a href="https://www.aitimes.com/news/articleView.html?idxno=217533" target="_blank" rel="noopener">엔비디아, 삼성전기·TSMC 등과 생산 협력 확대</a></h3><p>엔비디아가 AI 인프라 수요 증가에 맞춰 삼성전기, 앰코, 폭스콘, TSMC 등 협력사와 기판·첨단 패키징 생산능력을 늘리기로 했어요. 차세대 가속 컴퓨팅 플랫폼 생산 규모도 키울 계획이에요. <span class="so">AI 칩을 만드는 데는 칩뿐 아니라 기판·패키징 같은 부품이 필요해서, 한국 부품 기업에도 관련 흐름이 이어질 수 있어요.</span></p></li><li><h3><a href="https://www.blockmedia.co.kr/archives/1167810" target="_blank" rel="noopener">미국, 기업에 &#x27;중국산 AI 쓰는지 공개하라&#x27; 의무화 검토</a></h3><p>로이터에 따르면 트럼프 행정부가 미국 기업이 중국산 AI 모델을 쓰는 사실을 공개하도록 하는 방안을 검토 중이에요. 직접 금지하기보다 공개를 통해 중국 AI 의존도를 낮추려는 거예요. <span class="so">AI가 미·중 기술 경쟁의 핵심 무대가 되면서, 기업이 어떤 AI를 쓰는지도 규제 대상이 되고 있어요.</span></p></li><li><h3><a href="https://www.aitimes.com/news/articleView.html?idxno=217528" target="_blank" rel="noopener">딥마인드 창업자의 AI 신약 회사, 6개월 새 9.4조 원 유치</a></h3><p>데미스 허사비스가 세운 아이소모픽 랩스가 50억 달러(약 6조 6천억 원) 투자를 받았어요. 5월 21억 달러에 이어 6개월 만에 총 71억 달러를 모았고, AI로 설계한 신약 후보의 임상시험 진입을 추진해요. <span class="so">AI가 챗봇을 넘어 신약 개발 같은 큰 산업으로 확장되고 있다는 신호예요.</span></p></li><li><h3><a href="https://www.aitimes.com/news/articleView.html?idxno=217542" target="_blank" rel="noopener">오픈AI &quot;사이버 보안이 코딩보다 큰 사업 될 것&quot;</a></h3><p>오픈AI가 사이버 보안을 기업용 AI 사업의 핵심 성장 분야로 키우고 있어요. 이미 상당한 매출을 내고 있고, 영업 조직과 파트너십도 강화하고 있어요. <span class="so">AI 회사들이 &#x27;어디서 돈을 벌까&#x27;를 찾는 가운데, 보안이 새로운 수익원으로 떠오르고 있어요.</span></p></li></ol>
+  </section>
+
+  <section class="s">
+    <h2>피부미용의료 <span class="chip">기술·논문</span></h2>
+    <h4>새 기술 · 기기 소식</h4>
+    <ol class="news"><li><h3><a href="https://news.google.com/rss/articles/CBMiaEFVX3lxTE5wSmJ2cllPSzR2MUxtekJSYjY4S0p4eFFTRlVsa2dfbGVGcENpbm5Ec1hJMFZ0NlRYbmNSZnlBelY4S09SM3V4aFMzcUdVaDVadzFlOF9BeUhYN0kzTU1vQTlDZlBTTnY40gFsQVVfeXFMT19QU05vSGp1SnVILXQ1bkMyM3VoZk1xem1PcDF4RmpGeVJnTEFDUDl5SlRRc19DOE9haEdNX2MzNGhhMmRrX2VPakVlUUV0N3lXUHllQ0dyRWpwSS0zSXY0MHBoQVNDWHNQWXVa?oc=5" target="_blank" rel="noopener">레이저옵텍, 피부미용 장비는 성장…미국 사업 수익성은 숙제</a></h3><p>국내 레이저 기기 업체 레이저옵텍의 피부미용 장비 사업이 성장했다는 분석이 나왔어요. 다만 미국 사업의 수익성은 아직 과제로 꼽혔어요. <span class="so">K-피부미용 장비가 해외로 나가고 있지만, 해외 시장에서 실제로 돈을 버는 건 또 다른 문제라는 걸 보여줘요.</span></p></li><li><h3><a href="https://news.google.com/rss/articles/CBMibkFVX3lxTE5TdlpRWkJtV2JrX3phYXhOVm1DU0JocS0zckRjNkhDbGVZd25oNlhITTdvUGRLREhLaTVmNWd1dExGYVRaeWx5MnhMZ0xwSWVtS2gtdzNOUEFoZXk2R3NzNFhkOVlCakhwMWVtbHNR0gFyQVVfeXFMT1dPRkxPWUFKSFcwQXRmQzU2OUpMUGxYc09SazIzWC1vVHBXbmwwSDNZWDZPTHZTR05IUWtISzJPRGN2RjYyTkhhV0VhZng0UjJZNVp5ZTBETFV5Tk1IajY3REh5OHZZZjhXVlFqNnNiS1pn?oc=5" target="_blank" rel="noopener">바임, 쥬베룩 스킨케어 세럼 미국 병원·메드스파 출시</a></h3><p>국내 기업 바임(VAIM)이 &#x27;쥬베룩(JuveLook) 스킨케어 세럼&#x27;을 미국 클리닉과 메드스파(Med Spa, 의료진이 관여하는 미용 시설)에 선보일 예정이에요. <span class="so">국내 스킨부스터 브랜드가 시술 제품을 넘어 홈케어·화장품 라인으로 미국 시장을 두드리는 흐름이에요.</span></p></li><li><h3><a href="https://news.google.com/rss/articles/CBMipAFBVV95cUxQcnliSlVIVFdNVEZpTEVvVVFhcFlDa0h6UDhuYUNzUF9tdWtxLVVfNnNMdVNlRXZDRU1DTEM3eXZjOEFFY2pka0hENG9GVTBlSk5HaUM2SnhIREt2eXoySmJNME5nRTR1bDkzYlJTOF9qVmpuV0lhLUV6cVhOWV9LN0FDMHhhalRlOEFTelc1NzRyRklCa0l4VnlBTFZtcF9zaUtWSA?oc=5" target="_blank" rel="noopener">지방 분해 주사, &#x27;표적 세포자멸사&#x27; 방향으로 이동 중</a></h3><p>주사로 지방을 줄이는 시술 연구가 &#x27;표적 세포자멸사(Targeted Apoptosis, 원하는 세포만 스스로 죽게 유도하는 것)&#x27; 쪽으로 옮겨가고 있다는 리뷰가 소개됐어요. 구체적인 내용은 원문에서 확인해 보세요. <span class="so">지방세포를 무차별로 녹이기보다 더 선택적으로 줄이려는 방향이라, 앞으로 지방 분해 주사의 안전성 논의에 영향을 줄 수 있어요.</span></p></li></ol>
+    <h4>이번 주 논문</h4>
+    <ol class="news papers"><li><div class="jr">Lasers Med Sci</div><h3><a href="https://pubmed.ncbi.nlm.nih.gov/43033286/" target="_blank" rel="noopener">수술 후 얼굴 흉터에 프랙셔널 Nd:YAG 레이저와 함께 쓰는 엑소좀 외용 제제</a></h3><p>수술 후 얼굴 흉터 환자 150명을 무작위로 나눠, 프랙셔널 1064nm Nd:YAG 레이저 후 대조 하이드로젤·인체 유래 제제·식물 유래 제제를 바르게 했어요(각 50명). 2주 간격 5회 시술 후 mVSS, POSAS, 이미지 밝기값(GSI)으로 평가했고, 139명이 끝까지 분석됐어요.</p><p class="so">&#x27;엑소좀 스킨부스터&#x27;라는 이름의 제품이 레이저에 실제로 더 보탬이 되는지를 대조군과 비교한 무작위 연구라 의미가 있어요. 다만 받은 초록이 결과 부분에서 잘려 있어 효과 크기는 원문에서 꼭 확인해야 해요.</p></li><li><div class="jr">Aesthetic Plast Surg</div><h3><a href="https://pubmed.ncbi.nlm.nih.gov/43039988/" target="_blank" rel="noopener">켈로이드 고위험 정형외과 수술 환자에서 보툴리눔 톡신 A와 트리암시놀론 예방 주사 비교</a></h3><p>켈로이드 병력이 있는 74명을 보툴리눔 톡신 A(BTX-A, 39명)와 트리암시놀론(TAC, 35명) 예방 주사 그룹으로 비교했어요. 켈로이드 발생률은 82.1% vs 85.7%로 비슷했지만(p=0.670), 발생까지 걸린 시간은 BTX-A 군이 8.03개월로 TAC 군 4.87개월보다 길었어요(p&lt;0.001).</p><p class="so">톡신 예방 주사가 켈로이드를 막지는 못해도 늦추는 데는 도움이 될 수 있다는 단서예요. 다만 후향적 연구이고 그룹을 의사 습관대로 나눠 비교가 공정하지 않을 수 있어요.</p></li></ol>
+    <h4>기초 지식</h4>
+    <div class="basic"><b>프랙셔널 레이저 (Fractional Laser)의 원리: 피부를 &#x27;점&#x27;으로 나눠 치료하기</b><p>프랙셔널 레이저는 피부 전체를 한꺼번에 태우지 않고, 아주 가는 기둥 모양으로 열 손상을 내요. 이 손상 기둥 사이사이에 멀쩡한 피부를 일부러 남겨 두는 게 핵심이에요. 남은 건강한 조직이 주변으로 세포를 보내 상처를 빨리 덮어줘서(재상피화, Re-epithelialization) 회복이 빨라져요. 그래서 기존 전체 박피 레이저보다 붉은기 지속, 색소 변화, 흉터 위험을 줄일 수 있다고 알려져 있어요. 오늘 소개한 흉터 연구에서도 프랙셔널 Nd:YAG 레이저가 기본 치료로 쓰였고, 이렇게 생긴 미세 통로를 통해 바르는 제제를 함께 쓰는 방식이 연구되고 있어요. 다만 밀도와 에너지를 높게 잡으면 그 장점이 줄어드니 설정값이 중요해요.</p></div>
+  </section>
+
+  <details>
+    <summary>출처 보기</summary>
+    <ul><li><a href="https://www.hankyung.com/article/202611185930i" target="_blank" rel="noopener">한국경제 증권 · 마이크로소프트 AI 수익화 확대…오라클도 강세론[월가 업&amp;다운]</a></li><li><a href="https://www.hankyung.com/article/202611185914i" target="_blank" rel="noopener">한국경제 증권 · 내년 &#x27;초비상&#x27;...AI 투자 둔화에 美 기업이익 증가세 반토막 전망 [</a></li><li><a href="https://www.hankyung.com/article/202611185909i" target="_blank" rel="noopener">한국경제 증권 · 목표가 280달러 불렀다…월가가 다시 쓸어담는 &#x27;이곳&#x27; [월가 업&amp;다운]</a></li><li><a href="https://www.hankyung.com/article/2026111852966" target="_blank" rel="noopener">한국경제 증권 · 반도체 끝물이라는데 1만피 간다?…개미들 혼란 빠뜨린 전망 [분석+]</a></li><li><a href="https://www.aitimes.com/news/articleView.html?idxno=217542" target="_blank" rel="noopener">AI타임스 · 오픈AI &quot;사이버 보안, 코딩보다 큰 사업 될 것&quot;…신성장 동력 육성</a></li><li><a href="https://www.aitimes.com/news/articleView.html?idxno=217531" target="_blank" rel="noopener">AI타임스 · 구글, 제미나이 &#x27;태스크 모드&#x27; 한국에도 무료 제공…예약·쇼핑까지 대행</a></li><li><a href="https://www.aitimes.com/news/articleView.html?idxno=217528" target="_blank" rel="noopener">AI타임스 · 허사비스의 AI 신약 기업, 6개월 새 9.4조 투자 유치…임상시험 본격</a></li><li><a href="https://www.aitimes.com/news/articleView.html?idxno=217533" target="_blank" rel="noopener">AI타임스 · 엔비디아, 삼성전기·앰코 등 글로벌 공급망 파트너 협력 확대</a></li><li><a href="https://news.google.com/rss/articles/CBMiaEFVX3lxTE5wSmJ2cllPSzR2MUxtekJSYjY4S0p4eFFTRlVsa2dfbGVGcENpbm5Ec1hJMFZ0NlRYbmNSZnlBelY4S09SM3V4aFMzcUdVaDVadzFlOF9BeUhYN0kzTU1vQTlDZlBTTnY40gFsQVVfeXFMT19QU05vSGp1SnVILXQ1bkMyM3VoZk1xem1PcDF4RmpGeVJnTEFDUDl5SlRRc19DOE9haEdNX2MzNGhhMmRrX2VPakVlUUV0N3lXUHllQ0dyRWpwSS0zSXY0MHBoQVNDWHNQWXVa?oc=5" target="_blank" rel="noopener">피부미용 뉴스 · 레이저옵텍, 피부미용 장비 성장했지만…美사업 수익성은 과제 - 블로터</a></li><li><a href="https://news.google.com/rss/articles/CBMibkFVX3lxTE5TdlpRWkJtV2JrX3phYXhOVm1DU0JocS0zckRjNkhDbGVZd25oNlhITTdvUGRLREhLaTVmNWd1dExGYVRaeWx5MnhMZ0xwSWVtS2gtdzNOUEFoZXk2R3NzNFhkOVlCakhwMWVtbHNR0gFyQVVfeXFMT1dPRkxPWUFKSFcwQXRmQzU2OUpMUGxYc09SazIzWC1vVHBXbmwwSDNZWDZPTHZTR05IUWtISzJPRGN2RjYyTkhhV0VhZng0UjJZNVp5ZTBETFV5Tk1IajY3REh5OHZZZjhXVlFqNnNiS1pn?oc=5" target="_blank" rel="noopener">Aesthetic news · VAIM to launch JuveLook Skincare Serum i</a></li><li><a href="https://news.google.com/rss/articles/CBMipAFBVV95cUxQcnliSlVIVFdNVEZpTEVvVVFhcFlDa0h6UDhuYUNzUF9tdWtxLVVfNnNMdVNlRXZDRU1DTEM3eXZjOEFFY2pka0hENG9GVTBlSk5HaUM2SnhIREt2eXoySmJNME5nRTR1bDkzYlJTOF9qVmpuV0lhLUV6cVhOWV9LN0FDMHhhalRlOEFTelc1NzRyRklCa0l4VnlBTFZtcF9zaUtWSA?oc=5" target="_blank" rel="noopener">Aesthetic news · Review Highlights Shift Toward Targeted </a></li><li><a href="https://pubmed.ncbi.nlm.nih.gov/43039988/" target="_blank" rel="noopener">Aesthetic Plast Surg · Prophylactic Intralesional Botulinum Tox</a></li><li><a href="https://pubmed.ncbi.nlm.nih.gov/43033286/" target="_blank" rel="noopener">Lasers Med Sci · Exosome-based topical formulations as ad</a></li></ul>
+  </details>
+
+  <details>
+    <summary>지난 브리핑</summary>
+    <div class="arch"><a href="2026-11-19.html">11/19</a><a href="2026-11-18.html">11/18</a><a href="2026-11-17.html">11/17</a><a href="2026-11-16.html">11/16</a><a href="2026-11-15.html">11/15</a><a href="2026-11-14.html">11/14</a><a href="2026-11-13.html">11/13</a><a href="2026-11-12.html">11/12</a><a href="2026-11-11.html">11/11</a><a href="2026-11-10.html">11/10</a><a href="2026-11-09.html">11/09</a><a href="2026-11-08.html">11/08</a></div>
+  </details>
+
+  <p class="small">공부용 요약이에요. 특정 종목·코인 매매나 특정 시술·제품을 권하는 내용이 아니에요. 숫자는 표시된 시점 기준이에요.</p>
+  <p class="small">2026-11-19 06:17 업데이트 · Claude 요약</p>
+</div>
+</body>
+</html>
