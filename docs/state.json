@@ -15,9 +15,10 @@
     "이동평균선 (Moving Average)",
     "스테이블코인 (Stablecoin)",
     "실질금리 (Real Interest Rate)",
-    "현물 ETF (Spot ETF)"
+    "현물 ETF (Spot ETF)",
+    "공모가 (Offering Price)"
   ],
-  "last_run": "2026-11-19T06:17:59.825040+09:00",
+  "last_run": "2026-11-20T06:17:16.472786+09:00",
   "recent_skin": [
     "HIFU(고강도 집속 초음파)의 원리와 안전",
     "마이크로니들 고주파(MNRF)의 원리",
@@ -30,6 +31,7 @@
     "히알루로니다아제 (Hyaluronidase): 히알루론산 필러를 녹이는 효소",
     "눈 주변 에너지 기기 시술과 수정체 손상 위험",
     "켈로이드 (Keloid)와 비후성 반흔 (Hypertrophic Scar)의 차이",
-    "프랙셔널 레이저 (Fractional Laser)의 원리: 피부를 '점'으로 나눠 치료하기"
+    "프랙셔널 레이저 (Fractional Laser)의 원리: 피부를 '점'으로 나눠 치료하기",
+    "어븀야그(Er:YAG) 레이저와 물 흡수: 왜 2940nm일까"
   ]
 }

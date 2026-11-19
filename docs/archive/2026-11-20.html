@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>매일 아침 피드</title>
+<meta name="description" content="AI·IT, 주식·코인, 피부미용의료 소식을 쉽게 정리한 아침 브리핑">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="아침 피드">
+<meta name="theme-color" content="#f3f5f8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f141c" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231f5fd1'/%3E%3Ctext x='32' y='44' font-size='34' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='700'%3E아%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=IBM+Plex+Sans+KR:wght@400;500;700&display=swap">
+<style>
+:root{
+  --bg:#f3f5f8; --surface:#ffffff; --ink:#152033; --muted:#5a6678; --line:#dde3ec;
+  --it:#1f5fd1; --it-soft:#e6eefc; --money:#b86a00; --money-soft:#fbf0de;
+  --up:#d1342f; --down:#1f5fd1; --skin:#b0306a; --skin-soft:#fbe8f0;
+  --display:"Do Hyeon","Apple SD Gothic Neo",sans-serif;
+  --body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#0f141c; --surface:#18202c; --ink:#e7ecf3; --muted:#9aa6b8; --line:#2a3443;
+  --it:#7aa7ff; --it-soft:#1c2a44; --money:#f0b356; --money-soft:#33280f;
+  --up:#ff7a70; --down:#7aa7ff; --skin:#f58bb8; --skin-soft:#3a1a29; color-scheme:dark}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.65;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-top:max(20px,env(safe-area-inset-top,0px));padding-bottom:max(40px,env(safe-area-inset-bottom,0px))}
+.wrap{max-width:600px;margin:0 auto;display:flex;flex-direction:column;gap:26px}
+.date{font-size:.8rem;letter-spacing:.06em;color:var(--muted);font-weight:500}
+h1{font-family:var(--display);font-weight:400;font-size:2rem;line-height:1.2;margin:2px 0 0;text-wrap:balance}
+.lede{margin:10px 0 0;font-size:1.02rem}
+h2{font-family:var(--display);font-weight:400;font-size:1.4rem;margin:0 0 10px;display:flex;align-items:center;gap:8px}
+h2 .chip{font-family:var(--body);font-size:.72rem;padding:1px 8px;border-radius:999px;font-weight:500}
+.m .chip{background:var(--money-soft);color:var(--money)}
+.a .chip{background:var(--it-soft);color:var(--it)}
+.s .chip{background:var(--skin-soft);color:var(--skin)}
+h4{font-size:.85rem;color:var(--muted);font-weight:500;letter-spacing:.04em;margin:16px 0 8px}
+.s h4:first-of-type{margin-top:0}
+.jr{font-size:.72rem;color:var(--skin);font-weight:500;letter-spacing:.03em}
+.papers p.so{margin-top:6px}
+.basic{background:var(--skin-soft);border-radius:12px;padding:14px 16px}
+.basic b{font-size:1.05rem}
+.basic p{margin:4px 0 0}
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-width:0}
+.tile .k{font-size:.75rem;color:var(--muted)}
+.tile .v{font-weight:700;font-size:1.05rem;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tile .d{font-size:.78rem;font-variant-numeric:tabular-nums}
+.dn{color:var(--down)} .up{color:var(--up)}
+.tile .when{font-size:.68rem;color:var(--muted)}
+ul.why{margin:12px 0 0;padding-left:1.1em}
+ul.why li+li{margin-top:6px}
+.term{background:var(--money-soft);border-radius:12px;padding:14px 16px}
+.term b{font-size:1.05rem}
+.term p{margin:4px 0 0}
+ol.news{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+ol.news li{padding:14px 16px;border-top:1px solid var(--line)}
+ol.news li:first-child{border-top:0}
+ol.news h3{margin:0;font-size:1rem;line-height:1.45;text-wrap:balance}
+ol.news h3 a{color:var(--ink);text-decoration:none}
+ol.news h3 a::after{content:" ↗";color:var(--muted);font-weight:400}
+ol.news p{margin:4px 0 0;color:var(--muted);font-size:.92rem;overflow-wrap:anywhere}
+ol.news .so{color:var(--ink)}
+details{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 16px;font-size:.88rem}
+summary{cursor:pointer;font-weight:500}
+details ul{margin:8px 0 0;padding-left:1.1em}
+details a{color:var(--it);overflow-wrap:anywhere}
+.arch{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.arch a{color:var(--it);border:1px solid var(--line);border-radius:6px;padding:2px 8px;text-decoration:none;font-variant-numeric:tabular-nums}
+.home{color:var(--it);text-decoration:none;font-size:.9rem}
+.small{color:var(--muted);font-size:.8rem;margin:0}
+a:focus-visible,summary:focus-visible{outline:2px solid var(--it);outline-offset:2px}
+@media (max-width:420px){.tile{padding:8px 9px}.tile .v{font-size:.92rem}}
+@media (max-width:330px){.tiles{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="home" href="../index.html">← 오늘 브리핑</a>
+  <header>
+    <div class="date">2026년 11월 20일 (금) · 약 15분 읽기</div>
+    <h1>앤트로픽 나스닥 데뷔, 첫날 기업가치 2조달러…기술주는 흔들</h1>
+    <p class="lede">클로드(Claude)를 만든 앤트로픽이 역대 최대 규모로 상장했어요. 그런데 같은 날 나스닥은 2% 넘게 빠졌어요. AI 기대감과 &#x27;너무 비싼 것 아니냐&#x27;는 걱정이 동시에 드러난 하루예요.</p>
+  </header>
+
+  <section class="m">
+    <h2>시장 한눈에 <span class="chip">주식·코인</span></h2>
+    <div class="tiles"><div class="tile"><div class="k">코스피</div><div class="v">5,137.89</div><div class="d up">▲ 3.41%</div><div class="when">11/19 기준</div></div><div class="tile"><div class="k">나스닥</div><div class="v">23,879</div><div class="d dn">▼ 2.25%</div><div class="when">11/20 기준</div></div><div class="tile"><div class="k">비트코인</div><div class="v">$61,954</div><div class="d dn">▼ 0.71%</div><div class="when">11/20 6시 (24시간)</div></div></div>
+    <ul class="why"><li><b>기술주 매도:</b> 앤트로픽 상장을 계기로 뉴욕증시에서 기술주 매도세가 퍼졌다는 보도가 나왔어요. 나스닥은 2.25% 내렸어요. 막대한 인프라 지출과 부채를 수익이 감당할 수 있을지에 대한 의구심도 함께 커지고 있어요.</li><li><b>AMD 급락:</b> AMD 주가가 30분 만에 13% 떨어졌어요. 미국 블랙리스트에 오른 중국 서버업체에서 AMD 최신 펌웨어가 발견됐다는 조사 결과 때문이에요. 다만 수출통제법 위반 여부는 확인되지 않았어요.</li><li><b>코인 동반 약세:</b> 비트코인은 장중 6만4000달러를 넘었다가 6만2000달러선으로 밀렸어요. 기술주 약세에 레버리지 포지션 청산과 현물 ETF 자금 유출이 겹쳤다고 해요.</li><li><b>코스피 급등:</b> 코스피는 19일 3.4% 올랐지만, 직접적인 이유는 아직 뚜렷하게 보도되지 않았어요. 외국인이 닷새간 4.3조원을 순매도한 상황이라, 앤트로픽 상장 뒤 외국인이 돌아올지에 관심이 모여요.</li></ul>
+  </section>
+
+  <section class="term">
+    <b>오늘의 용어 · 공모가 (Offering Price)</b>
+    <p>공모가는 회사가 상장하기 전에 일반 투자자에게 새 주식을 파는 가격이에요. 상장 첫날 시장에서 거래되는 가격은 공모가보다 높을 수도, 낮을 수도 있어요. 오늘 앤트로픽은 공모가 83달러로 정해졌는데, 첫 거래 가격은 111.50달러로 약 34% 높게 시작했어요.</p>
+  </section>
+
+  <section class="a">
+    <h2>AI · IT 소식 <span class="chip">IT</span></h2>
+    <ol class="news"><li><h3><a href="https://www.aitimes.com/news/articleView.html?idxno=217594" target="_blank" rel="noopener">앤트로픽, 나스닥 상장 첫날 기업가치 2조달러…스페이스X 넘었다</a></h3><p>앤트로픽이 종목코드 &#x27;ANT&#x27;로 나스닥에 상장했어요. 공모가 83달러보다 34% 높은 111.50달러에 첫 거래를 시작해 기업가치 약 2조달러(약 2668조원)를 기록했어요. <span class="so">최첨단 AI 기업이 처음으로 상장한 사례라, AI 산업의 성장 기대와 투자 위험을 가늠하는 시험대가 됐어요.</span></p></li><li><h3><a href="https://www.aitimes.com/news/articleView.html?idxno=217562" target="_blank" rel="noopener">오픈AI, AI로 AMD GPU 설계 개선…&quot;5개월 만에 1년치 진전&quot;</a></h3><p>오픈AI가 AI 모델로 AMD 주력 GPU의 회로 설계를 최적화해 전력·성능·면적(PPA) 지표를 최대 14% 개선했다고 밝혔어요. 자체 추론 칩 &#x27;할라페뇨(Jalapeño)&#x27; 개발에도 AI를 활용했대요. <span class="so">AI가 AI용 칩을 더 빠르게 설계하는 흐름이 본격화되고 있다는 신호예요.</span></p></li><li><h3><a href="https://www.aitimes.com/news/articleView.html?idxno=217557" target="_blank" rel="noopener">MS, 중국 바이트댄스에 오픈AI 모델 공급 확대 추진…미 의회 &quot;설명하라&quot;</a></h3><p>마이크로소프트가 바이트댄스에 5억달러(약 6650억원) 규모 AI 클라우드 서비스를 추가 공급하는 계약에 근접했다는 보도가 나왔어요. 오픈AI가 반발했고, 미국 하원 중국특별위원회도 설명을 요구했어요. <span class="so">미중 기술 갈등 속에서 AI 모델 접근 권한이 새로운 규제 쟁점이 되고 있어요.</span></p></li><li><h3><a href="https://www.aitimes.com/news/articleView.html?idxno=217579" target="_blank" rel="noopener">엔비디아, 집에서 AI 에이전트 돌리는 소형 PC &#x27;RTX 스파크&#x27; 출시</a></h3><p>엔비디아가 로컬 AI 에이전트를 24시간 구동할 수 있는 소형 데스크톱 &#x27;RTX 스파크&#x27;를 글로벌 출시했어요. 국내에서는 19일부터 에이수스 제품 사전예약이 시작됐어요. <span class="so">클라우드에 의존하지 않고 내 책상 위에서 AI를 돌리는 시대가 가까워지고 있어요.</span></p></li><li><h3><a href="https://www.aitimes.com/news/articleView.html?idxno=217580" target="_blank" rel="noopener">챗GPT 음성 받아쓰기, 실시간 변환되고 10분 제한도 사라져</a></h3><p>오픈AI가 &#x27;라이브 받아쓰기(Live Dictation)&#x27;를 모든 챗GPT 요금제에 차례로 배포해요. 말하는 동안 글자가 화면에 바로 뜨고, 기존 10분 녹음 제한도 없어졌어요. <span class="so">긴 질문이나 설명을 타이핑 대신 말로 편하게 입력할 수 있게 돼요.</span></p></li></ol>
+  </section>
+
+  <section class="s">
+    <h2>피부미용의료 <span class="chip">기술·논문</span></h2>
+    <h4>새 기술 · 기기 소식</h4>
+    <ol class="news"><li><h3><a href="https://news.google.com/rss/articles/CBMidEFVX3lxTE1MQUx2dTF2UDFtTUt5VWVpa21JdXgwSF9qUGhKNVF4TjVIX2RiQk0yN2dlMWdOeDBhbjJIamRtTDA3YnhuQXhlZ05hMkxWOGtIOHZZNXY3d3p2eGdPNDdvT3p5SF9jSC1TSHNseUdxOHdpYVBH?oc=5" target="_blank" rel="noopener">&#x27;슈링크&#x27;로 알려진 클래시스, 매출 절반이 이익인 배경은?</a></h3><p>HIFU 리프팅 기기 &#x27;슈링크&#x27;로 알려진 국내 기업 클래시스의 수익 구조를 다룬 기업 분석 기사예요. 매출의 절반 가까이가 이익으로 남는 배경을 짚었어요. <span class="so">국내 에너지 기반 미용기기 업체가 어떤 사업 구조로 돈을 버는지 업계 흐름을 엿볼 수 있어요.</span></p></li><li><h3><a href="https://news.google.com/rss/articles/CBMipAFBVV95cUxQcnliSlVIVFdNVEZpTEVvVVFhcFlDa0h6UDhuYUNzUF9tdWtxLVVfNnNMdVNlRXZDRU1DTEM3eXZjOEFFY2pka0hENG9GVTBlSk5HaUM2SnhIREt2eXoySmJNME5nRTR1bDkzYlJTOF9qVmpuV0lhLUV6cVhOWV9LN0FDMHhhalRlOEFTelc1NzRyRklCa0l4VnlBTFZtcF9zaUtWSA?oc=5" target="_blank" rel="noopener">지방 녹이는 주사, &#x27;표적 세포자멸사&#x27; 방향으로 이동 중이라는 리뷰</a></h3><p>주사로 지방을 줄이는 시술이 &#x27;표적 세포자멸사(Targeted Apoptosis)&#x27;, 즉 지방세포가 스스로 정리되도록 유도하는 방식으로 옮겨가고 있다는 리뷰 소개 기사예요. <span class="so">지방세포를 강하게 터뜨리는 방식에서 더 선택적인 방식으로 연구 흐름이 바뀌고 있음을 보여줘요.</span></p></li><li><h3><a href="https://news.google.com/rss/articles/CBMilwFBVV95cUxNSnh4R25fTEY4VmNESEd2a3B1aWI0dlJhcWY4c3B4clJwYi1Dd3FBRWhKblJGekpxbVlnSUVXRjBKZmFxOEctQlZycUZKTGdEc2hqaVVkd1Y5NXN6RGlNLW9vNGVXYlpUSDR3cDFuZmJXOEREMzV5S09aQU5QdUFjUHllMWtFX3Y1SW9Ka1dnQTBTRGhheDFn?oc=5" target="_blank" rel="noopener">2027 피부미용 트렌드: 진정 시술·바이오스티뮬레이터·&#x27;피부 헬스장&#x27;</a></h3><p>영국 매체가 2027년 주목할 피부미용 트렌드로 피부 진정 시술, 바이오스티뮬레이터(Biostimulator, 콜라겐 생성을 유도하는 주사제), &#x27;피부를 위한 헬스장&#x27; 개념을 꼽았어요. <span class="so">단번에 바꾸기보다 피부 자체의 회복력을 꾸준히 키우는 쪽으로 관심이 옮겨가는 흐름이에요.</span></p></li></ol>
+    <h4>이번 주 논문</h4>
+    <ol class="news papers"><li><div class="jr">Lasers Med Sci</div><h3><a href="https://pubmed.ncbi.nlm.nih.gov/43052576/" target="_blank" rel="noopener">입술·입 주변 리모델링을 위한 어븀야그(Er:YAG) 레이저, SMOOTH® 모드 중심의 체계적 문헌고찰</a></h3><p>주사 없이 2940nm Er:YAG 레이저로 입술·입 주변을 개선한다는 근거를 MEDLINE, Web of Science, Scopus, Cochrane에서 찾아 정리했어요. 결과가 진짜 입술 볼륨 증가인지, 조직 리모델링으로 &#x27;도톰해 보이는 것&#x27;인지를 따져보는 게 목적이었어요. 최종 5개 연구, 참가자 80명이 포함됐고, 그중 일부만 입술 부위 치료를 받았어요.</p><p class="so">&#x27;레이저 입술 볼륨&#x27; 효과를 해석할 때 실제 부피 증가와 겉보기 변화를 구분해야 한다는 점을 짚어줘요. 다만 연구 수와 대상자가 적고 대상군이 섞여 있어 결론을 내리기엔 근거가 제한적이에요.</p></li><li><div class="jr">Facial Plast Surg Clin North Am</div><h3><a href="https://pubmed.ncbi.nlm.nih.gov/43045403/" target="_blank" rel="noopener">피부 재생에서의 혈소판풍부혈장(PRP)과 새로운 생물학적 보조요법</a></h3><p>PRP(Platelet-Rich Plasma, 내 피에서 혈소판을 농축한 것)의 피부 재생 근거를 검토한 리뷰예요. 피부 두께, 탄력, 결에서 &#x27;완만한&#x27; 개선이 보고됐고, 특히 프랙셔널 레이저나 마이크로니들링과 병행할 때 그랬어요. 엑소좀과 줄기세포 치료는 초기 가능성은 있지만 아직 연구 단계라고 정리했어요.</p><p class="so">PRP는 단독보다 병행 시술의 보조 역할로 보는 게 현실적이라는 뜻이에요. 다만 준비 방법이 제각각이고 평가 기준이 표준화되지 않아 확정적 결론과 표준 프로토콜은 아직 어려워요.</p></li></ol>
+    <h4>기초 지식</h4>
+    <div class="basic"><b>어븀야그(Er:YAG) 레이저와 물 흡수: 왜 2940nm일까</b><p>어븀야그(Er:YAG) 레이저는 2940nm 파장을 쓰는데, 이 파장은 피부 속 물이 아주 잘 흡수하는 영역이에요. 그래서 에너지가 피부 표면 가까이에서 대부분 흡수돼, 얇은 층을 정밀하게 깎아내는(Ablation, 증산) 데 유리해요. 같은 박피 레이저인 CO2 레이저(10600nm)보다 주변으로 퍼지는 열이 적어서 열 손상과 회복 기간이 상대적으로 짧은 편이에요. 대신 열 응고 효과가 약해 출혈 조절이나 조직 수축 효과는 CO2보다 덜할 수 있어요. 오늘 소개한 Er:YAG 입술 리모델링 리뷰처럼, 같은 레이저라도 모드와 깊이 설정에 따라 &#x27;깎기&#x27;와 &#x27;데우기&#x27;의 비율이 달라져 결과 해석이 달라질 수 있어요.</p></div>
+  </section>
+
+  <details>
+    <summary>출처 보기</summary>
+    <ul><li><a href="https://www.hankyung.com/article/202611208726i" target="_blank" rel="noopener">한국경제 증권 · 앤트로픽 장중 오름폭 둔화...전문가들 &quot;기다려서 할인된 가격에 투자하라</a></li><li><a href="https://www.hankyung.com/article/202611208724i" target="_blank" rel="noopener">한국경제 증권 · 앤트로픽 CFO &quot;컴퓨팅 자원 75% R&amp;D 투입…IPO로 투자 확대&quot;[</a></li><li><a href="https://www.hankyung.com/article/202611198672i" target="_blank" rel="noopener">한국경제 증권 · 앤트로픽 CEO, &quot;안전 담보 전엔 AI 개발 안 서두를 것...성공적인</a></li><li><a href="https://www.hankyung.com/article/202611198661i" target="_blank" rel="noopener">한국경제 증권 · 앤트로픽 상장·텍사스 규제 완화…AI 반도체주, 시간외거래 동반 상승  </a></li><li><a href="https://www.aitimes.com/news/articleView.html?idxno=217594" target="_blank" rel="noopener">AI타임스 · 앤트로픽, 나스닥 상장 첫날 기업가치 2조달러…스페이스X 추월</a></li><li><a href="https://www.aitimes.com/news/articleView.html?idxno=217562" target="_blank" rel="noopener">AI타임스 · 오픈AI, AI로 AMD GPU 설계 개선…“5개월 만에 1년치 진전”</a></li><li><a href="https://www.aitimes.com/news/articleView.html?idxno=217557" target="_blank" rel="noopener">AI타임스 · MS, 바이트댄스에 오픈AI 모델 공급 확대 추진…미 의회 설명 요구</a></li><li><a href="https://www.aitimes.com/news/articleView.html?idxno=217580" target="_blank" rel="noopener">AI타임스 · 챗GPT 음성 받아쓰기 기능 개선...실시간 텍스트 변환·10분 녹음 제</a></li><li><a href="https://www.aitimes.com/news/articleView.html?idxno=217579" target="_blank" rel="noopener">AI타임스 · 엔비디아, ‘RTX 스파크’ 소형 데스크톱 글로벌 출시…국내 사전예약 시</a></li><li><a href="https://news.google.com/rss/articles/CBMidEFVX3lxTE1MQUx2dTF2UDFtTUt5VWVpa21JdXgwSF9qUGhKNVF4TjVIX2RiQk0yN2dlMWdOeDBhbjJIamRtTDA3YnhuQXhlZ05hMkxWOGtIOHZZNXY3d3p2eGdPNDdvT3p5SF9jSC1TSHNseUdxOHdpYVBH?oc=5" target="_blank" rel="noopener">피부미용 뉴스 · [기업Hi스토리] ‘슈링크’로 알려진 클래시스…매출 절반이 이익, 배경은</a></li><li><a href="https://news.google.com/rss/articles/CBMipAFBVV95cUxQcnliSlVIVFdNVEZpTEVvVVFhcFlDa0h6UDhuYUNzUF9tdWtxLVVfNnNMdVNlRXZDRU1DTEM3eXZjOEFFY2pka0hENG9GVTBlSk5HaUM2SnhIREt2eXoySmJNME5nRTR1bDkzYlJTOF9qVmpuV0lhLUV6cVhOWV9LN0FDMHhhalRlOEFTelc1NzRyRklCa0l4VnlBTFZtcF9zaUtWSA?oc=5" target="_blank" rel="noopener">Aesthetic news · Review Highlights Shift Toward Targeted </a></li><li><a href="https://news.google.com/rss/articles/CBMilwFBVV95cUxNSnh4R25fTEY4VmNESEd2a3B1aWI0dlJhcWY4c3B4clJwYi1Dd3FBRWhKblJGekpxbVlnSUVXRjBKZmFxOEctQlZycUZKTGdEc2hqaVVkd1Y5NXN6RGlNLW9vNGVXYlpUSDR3cDFuZmJXOEREMzV5S09aQU5QdUFjUHllMWtFX3Y1SW9Ka1dnQTBTRGhheDFn?oc=5" target="_blank" rel="noopener">Aesthetic news · Skin Soothers, Biostimulators &amp; ‘Gym For</a></li><li><a href="https://pubmed.ncbi.nlm.nih.gov/43045403/" target="_blank" rel="noopener">Facial Plast Surg Clin North Am · Platelet-Rich Plasma and Emerging Biolog</a></li><li><a href="https://pubmed.ncbi.nlm.nih.gov/43052576/" target="_blank" rel="noopener">Lasers Med Sci · Er: YAG laser for lip and perioral remod</a></li></ul>
+  </details>
+
+  <details>
+    <summary>지난 브리핑</summary>
+    <div class="arch"><a href="2026-11-20.html">11/20</a><a href="2026-11-19.html">11/19</a><a href="2026-11-18.html">11/18</a><a href="2026-11-17.html">11/17</a><a href="2026-11-16.html">11/16</a><a href="2026-11-15.html">11/15</a><a href="2026-11-14.html">11/14</a><a href="2026-11-13.html">11/13</a><a href="2026-11-12.html">11/12</a><a href="2026-11-11.html">11/11</a><a href="2026-11-10.html">11/10</a><a href="2026-11-09.html">11/09</a><a href="2026-11-08.html">11/08</a></div>
+  </details>
+
+  <p class="small">공부용 요약이에요. 특정 종목·코인 매매나 특정 시술·제품을 권하는 내용이 아니에요. 숫자는 표시된 시점 기준이에요.</p>
+  <p class="small">2026-11-20 06:17 업데이트 · Claude 요약</p>
+</div>
+</body>
+</html>
