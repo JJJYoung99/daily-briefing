@@ -18,9 +18,10 @@
     "현물 ETF (Spot ETF)",
     "공모가 (Offering Price)",
     "조정장 (Correction)",
-    "공매도 (Short Selling)"
+    "공매도 (Short Selling)",
+    "증안펀드 (증권시장안정펀드)"
   ],
-  "last_run": "2026-11-22T06:16:46.601299+09:00",
+  "last_run": "2026-11-23T06:16:31.516139+09:00",
   "recent_skin": [
     "HIFU(고강도 집속 초음파)의 원리와 안전",
     "마이크로니들 고주파(MNRF)의 원리",
@@ -36,6 +37,7 @@
     "프랙셔널 레이저 (Fractional Laser)의 원리: 피부를 '점'으로 나눠 치료하기",
     "어븀야그(Er:YAG) 레이저와 물 흡수: 왜 2940nm일까",
     "PRP (혈소판 풍부 혈장, Platelet-Rich Plasma)의 원리",
-    "플라즈마(Plasma) 에너지 기기의 원리"
+    "플라즈마(Plasma) 에너지 기기의 원리",
+    "기미 (Melasma)와 트라넥삼산 (Tranexamic Acid)의 원리"
   ]
 }
