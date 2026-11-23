@@ -1,6 +1,5 @@
 {
   "recent_terms": [
-    "인플레이션",
     "AI 에이전트",
     "시가총액",
     "PER (주가수익비율)",
@@ -19,9 +18,10 @@
     "공모가 (Offering Price)",
     "조정장 (Correction)",
     "공매도 (Short Selling)",
-    "증안펀드 (증권시장안정펀드)"
+    "증안펀드 (증권시장안정펀드)",
+    "목표주가 (Target Price)"
   ],
-  "last_run": "2026-11-23T06:16:31.516139+09:00",
+  "last_run": "2026-11-24T06:17:02.201751+09:00",
   "recent_skin": [
     "HIFU(고강도 집속 초음파)의 원리와 안전",
     "마이크로니들 고주파(MNRF)의 원리",
@@ -38,6 +38,7 @@
     "어븀야그(Er:YAG) 레이저와 물 흡수: 왜 2940nm일까",
     "PRP (혈소판 풍부 혈장, Platelet-Rich Plasma)의 원리",
     "플라즈마(Plasma) 에너지 기기의 원리",
-    "기미 (Melasma)와 트라넥삼산 (Tranexamic Acid)의 원리"
+    "기미 (Melasma)와 트라넥삼산 (Tranexamic Acid)의 원리",
+    "세포외기질 (ECM, Extracellular Matrix): 피부를 받치는 '틀'"
   ]
 }
