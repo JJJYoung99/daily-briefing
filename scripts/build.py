@@ -450,6 +450,7 @@ SCHEMA = {
         "headline": {"type": "string"},
         "lede": {"type": "string"},
         "market_why": {"type": "array", "items": {"type": "string"}},
+        "market_links": {"type": "array", "items": {"type": "string"}},
         "term": {"type": "object", "properties": {"name": {"type": "string"}, "explain": {"type": "string"}},
                  "required": ["name", "explain"], "additionalProperties": False},
         "news": {"type": "array", "items": {
@@ -474,7 +475,7 @@ SCHEMA = {
                                                         "pubmed_query": {"type": "string"}},
                        "required": ["name", "explain", "pubmed_query"], "additionalProperties": False},
     },
-    "required": ["headline", "lede", "market_why", "term", "news", "skin_tech", "skin_papers", "skin_basic"],
+    "required": ["headline", "lede", "market_why", "market_links", "term", "news", "skin_tech", "skin_papers", "skin_basic"],
     "additionalProperties": False,
 }
 
@@ -485,6 +486,7 @@ PROMPT = """너는 주식·코인 초보이면서 AI·IT에 관심 있는 한국
 - headline: 오늘의 핵심을 담은 한 문장 (40자 안팎).
 - lede: 왜 그게 중요한지 쉬운 말로 1~2문장.
 - market_why: 시장이 왜 이렇게 움직였는지 2~4개. 각 항목은 "굵은 요점: 설명" 형식으로, 앞부분 요점은 10자 이내. 뉴스 자료에 근거가 없으면 "아직 뚜렷한 이유가 보도되지 않았어요"라고 써도 돼. 금리·물가 이야기는 [공식](한국은행·연준) 자료가 있으면 그것을 먼저 근거로 해. 한 사람이나 한 증권사의 전망은 "~라는 의견도 있어요"처럼 의견으로 써.
+- market_links: headline·lede·market_why를 쓸 때 실제로 근거로 삼은 기사 링크 2~5개(자료의 링크 그대로).
 - term: 오늘 뉴스와 관련된 투자·경제 또는 AI 용어 하나. explain은 2~3문장으로 쉽게 설명하고 마지막 문장은 오늘 뉴스와 연결해.
 - news: AI·IT 소식 정확히 5개. 초보도 알 만한 큰 소식(기업, 제품, 투자, 규제)을 우선하고 개발자 전용 도구는 많아야 1개. 같은 소식이 여러 곳에 있으면 [공식] > [전문] > [모음] 순서로 고르고, [모음] 출처는 다른 출처에 없는 중요한 소식일 때만 써. title은 쉬운 한국어로 다시 쓴 제목, body는 1~2문장, why는 "그래서 왜 중요한지" 한 문장, link는 자료에 있던 원문 링크 그대로.
 - skin_tech: 피부미용의료(레이저, 리프팅·에너지 기기, 주사 시술, 스킨부스터, 허가·안전성, 진료지침) 소식 최대 3개. 레퍼런스로 쓸 수 있는 것만 골라. 우선순위는 ① 규제기관의 허가·회수·안전성 정보 ② 사람 대상 임상 연구를 다룬 전문지 기사 ③ 학회 발표·진료지침·전문가 의견 ④ 업체 신제품 발표.
@@ -494,7 +496,7 @@ PROMPT = """너는 주식·코인 초보이면서 AI·IT에 관심 있는 한국
   · 연구 기사는 대상 수·비교군이 자료에 있으면 쓰고, 없으면 "기사 요약에는 대상 수가 없어요"라고 써.
   · 기준에 맞는 것이 없으면 빈 목록으로 둬. 개수를 채우려고 낮은 수준의 글을 넣지 마. 영어 기사는 한국어로 옮겨.
 - skin_papers: 아래 PubMed 논문(좋은 설계·저널 순으로 정렬돼 있음) 중 피부미용 실무에 의미 있는 것 2개. 서로 다른 주제로 골라. title은 한국어로 옮긴 제목. design은 연구 설계와 규모(예: "무작위 대조시험 · 42명 · 12주"), 초록에 없는 값은 빼. finding은 비교군과 주요 수치(p값·신뢰구간이 있으면 포함)로 2~3문장. meaning은 "그래서 실제로 무슨 의미인지" 한 문장. limits는 한계와 이해관계(업체 지원·저자 소속이 자료에 있으면 포함)를 한두 문장. link는 PubMed 링크 그대로. 초록에 없는 내용은 쓰지 마.
-  · level 기준: 높음 = 진료지침, 무작위시험을 모은 메타분석, 여러 기관의 큰 무작위시험(대략 100명 이상). 중간 = 작은 무작위시험, 반쪽 얼굴 비교, 체계적 문헌고찰. 낮음 = 비교군 없는 연구, 후향 연구, 종설, 전문가 의견. 애매하면 낮은 쪽으로 매겨.
+  · level 기준: 높음 = 진료지침, 무작위시험을 모은 메타분석, 여러 기관의 큰 무작위시험(대략 100명 이상). 중간 = 작은 무작위시험, 반쪽 얼굴 비교, 체계적 문헌고찰. 낮음 = 비교군 없는 연구, 후향 연구, 종설, 전문가 의견. 초록에 GRADE 확실성이 있으면 그것을 우선해(여러 개면 주된 결과의 것). 애매하면 낮은 쪽으로 매겨.
 - skin_basic: 피부미용의료 기초 지식 하나(피부 구조, 레이저·기기 원리, 주사 시술 기전, 합병증, 피부 질환 등). 4~6문장으로, 원리 → 실제 시술에서 왜 중요한지 순서로. 교과서 수준에서 널리 받아들여지는 내용만 쓰고, 근거가 엇갈리면 엇갈린다고 써. 가능하면 오늘 skin_tech나 skin_papers 내용과 연결해. pubmed_query는 이 주제의 종설을 찾을 영어 검색어 2~4단어(예: "picosecond laser pigmentation").
 - 말투는 친근한 해요체, 짧은 문장. 전문용어는 처음 나올 때 영어나 원어를 괄호로 함께 쓰고 바로 풀어서 설명해.
 - link는 반드시 아래 자료에 있는 링크를 글자 그대로 옮겨. 자료에 없는 링크는 자동으로 버려져.
@@ -753,7 +755,9 @@ def main():
     if brief["skin_basic"].get("pubmed_query"):
         brief["skin_basic"]["_review"] = pubmed_review(brief["skin_basic"]["pubmed_query"])
 
-    sources = [(f"{i['source']} · {i['title'][:40]}", i["link"]) for i in market_news[:4]]
+    # 시장 설명에 실제로 쓴 기사만 출처에 싣는다 (기본 브리핑은 앞의 4개를 그대로 보여 주므로 4개)
+    used_market = set(brief.get("market_links") or [i["link"] for i in market_news[:4]])
+    sources = [(f"{i['source']} · {i['title'][:40]}", i["link"]) for i in market_news if i["link"] in used_market]
     used = {n["link"] for n in brief["news"]}
     sources += [(f"{i['source']} · {i['title'][:40]}", i["link"]) for i in ai_news if i["link"] in used]
     used_skin = {n["link"] for n in brief.get("skin_tech", [])} | {p["link"] for p in brief.get("skin_papers", [])}
