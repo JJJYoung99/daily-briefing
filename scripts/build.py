@@ -7,11 +7,14 @@ GitHub Actions가 매일 아침 이 스크립트를 실행하고, 결과(docs/)�
 """
 
 import datetime as dt
+import email.utils
 import html
 import json
 import os
 import re
 import sys
+import time
+import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
 from pathlib import Path
@@ -21,14 +24,22 @@ DOCS = ROOT / "docs"
 KST = dt.timezone(dt.timedelta(hours=9))
 UA = "Mozilla/5.0 (compatible; daily-briefing/1.0; +https://github.com)"
 
+# 출처 등급: 공식 = 기관·회사의 1차 발표, 전문 = 전문지·통신사·경제지, 모음 = 다른 기사를 모은 곳
+# (이름, 주소, 등급, 최대 개수)
 AI_FEEDS = [
-    ("긱뉴스", "https://news.hada.io/rss/news"),
-    ("AI타임스", "https://www.aitimes.com/rss/allArticle.xml"),
+    ("OpenAI", "https://openai.com/news/rss.xml", "공식", 6),
+    ("Google AI", "https://blog.google/technology/ai/rss/", "공식", 5),
+    ("MIT Technology Review", "https://www.technologyreview.com/feed/", "전문", 8),
+    ("Ars Technica", "https://feeds.arstechnica.com/arstechnica/technology-lab", "전문", 8),
+    ("AI타임스", "https://www.aitimes.com/rss/allArticle.xml", "전문", 15),
+    ("긱뉴스", "https://news.hada.io/rss/news", "모음", 12),
 ]
 MARKET_FEEDS = [
-    ("한국경제 증권", "https://www.hankyung.com/feed/finance"),
-    ("연합뉴스 경제", "https://www.yna.co.kr/rss/economy.xml"),
-    ("블록미디어", "https://www.blockmedia.co.kr/feed"),
+    ("한국은행", "https://www.bok.or.kr/portal/bbs/B0000501/news.rss?menuNo=201264", "공식", 5),
+    ("미국 연준(Fed)", "https://www.federalreserve.gov/feeds/press_monetary.xml", "공식", 3),
+    ("연합뉴스 경제", "https://www.yna.co.kr/rss/economy.xml", "전문", 10),
+    ("한국경제 증권", "https://www.hankyung.com/feed/finance", "전문", 10),
+    ("블록미디어", "https://www.blockmedia.co.kr/feed", "전문", 8),
 ]
 
 
@@ -40,20 +51,96 @@ def gnews(query, lang="ko"):
     return f"https://news.google.com/rss/search?q={q}&hl=en-US&gl=US&ceid=US:en"
 
 
-SKIN_FEEDS = [
-    ("피부미용 뉴스", gnews("피부과 레이저 OR 리프팅 OR 보톡스 OR 필러 OR 스킨부스터 OR 미용의료기기 when:7d")),
-    ("Aesthetic news", gnews('"aesthetic" (device OR laser OR "FDA clearance" OR injectable OR dermatology) when:7d', "en")),
+# 피부미용 뉴스는 아래 출처만 쓴다. 목록에 없는 곳(생활잡지·연예지·SNS·보도자료 배포 사이트·병원 블로그)은 버린다.
+SKIN_SOURCES = {
+    # 규제기관·학회 (공식)
+    "mfds.go.kr": ("식약처", "공식"), "korea.kr": ("정책브리핑", "공식"), "fda.gov": ("FDA", "공식"),
+    "gov.uk": ("영국 정부(MHRA)", "공식"), "ema.europa.eu": ("EMA", "공식"), "aad.org": ("AAD", "공식"),
+    "asds.net": ("ASDS", "공식"), "theaestheticsociety.org": ("The Aesthetic Society", "공식"),
+    # 의학 전문지
+    "dermatologytimes.com": ("Dermatology Times", "전문"), "healio.com": ("Healio", "전문"),
+    "practicaldermatology.com": ("Practical Dermatology", "전문"), "modernaesthetics.com": ("Modern Aesthetics", "전문"),
+    "hcplive.com": ("HCPLive", "전문"), "medpagetoday.com": ("MedPage Today", "전문"),
+    "medscape.com": ("Medscape", "전문"), "thedermdigest.com": ("The Dermatology Digest", "전문"),
+    "plasticsurgerypractice.com": ("Plastic Surgery Practice", "전문"), "statnews.com": ("STAT", "전문"),
+    "docdocdoc.co.kr": ("청년의사", "전문"), "doctorsnews.co.kr": ("의협신문", "전문"),
+    "medicaltimes.com": ("메디칼타임즈", "전문"), "dailymedi.com": ("데일리메디", "전문"),
+    "medigatenews.com": ("메디게이트뉴스", "전문"), "bosa.co.kr": ("의학신문", "전문"),
+    "dailypharm.com": ("데일리팜", "전문"), "yakup.com": ("약업신문", "전문"), "hitnews.co.kr": ("히트뉴스", "전문"),
+    # 통신사
+    "reuters.com": ("Reuters", "전문"), "apnews.com": ("AP", "전문"), "yna.co.kr": ("연합뉴스", "전문"),
+}
+# 직접 읽는 피드: (주소, 최대 개수)
+SKIN_RSS = [
+    ("https://www.mfds.go.kr/www/rss/brd.do?brdId=ntc0021", 40),
+    ("https://www.fda.gov/about-fda/contact-fda/stay-informed/rss-feeds/medwatch/rss.xml", 30),
+    ("https://www.fda.gov/about-fda/contact-fda/stay-informed/rss-feeds/press-releases/rss.xml", 30),
+    ("https://www.dermatologytimes.com/rss", 40),
+    ("https://www.healio.com/rss/dermatology", 30),
+    ("https://www.medpagetoday.com/rss/dermatology.xml", 30),
+    ("https://www.docdocdoc.co.kr/rss/allArticle.xml", 60),
+    ("https://www.doctorsnews.co.kr/rss/allArticle.xml", 60),
+    ("https://www.bosa.co.kr/rss/allArticle.xml", 60),
+    ("https://www.hitnews.co.kr/rss/allArticle.xml", 60),
 ]
 
-# PubMed에서 최근 1주일 피부미용 관련 논문 검색어
+
+def _sites(*domains):
+    return "(" + " OR ".join(f"site:{d}" for d in domains) + ")"
+
+
+_KO = "(필러 OR 보툴리눔 OR 톡신 OR 스킨부스터 OR 리프팅 OR 레이저 OR 고주파 OR 미용의료기기 OR 피부미용)"
+_EN = '("aesthetic" OR "dermal filler" OR botulinum OR "laser" OR radiofrequency OR biostimulator OR melasma)'
+SKIN_GNEWS = [
+    gnews(f"{_KO} {_sites('medicaltimes.com', 'dailymedi.com', 'medigatenews.com', 'docdocdoc.co.kr', 'doctorsnews.co.kr')} when:14d"),
+    gnews(f"{_KO} {_sites('bosa.co.kr', 'dailypharm.com', 'yakup.com', 'hitnews.co.kr', 'yna.co.kr', 'mfds.go.kr')} when:14d"),
+    gnews(f"{_EN} {_sites('dermatologytimes.com', 'healio.com', 'practicaldermatology.com', 'modernaesthetics.com', 'thedermdigest.com', 'hcplive.com')} when:14d", "en"),
+    gnews(f"{_EN} {_sites('fda.gov', 'gov.uk', 'medpagetoday.com', 'medscape.com', 'plasticsurgerypractice.com', 'reuters.com')} (skin OR facial OR cosmetic) when:14d", "en"),
+]
+
+# 피부미용과 관련 있는 글만 남기는 낱말 (제목·요약에서 찾음)
+SKIN_WORDS = re.compile(
+    r"필러|보툴리눔|톡신|보톡스|스킨\s?부스터|리프팅|레이저|고주파|하이푸|HIFU|초음파 (?:리프팅|수술기)|쥬베룩|리쥬란|스컬트라|엑소좀|"
+    r"PDRN|폴리뉴클레오|콜라겐|미용\s?의료|피부\s?미용|미용\s?시술|기미|색소|흉터|여드름|주름|"
+    r"aesthetic|cosmetic|filler|botulinum|botox|\btoxin\b|\blasers?\b|radiofrequency|microneedl|biostimulat|hyaluronic|poly-?l-?lactic|"
+    r"hydroxylapatite|polynucleotide|exosome|rejuvenat|melasma|hyperpigment|\bscars?\b|\bacne\b|rosacea|wrinkle|skin (?:laxity|tightening)|photoaging",
+    re.I)
+# 레퍼런스로 쓰기 어려운 글 (실적·주가·모델·광고·행사)
+SKIN_SKIP = re.compile(
+    r"주가|목표가|실적|영업이익|매출|상장|공모|배당|지분|홍보대사|모델 발탁|화보|할인|이벤트|기부|후원|봉사|협약|MOU|부고|인사\]|채용|수출|점유율|투자|기증|수훈|포장|의료관광|관광객|외국인 환자|부가세|사격|갑상선|시상|수상|대회|창립|\d+돌|"
+    r"워크숍|박람회|전시회|코스모프로프|심포지엄 개최|개최|참가|간담회|"
+    r"수술용 로봇|백내장|라식|전립선|stock|shares|earnings|revenue|market size|forecast|CAGR|sponsored", re.I)
+
+# PubMed 피부미용 논문 검색어 (최근 45일에서 찾아 아래 기준으로 점수를 매긴다)
 PUBMED_TERM = (
     '(laser[tiab] OR "energy-based device"[tiab] OR radiofrequency[tiab] OR "focused ultrasound"[tiab] '
-    'OR botulinum[tiab] OR "hyaluronic acid filler"[tiab] OR microneedling[tiab] OR "skin booster"[tiab] '
-    'OR exosome[tiab] OR "poly-L-lactic"[tiab] OR polynucleotide[tiab] OR "intense pulsed light"[tiab]) '
+    'OR botulinum[tiab] OR "hyaluronic acid"[tiab] OR filler[tiab] OR microneedling[tiab] OR "skin booster"[tiab] '
+    'OR exosome[tiab] OR "poly-L-lactic"[tiab] OR "calcium hydroxylapatite"[tiab] OR polycaprolactone[tiab] '
+    'OR polynucleotide[tiab] OR "intense pulsed light"[tiab] OR picosecond[tiab] OR "thread lift"[tiab] OR tranexamic[tiab]) '
     'AND (aesthetic[tiab] OR cosmetic[tiab] OR rejuvenation[tiab] OR melasma[tiab] OR scar[tiab] '
-    'OR wrinkle[tiab] OR pigmentation[tiab] OR acne[tiab]) '
+    'OR wrinkle[tiab] OR pigmentation[tiab] OR acne[tiab] OR rosacea[tiab] OR laxity[tiab] OR "vascular occlusion"[tiab]) '
     'AND (skin[tiab] OR dermatol*[tiab] OR facial[tiab] OR face[tiab] OR cutaneous[tiab]) AND hasabstract'
 )
+# 저널 점수 (3 = 종합·피부과 대표지, 2 = 피부·미용·레이저 전문지, 1 = 오픈액세스 전문지). 목록 밖은 0.
+JOURNALS = {
+    3: ["N Engl J Med", "Lancet", "JAMA", "BMJ", "Cochrane Database Syst Rev", "JAMA Dermatol", "J Am Acad Dermatol",
+        "Br J Dermatol", "J Eur Acad Dermatol Venereol", "J Invest Dermatol", "Am J Clin Dermatol",
+        "Plast Reconstr Surg", "Aesthet Surg J", "Lasers Surg Med", "Dermatol Surg"],
+    2: ["Acta Derm Venereol", "J Dermatol", "Clin Exp Dermatol", "Int J Dermatol", "Dermatology", "J Dermatolog Treat",
+        "Aesthetic Plast Surg", "Lasers Med Sci", "J Cosmet Dermatol", "J Cosmet Laser Ther", "Ann Dermatol",
+        "Facial Plast Surg Aesthet Med", "Facial Plast Surg", "Dermatol Ther (Heidelb)", "J Drugs Dermatol",
+        "Arch Dermatol Res", "J Plast Reconstr Aesthet Surg", "Ophthalmic Plast Reconstr Surg", "Toxins (Basel)",
+        "Photodermatol Photoimmunol Photomed", "Pigment Cell Melanoma Res", "Contact Dermatitis"],
+    1: ["Skin Res Technol", "Clin Cosmet Investig Dermatol", "Plast Reconstr Surg Glob Open", "Aesthet Surg J Open Forum",
+        "J Clin Med", "J Clin Aesthet Dermatol", "Dermatol Res Pract", "Facial Plast Surg Clin North Am", "Dermatol Clin"],
+}
+JOURNAL_SCORE = {name.lower(): pt for pt, names in JOURNALS.items() for name in names}
+# 근거로 쓰기 약한 글 종류는 뺀다
+BAD_TYPES = {"Letter", "Comment", "Editorial", "Published Erratum", "Retracted Publication", "Retraction of Publication",
+             "Case Reports", "News", "Personal Narrative", "Preprint", "Expression of Concern"}
+PAPER_WORDS = re.compile(
+    r"laser|radiofrequency|ultrasound|botulinum|hyaluronic|filler|microneedl|booster|exosome|lactic|hydroxylapatite|"
+    r"polycaprolactone|polynucleotide|pulsed light|picosecond|thread|tranexamic|melasma|scar|rejuvenat|vascular occlusion", re.I)
 
 # 키가 없을 때 쓰는 '피부미용 기초 지식'
 SKIN_BASICS = [
@@ -124,7 +211,26 @@ def strip_tags(text, limit=220):
     return text[:limit] + ("…" if len(text) > limit else "")
 
 
-def read_feed(source, url, limit=12):
+def parse_date(text):
+    text = (text or "").strip()
+    if not text:
+        return None
+    for fn in (email.utils.parsedate_to_datetime, lambda t: dt.datetime.fromisoformat(t.replace("Z", "+00:00"))):
+        try:
+            d = fn(text)
+            if d is None:
+                continue
+            return d if d.tzinfo else d.replace(tzinfo=KST)
+        except (ValueError, TypeError, IndexError):
+            continue
+    return None
+
+
+def clean(text):
+    return re.sub(r"<!\[CDATA\[|\]\]>", "", text or "").strip()
+
+
+def read_feed(source, url, limit=12, grade="", max_age_days=None):
     """RSS 2.0과 Atom 둘 다 읽는다. 실패하면 빈 목록."""
     try:
         root = ET.fromstring(fetch(url))
@@ -134,23 +240,81 @@ def read_feed(source, url, limit=12):
     atom = "{http://www.w3.org/2005/Atom}"
     items = []
     for it in root.iter("item"):
+        pub = it.find("source")
         items.append({
-            "source": source,
-            "title": (it.findtext("title") or "").strip(),
-            "link": (it.findtext("link") or "").strip(),
-            "summary": strip_tags(it.findtext("description")),
+            "source": source, "grade": grade,
+            "title": clean(it.findtext("title")),
+            "link": clean(it.findtext("link")),
+            "summary": strip_tags(clean(it.findtext("description"))),
+            "date": parse_date(it.findtext("pubDate")),
+            "publisher": pub.get("url", "") if pub is not None else "",
         })
     for it in root.iter(atom + "entry"):
         link = it.find(atom + "link")
         items.append({
-            "source": source,
-            "title": (it.findtext(atom + "title") or "").strip(),
+            "source": source, "grade": grade,
+            "title": clean(it.findtext(atom + "title")),
             "link": link.get("href", "") if link is not None else "",
             "summary": strip_tags(it.findtext(atom + "content") or it.findtext(atom + "summary")),
+            "date": parse_date(it.findtext(atom + "published") or it.findtext(atom + "updated")),
+            "publisher": "",
         })
     for i in items:
         i["link"] = re.sub(r"[&?]utm_[^&]+", "", i["link"])
+    if max_age_days is not None:
+        oldest = dt.datetime.now(KST) - dt.timedelta(days=max_age_days)
+        items = [i for i in items if i["date"] is None or i["date"] >= oldest]
     return [i for i in items if i["title"]][:limit]
+
+
+def trusted_source(url):
+    """주소의 도메인이 SKIN_SOURCES에 있으면 (이름, 등급), 없으면 None."""
+    host = (urllib.parse.urlsplit(url).hostname or "").lower()
+    for domain, info in SKIN_SOURCES.items():
+        if host == domain or host.endswith("." + domain):
+            return info
+    return None
+
+
+# 먼저 보여 줄 글: 허가·안전성·임상 근거
+SKIN_FIRST = re.compile(
+    r"허가|승인|회수|안전성|부작용|이상반응|임상|무작위|지침|가이드라인|FDA|recall|safety|adverse|complication|trial|study|"
+    r"randomi|meta-analysis|guideline|consensus|clearance|approv|warning", re.I)
+
+
+def title_key(title):
+    return re.sub(r"[^0-9a-z가-힣]", "", title.lower())[:40]
+
+
+def skin_news_items(seen, limit=24):
+    """공식기관·의학 전문지 글만 남긴 피부미용 소식. 이미 실은 글은 뺀다."""
+    raw = []
+    for url, n in SKIN_RSS:
+        raw += read_feed(url, url, n, max_age_days=14)
+    for url in SKIN_GNEWS:
+        got = read_feed("Google 뉴스", url, 30, max_age_days=14)
+        if not got:   # 요청이 몰리면 잠깐 막히므로 한 번만 더
+            time.sleep(15)
+            got = read_feed("Google 뉴스", url, 30, max_age_days=14)
+        raw += got
+        time.sleep(3)
+    out, keys = [], set()
+    for i in raw:
+        info = trusted_source(i["publisher"] or i["link"])
+        if not info:
+            continue
+        i["source"], i["grade"] = info
+        i["title"] = re.sub(r"\s+-\s+[^-]{2,40}$", "", i["title"]) if i["publisher"] else i["title"]
+        text = f"{i['title']} {i['summary']}"
+        key = title_key(i["title"])
+        if not SKIN_WORDS.search(text) or SKIN_SKIP.search(i["title"]) or i["link"] in seen or key in keys:
+            continue
+        keys.add(key)
+        out.append(i)
+    floor = dt.datetime(2000, 1, 1, tzinfo=KST)
+    out.sort(key=lambda i: (i["grade"] != "공식", not SKIN_FIRST.search(i["title"]), -(i["date"] or floor).timestamp()))
+    print(f"[info] 피부미용 뉴스 {len(raw)}개 중 {len(out)}개 통과")
+    return out[:limit]
 
 
 def yahoo_quote(symbol):
@@ -180,31 +344,102 @@ def bitcoin_quote():
         return None
 
 
-def pubmed_recent(limit=12):
-    """PubMed에서 최근 7일 안에 올라온 피부미용 논문의 제목·저널·초록 앞부분을 가져온다."""
-    base = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
+EUTILS = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
+
+
+def paper_design(title, abstract, types):
+    """제목·초록·논문 종류로 연구 설계를 어림한다. (이름, 점수)"""
+    t, a = title.lower(), abstract.lower()
+    if "Practice Guideline" in types or "Guideline" in types or re.search(r"\b(?:clinical|practice|treatment|management) guidelines?\b", t):
+        return "진료지침", 6
+    if "Meta-Analysis" in types or "meta-analysis" in t:
+        return "메타분석", 6
+    if "Systematic Review" in types or "systematic review" in t:
+        return "체계적 문헌고찰", 5
+    if "Randomized Controlled Trial" in types or re.search(r"\brandomi[sz]ed\b", t) or re.search(r"\bwere randomi[sz]ed\b|\brandomi[sz]ed (?:controlled|split)", a):
+        return "무작위 대조시험", 5
+    if re.search(r"split-face|split-body|split-scar|controlled (?:study|trial)", t + " " + a):
+        return "비교 임상시험", 4
+    if re.search(r"\bconsensus\b|\bdelphi\b", t):
+        return "전문가 합의", 3
+    if re.search(r"\bprospective\b", t + " " + a) or "Clinical Trial" in types:
+        return "전향 연구", 3
+    if re.search(r"\bretrospective\b|\bcohort\b", t + " " + a):
+        return "후향·코호트 연구", 2
+    if "Review" in types or re.search(r"\breview\b", t):
+        return "종설", 1
+    return "기타 연구", 1
+
+
+def pubmed_recent(seen, limit=10):
+    """최근 45일 피부미용 논문을 저널·연구 설계로 점수 매겨 좋은 것부터 준다. 이미 실은 논문은 뺀다."""
     try:
-        q = urllib.request.quote(PUBMED_TERM)
-        ids = json.loads(fetch(f"{base}esearch.fcgi?db=pubmed&retmode=json&retmax={limit}"
-                               f"&sort=pub_date&datetype=edat&reldate=7&term={q}"))["esearchresult"]["idlist"]
+        q = urllib.parse.quote(PUBMED_TERM)
+        ids = json.loads(fetch(f"{EUTILS}esearch.fcgi?db=pubmed&retmode=json&retmax=180"
+                               f"&sort=pub_date&datetype=edat&reldate=45&term={q}"))["esearchresult"]["idlist"]
         if not ids:
             return []
-        root = ET.fromstring(fetch(f"{base}efetch.fcgi?db=pubmed&retmode=xml&id={','.join(ids)}"))
+        root = ET.fromstring(fetch(f"{EUTILS}efetch.fcgi?db=pubmed&retmode=xml&id={','.join(ids)}", 60))
     except Exception as e:
         print(f"[warn] PubMed 실패: {e}", file=sys.stderr)
         return []
     papers = []
     for art in root.iter("PubmedArticle"):
         pmid = art.findtext(".//PMID")
-        title = "".join(art.find(".//ArticleTitle").itertext()) if art.find(".//ArticleTitle") is not None else ""
-        abstract = " ".join("".join(a.itertext()) for a in art.iter("AbstractText"))
+        link = f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/"
+        el = art.find(".//ArticleTitle")
+        title = "".join(el.itertext()).strip() if el is not None else ""
+        abstract = " ".join("".join(a.itertext()) for a in art.findall(".//Abstract/AbstractText"))
+        types = {(t.text or "").strip() for t in art.iter("PublicationType")}
+        if not title or link in seen or types & BAD_TYPES:
+            continue
+        if re.match(r"(response to|reply|comment|correction|erratum|retract)", title, re.I):
+            continue
+        # 실제 사람 시술이 아닌 연구(동물·세포·모의시험)는 뺀다
+        if re.search(r"\b(rats?|mice|mouse|murine|porcine|rabbits?|in vitro|in silico|zebrafish|computational|cadaver)\b", title, re.I):
+            continue
+        journal = art.findtext(".//Journal/ISOAbbreviation") or art.findtext(".//Journal/Title") or ""
+        js = JOURNAL_SCORE.get(journal.replace(".", "").lower(), 0)
+        design, ds = paper_design(title, abstract, types)
+        if js == 0 and ds < 5:   # 목록 밖 저널은 설계가 아주 좋을 때만
+            continue
+        doi = next((x.text for x in art.findall("./PubmedData/ArticleIdList/ArticleId") if x.get("IdType") == "doi"), "") or ""
+        coi = re.sub(r"\s+", " ", art.findtext(".//CoiStatement") or "").strip()
+        m = re.search(r"(conflicts? of interest|competing interests?|disclosures?)", coi, re.I)
+        coi = coi[m.start():m.start() + 260] if m else coi[:260]
         papers.append({
-            "source": art.findtext(".//Journal/ISOAbbreviation") or art.findtext(".//Journal/Title") or "PubMed",
-            "title": title.strip(),
-            "link": f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/",
-            "summary": strip_tags(abstract, 900),
+            "source": journal, "grade": "논문", "title": title, "link": link, "doi": doi, "design": design,
+            "year": art.findtext(".//Journal/JournalIssue/PubDate/Year") or "", "coi": coi,
+            "summary": strip_tags(abstract, 1800),
+            "score": ds * 2 + js * 2 + (2 if PAPER_WORDS.search(title) else 0),
         })
-    return [p for p in papers if p["title"]]
+    papers.sort(key=lambda p: -p["score"])   # 점수가 같으면 최신순(검색 순서) 유지
+    print(f"[info] PubMed {len(ids)}편 중 {len(papers)}편 통과")
+    return papers[:limit]
+
+
+def pubmed_review(query):
+    """기초 지식 아래에 붙일 최근 종설 한 편 (대표·전문 저널만). 못 찾으면 None."""
+    query = re.sub(r"[^A-Za-z0-9 \-]", " ", query or "").strip()
+    if not query:
+        return None
+    try:
+        term = urllib.parse.quote(f"({query}) AND (review[pt] OR systematic review[pt] OR meta-analysis[pt]) AND english[la]")
+        ids = json.loads(fetch(f"{EUTILS}esearch.fcgi?db=pubmed&retmode=json&retmax=15&sort=relevance"
+                               f"&datetype=pdat&reldate=2555&term={term}"))["esearchresult"]["idlist"]
+        if not ids:
+            return None
+        res = json.loads(fetch(f"{EUTILS}esummary.fcgi?db=pubmed&retmode=json&id={','.join(ids)}"))["result"]
+    except Exception as e:
+        print(f"[warn] 종설 검색 실패: {e}", file=sys.stderr)
+        return None
+    for pmid in ids:
+        r = res.get(pmid) or {}
+        journal = r.get("source", "")
+        if JOURNAL_SCORE.get(journal.replace(".", "").lower(), 0) >= 2 and "Retracted Publication" not in r.get("pubtype", []):
+            return {"title": strip_tags(r.get("title", ""), 160), "journal": journal, "year": r.get("pubdate", "")[:4],
+                    "link": f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/"}
+    return None
 
 
 # ---------- Claude로 초보용 설명 쓰기 ----------
@@ -225,16 +460,19 @@ SCHEMA = {
         "skin_tech": {"type": "array", "items": {
             "type": "object",
             "properties": {"title": {"type": "string"}, "body": {"type": "string"},
-                           "why": {"type": "string"}, "link": {"type": "string"}},
-            "required": ["title", "body", "why", "link"], "additionalProperties": False}},
+                           "why": {"type": "string"}, "link": {"type": "string"},
+                           "basis": {"type": "string", "enum": ["규제기관 발표", "임상 연구 보도", "학회·전문가 의견", "업체 발표"]}},
+            "required": ["title", "body", "why", "link", "basis"], "additionalProperties": False}},
         "skin_papers": {"type": "array", "items": {
             "type": "object",
-            "properties": {"title": {"type": "string"}, "journal": {"type": "string"},
+            "properties": {"title": {"type": "string"}, "design": {"type": "string"},
+                           "level": {"type": "string", "enum": ["높음", "중간", "낮음"]},
                            "finding": {"type": "string"}, "meaning": {"type": "string"},
-                           "link": {"type": "string"}},
-            "required": ["title", "journal", "finding", "meaning", "link"], "additionalProperties": False}},
-        "skin_basic": {"type": "object", "properties": {"name": {"type": "string"}, "explain": {"type": "string"}},
-                       "required": ["name", "explain"], "additionalProperties": False},
+                           "limits": {"type": "string"}, "link": {"type": "string"}},
+            "required": ["title", "design", "level", "finding", "meaning", "limits", "link"], "additionalProperties": False}},
+        "skin_basic": {"type": "object", "properties": {"name": {"type": "string"}, "explain": {"type": "string"},
+                                                        "pubmed_query": {"type": "string"}},
+                       "required": ["name", "explain", "pubmed_query"], "additionalProperties": False},
     },
     "required": ["headline", "lede", "market_why", "term", "news", "skin_tech", "skin_papers", "skin_basic"],
     "additionalProperties": False,
@@ -246,17 +484,25 @@ PROMPT = """너는 주식·코인 초보이면서 AI·IT에 관심 있는 한국
 쓰는 법:
 - headline: 오늘의 핵심을 담은 한 문장 (40자 안팎).
 - lede: 왜 그게 중요한지 쉬운 말로 1~2문장.
-- market_why: 시장이 왜 이렇게 움직였는지 2~4개. 각 항목은 "굵은 요점: 설명" 형식으로, 앞부분 요점은 10자 이내. 뉴스 자료에 근거가 없으면 "아직 뚜렷한 이유가 보도되지 않았어요"라고 써도 돼.
+- market_why: 시장이 왜 이렇게 움직였는지 2~4개. 각 항목은 "굵은 요점: 설명" 형식으로, 앞부분 요점은 10자 이내. 뉴스 자료에 근거가 없으면 "아직 뚜렷한 이유가 보도되지 않았어요"라고 써도 돼. 금리·물가 이야기는 [공식](한국은행·연준) 자료가 있으면 그것을 먼저 근거로 해. 한 사람이나 한 증권사의 전망은 "~라는 의견도 있어요"처럼 의견으로 써.
 - term: 오늘 뉴스와 관련된 투자·경제 또는 AI 용어 하나. explain은 2~3문장으로 쉽게 설명하고 마지막 문장은 오늘 뉴스와 연결해.
-- news: AI·IT 소식 정확히 5개. 초보도 알 만한 큰 소식(기업, 제품, 투자, 규제)을 우선하고 개발자 전용 도구는 많아야 1개. title은 쉬운 한국어로 다시 쓴 제목, body는 1~2문장, why는 "그래서 왜 중요한지" 한 문장, link는 자료에 있던 원문 링크 그대로.
-- skin_tech: 피부미용의료(레이저, 리프팅·에너지 기기, 주사 시술, 스킨부스터, 신제품 허가, 업계 동향) 소식 3개. 특정 병원을 홍보하는 광고성 기사는 빼고, 새 기술·기계·허가·연구·업계 흐름을 우선해. 영어 기사는 한국어로 옮겨. 형식은 news와 같아. 쓸 만한 소식이 3개가 안 되면 있는 만큼만.
-- skin_papers: 아래 PubMed 논문 중 피부미용 실무나 공부에 의미 있는 것 2개. title은 한국어로 옮긴 제목, journal은 저널 약어, finding은 무엇을 어떻게 연구해 무엇을 발견했는지 2~3문장(대상 수·비교군·주요 수치가 초록에 있으면 포함), meaning은 "그래서 실제로 무슨 의미인지"와 연구의 한계 한 문장. link는 PubMed 링크 그대로. 초록에 없는 내용은 쓰지 마.
-- skin_basic: 피부미용의료 기초 지식 하나(피부 구조, 레이저·기기 원리, 주사 시술 기전, 합병증, 피부 질환 등). 4~6문장으로, 원리 → 실제 시술에서 왜 중요한지 순서로. 가능하면 오늘 skin_tech나 skin_papers 내용과 연결해.
+- news: AI·IT 소식 정확히 5개. 초보도 알 만한 큰 소식(기업, 제품, 투자, 규제)을 우선하고 개발자 전용 도구는 많아야 1개. 같은 소식이 여러 곳에 있으면 [공식] > [전문] > [모음] 순서로 고르고, [모음] 출처는 다른 출처에 없는 중요한 소식일 때만 써. title은 쉬운 한국어로 다시 쓴 제목, body는 1~2문장, why는 "그래서 왜 중요한지" 한 문장, link는 자료에 있던 원문 링크 그대로.
+- skin_tech: 피부미용의료(레이저, 리프팅·에너지 기기, 주사 시술, 스킨부스터, 허가·안전성, 진료지침) 소식 최대 3개. 레퍼런스로 쓸 수 있는 것만 골라. 우선순위는 ① 규제기관의 허가·회수·안전성 정보 ② 사람 대상 임상 연구를 다룬 전문지 기사 ③ 학회 발표·진료지침·전문가 의견 ④ 업체 신제품 발표.
+  · 트렌드 예측, 유명인, 병원·행사·협약 홍보, 회사 실적·주가 기사는 쓰지 마. 피부미용과 관계없는 글(암·아토피 신약 등)도 쓰지 마.
+  · ④는 많아야 1개이고, body에 "업체 발표이며 독립적으로 검증된 자료는 아니에요"라는 뜻을 꼭 넣어.
+  · basis는 그 기사의 실제 근거에 맞게 골라. 전문지가 업체 보도자료를 옮긴 기사는 "업체 발표"야.
+  · 연구 기사는 대상 수·비교군이 자료에 있으면 쓰고, 없으면 "기사 요약에는 대상 수가 없어요"라고 써.
+  · 기준에 맞는 것이 없으면 빈 목록으로 둬. 개수를 채우려고 낮은 수준의 글을 넣지 마. 영어 기사는 한국어로 옮겨.
+- skin_papers: 아래 PubMed 논문(좋은 설계·저널 순으로 정렬돼 있음) 중 피부미용 실무에 의미 있는 것 2개. 서로 다른 주제로 골라. title은 한국어로 옮긴 제목. design은 연구 설계와 규모(예: "무작위 대조시험 · 42명 · 12주"), 초록에 없는 값은 빼. finding은 비교군과 주요 수치(p값·신뢰구간이 있으면 포함)로 2~3문장. meaning은 "그래서 실제로 무슨 의미인지" 한 문장. limits는 한계와 이해관계(업체 지원·저자 소속이 자료에 있으면 포함)를 한두 문장. link는 PubMed 링크 그대로. 초록에 없는 내용은 쓰지 마.
+  · level 기준: 높음 = 진료지침, 무작위시험을 모은 메타분석, 여러 기관의 큰 무작위시험(대략 100명 이상). 중간 = 작은 무작위시험, 반쪽 얼굴 비교, 체계적 문헌고찰. 낮음 = 비교군 없는 연구, 후향 연구, 종설, 전문가 의견. 애매하면 낮은 쪽으로 매겨.
+- skin_basic: 피부미용의료 기초 지식 하나(피부 구조, 레이저·기기 원리, 주사 시술 기전, 합병증, 피부 질환 등). 4~6문장으로, 원리 → 실제 시술에서 왜 중요한지 순서로. 교과서 수준에서 널리 받아들여지는 내용만 쓰고, 근거가 엇갈리면 엇갈린다고 써. 가능하면 오늘 skin_tech나 skin_papers 내용과 연결해. pubmed_query는 이 주제의 종설을 찾을 영어 검색어 2~4단어(예: "picosecond laser pigmentation").
 - 말투는 친근한 해요체, 짧은 문장. 전문용어는 처음 나올 때 영어나 원어를 괄호로 함께 쓰고 바로 풀어서 설명해.
+- link는 반드시 아래 자료에 있는 링크를 글자 그대로 옮겨. 자료에 없는 링크는 자동으로 버려져.
 - 특정 종목·코인을 사라/팔라고 하거나 가격을 예측하지 마. 특정 병원·제품을 추천하거나 치료 효과를 장담하지 마.
 
 최근 '오늘의 용어'로 이미 쓴 것(겹치지 않게): {recent_terms}
 최근 '피부미용 기초 지식'으로 이미 쓴 것(겹치지 않게): {recent_skin}
+최근 피부미용 소식·논문으로 이미 실은 것(같은 내용은 다른 매체 기사라도 다시 싣지 마): {recent_titles}
 
 === 시세 ===
 {market}
@@ -270,16 +516,22 @@ PROMPT = """너는 주식·코인 초보이면서 AI·IT에 관심 있는 한국
 === 피부미용의료 뉴스 ===
 {skin_news}
 
-=== 최근 7일 PubMed 피부미용 논문 (제목 | 초록 앞부분 | 링크) ===
+=== 최근 PubMed 피부미용 논문 (저널 · 설계 | 제목 | 초록 | 이해관계 | 링크) ===
 {papers}
 """
 
 
 def fmt_items(items):
-    return "\n".join(f"- [{i['source']}] {i['title']} | {i['summary']} | {i['link']}" for i in items)
+    return "\n".join(f"- [{i['source']}{' · ' + i['grade'] if i.get('grade') else ''}] {i['title']} | {i['summary']} | {i['link']}"
+                     for i in items)
 
 
-def ask_claude(market, market_news, ai_news, skin_news, papers, recent_terms, recent_skin):
+def fmt_papers(papers):
+    return "\n".join(f"- [{p['source']} · {p['design']}] {p['title']} | {p['summary']} | 이해관계: {p['coi'] or '자료 없음'} | {p['link']}"
+                     for p in papers)
+
+
+def ask_claude(market, market_news, ai_news, skin_news, papers, recent_terms, recent_skin, recent_titles):
     if not os.environ.get("ANTHROPIC_API_KEY"):
         print("[info] ANTHROPIC_API_KEY 없음: 기본 브리핑으로 만듭니다.")
         return None
@@ -296,8 +548,9 @@ def ask_claude(market, market_news, ai_news, skin_news, papers, recent_terms, re
         market_news=fmt_items(market_news),
         ai_news=fmt_items(ai_news),
         skin_news=fmt_items(skin_news) or "(없음)",
-        papers=fmt_items(papers) or "(이번 주 검색된 논문 없음)",
+        papers=fmt_papers(papers) or "(기준을 통과한 새 논문 없음)",
         recent_skin=", ".join(recent_skin) or "없음",
+        recent_titles=" / ".join(recent_titles) or "없음",
     )
     try:
         resp = client.beta.messages.create(
@@ -347,8 +600,8 @@ def basic_briefing(today, market_news, ai_news, skin_news, papers, recent_terms,
         "market_why": [f"{i['source']}: {i['title']}" for i in market_news[:4]],
         "term": {"name": name, "explain": explain},
         "news": news,
-        "skin_tech": [{"title": i["title"], "body": "", "why": "", "link": i["link"]} for i in skin_news[:3]],
-        "skin_papers": [{"title": p["title"], "journal": p["source"], "finding": p["summary"][:300], "meaning": "", "link": p["link"]} for p in papers[:2]],
+        "skin_tech": [{"title": i["title"], "body": "", "why": "", "link": i["link"], "basis": ""} for i in skin_news[:3]],
+        "skin_papers": [{"title": p["title"], "design": p["design"], "level": "", "finding": p["summary"][:300], "meaning": "", "limits": "", "link": p["link"]} for p in papers[:2]],
         "skin_basic": dict(zip(("name", "explain"), skin_pick)),
     }
 
@@ -372,6 +625,30 @@ def tile(label, q, money_fmt):
             f'{d}<div class="when">{esc(q["when"])}</div></div>')
 
 
+def src_tag(n, basis=None):
+    """소식 위에 붙는 출처 줄: 매체 이름 · 등급 · 근거"""
+    parts = [x for x in (n.get("_source"), {"공식": "공식 발표", "전문": "", "모음": "모음 사이트"}.get(n.get("_grade"), ""), basis) if x]
+    return f'<div class="src">{esc(" · ".join(dict.fromkeys(parts)))}</div>' if parts else ""
+
+
+def attach_sources(brief, items):
+    """Claude가 준 링크를 원자료와 맞춰 본다. 자료에 없는 링크의 글은 버리고, 출처·저널은 원자료 값으로 붙인다."""
+    by_link = {i["link"]: i for i in items}
+    for key in ("news", "skin_tech", "skin_papers"):
+        kept = []
+        for n in brief.get(key, []):
+            src = by_link.get(n["link"])
+            if not src:
+                print(f"[warn] 자료에 없는 링크라 뺌: {key} {n['link']}", file=sys.stderr)
+                continue
+            if key == "skin_papers" and src.get("grade") != "논문":
+                continue
+            n["_source"], n["_grade"] = src["source"], src.get("grade", "")
+            n["_doi"], n["_year"] = src.get("doi", ""), src.get("year", "")
+            kept.append(n)
+        brief[key] = kept
+
+
 def render(today, brief, market, sources, archive_dates, is_index):
     wd = "월화수목금토일"[today.weekday()]
     why_html = ""
@@ -386,23 +663,31 @@ def render(today, brief, market, sources, archive_dates, is_index):
         link = n["link"] if n["link"].startswith("http") else ""
         title = f'<a href="{esc(link)}" target="_blank" rel="noopener">{esc(n["title"])}</a>' if link else esc(n["title"])
         why = f' <span class="so">{esc(n["why"])}</span>' if n.get("why") else ""
-        news_html += f"<li><h3>{title}</h3><p>{esc(n['body'])}{why}</p></li>"
+        news_html += f"<li>{src_tag(n)}<h3>{title}</h3><p>{esc(n['body'])}{why}</p></li>"
     skin_html = ""
     for n in brief.get("skin_tech", [])[:3]:
         link = n["link"] if n["link"].startswith("http") else ""
         title = f'<a href="{esc(link)}" target="_blank" rel="noopener">{esc(n["title"])}</a>' if link else esc(n["title"])
         why = f' <span class="so">{esc(n["why"])}</span>' if n.get("why") else ""
         body = f"<p>{esc(n['body'])}{why}</p>" if (n.get("body") or why) else ""
-        skin_html += f"<li><h3>{title}</h3>{body}</li>"
+        skin_html += f"<li>{src_tag(n, n.get('basis'))}<h3>{title}</h3>{body}</li>"
     paper_html = ""
     for p in brief.get("skin_papers", [])[:2]:
         link = p["link"] if p["link"].startswith("http") else ""
         title = f'<a href="{esc(link)}" target="_blank" rel="noopener">{esc(p["title"])}</a>' if link else esc(p["title"])
         meaning = f'<p class="so">{esc(p["meaning"])}</p>' if p.get("meaning") else ""
-        paper_html += f'<li><div class="jr">{esc(p["journal"])}</div><h3>{title}</h3><p>{esc(p["finding"])}</p>{meaning}</li>'
-    skin_tech_block = f'<ol class="news">{skin_html}</ol>' if skin_html else '<p class="small">이번 주에는 눈에 띄는 기기·기술 소식이 없었어요.</p>'
-    paper_block = f'<ol class="news papers">{paper_html}</ol>' if paper_html else '<p class="small">최근 1주일 새 논문을 찾지 못했어요.</p>'
+        limits = f'<p class="lim">한계: {esc(p["limits"])}</p>' if p.get("limits") else ""
+        level = f'<span class="lv lv{["낮음", "중간", "높음"].index(p["level"])}">근거 {esc(p["level"])}</span>' if p.get("level") else ""
+        doi = f' · <a href="https://doi.org/{esc(p["_doi"])}" target="_blank" rel="noopener">DOI</a>' if p.get("_doi") else ""
+        jr = " ".join(x for x in (p.get("_source", ""), p.get("_year", "")) if x)
+        paper_html += (f'<li><div class="jr">{esc(jr)}{doi} {level}</div><h3>{title}</h3>'
+                       f'<p class="ds">{esc(p["design"])}</p><p>{esc(p["finding"])}</p>{meaning}{limits}</li>')
+    skin_tech_block = f'<ol class="news">{skin_html}</ol>' if skin_html else '<p class="small">오늘은 공식기관·의학 전문지에 새로 실을 만한 소식이 없었어요.</p>'
+    paper_block = f'<ol class="news papers">{paper_html}</ol>' if paper_html else '<p class="small">기준을 통과한 새 논문을 찾지 못했어요.</p>'
     sb = brief.get("skin_basic") or {"name": "", "explain": ""}
+    rv = sb.get("_review")
+    review_html = (f'<p class="small">더 읽을 종설(자동 검색): <a href="{esc(rv["link"])}" target="_blank" rel="noopener">{esc(rv["title"])}</a> '
+                   f'{esc(rv["journal"])} {esc(rv["year"])}</p>') if rv else ""
     src_html = "".join(f'<li><a href="{esc(u)}" target="_blank" rel="noopener">{esc(n)}</a></li>' for n, u in sources)
     prefix = "archive/" if is_index else ""
     arch_html = "".join(f'<a href="{prefix}{d}.html">{d[5:].replace("-", "/")}</a>' for d in archive_dates[:14])
@@ -416,7 +701,7 @@ def render(today, brief, market, sources, archive_dates, is_index):
         btc=tile("비트코인", market.get("btc"), lambda v: f"${v:,.0f}"),
         why=why_html, term_name=esc(brief["term"]["name"]), term_explain=esc(brief["term"]["explain"]),
         news=news_html, skin_tech=skin_tech_block, skin_papers=paper_block,
-        skin_basic_name=esc(sb["name"]), skin_basic_explain=esc(sb["explain"]),
+        skin_basic_name=esc(sb["name"]), skin_basic_explain=esc(sb["explain"]), skin_basic_review=review_html,
         sources=src_html, archive=arch_html, home=home,
         updated=dt.datetime.now(KST).strftime("%Y-%m-%d %H:%M"),
         mode="Claude 요약" if brief.get("_ai") else "기본 모드",
@@ -442,19 +727,31 @@ def main():
     recent_terms = state.get("recent_terms", [])[-20:]
     recent_skin = state.get("recent_skin", [])[-20:]
 
-    ai_news = [i for src, url in AI_FEEDS for i in read_feed(src, url, 15)]
-    skin_news = [i for src, url in SKIN_FEEDS for i in read_feed(src, url, 12)]
-    papers = pubmed_recent()
-    market_news = [i for src, url in MARKET_FEEDS for i in read_feed(src, url, 10)]
+    if "seen_skin" in state:
+        seen_list = state["seen_skin"]
+    else:   # 처음 한 번: 지난 7일 브리핑에 실린 링크를 읽어 다시 싣지 않는다
+        old = sorted((DOCS / "archive").glob("????-??-??.html"))[-7:]
+        seen_list = [html.unescape(u) for f in old for u in
+                     re.findall(r'href="(https://(?:pubmed\.ncbi\.nlm\.nih\.gov|news\.google\.com)/[^"]+)"', f.read_text(encoding="utf-8"))]
+    seen = set(seen_list)
+    recent_titles = state.get("recent_skin_titles", [])[-24:]
+
+    ai_news = [i for src, url, g, n in AI_FEEDS for i in read_feed(src, url, n, g, 4)]
+    skin_news = skin_news_items(seen)
+    papers = pubmed_recent(seen)
+    market_news = [i for src, url, g, n in MARKET_FEEDS for i in read_feed(src, url, n, g, 4)]
     market = {"kospi": yahoo_quote("^KS11"), "nasdaq": yahoo_quote("^IXIC"), "btc": bitcoin_quote()}
     if not ai_news and not market_news:
         sys.exit("뉴스를 하나도 가져오지 못했어요. 네트워크를 확인하세요.")
 
-    brief = ask_claude(market, market_news, ai_news, skin_news, papers, recent_terms, recent_skin)
+    brief = ask_claude(market, market_news, ai_news, skin_news, papers, recent_terms, recent_skin, recent_titles)
     if brief:
         brief["_ai"] = True
     else:
         brief = basic_briefing(today, market_news, ai_news, skin_news, papers, recent_terms, recent_skin)
+    attach_sources(brief, ai_news + skin_news + papers)
+    if brief["skin_basic"].get("pubmed_query"):
+        brief["skin_basic"]["_review"] = pubmed_review(brief["skin_basic"]["pubmed_query"])
 
     sources = [(f"{i['source']} · {i['title'][:40]}", i["link"]) for i in market_news[:4]]
     used = {n["link"] for n in brief["news"]}
@@ -471,6 +768,9 @@ def main():
     state["recent_terms"] = (recent_terms + [brief["term"]["name"]])[-20:]
     if brief.get("skin_basic", {}).get("name"):
         state["recent_skin"] = (recent_skin + [brief["skin_basic"]["name"]])[-20:]
+    shown = brief.get("skin_tech", []) + brief.get("skin_papers", [])
+    state["seen_skin"] = (seen_list + [n["link"] for n in shown])[-150:]
+    state["recent_skin_titles"] = (recent_titles + [n["title"] for n in shown])[-24:]
     state["last_run"] = dt.datetime.now(KST).isoformat()
     state_path.write_text(json.dumps(state, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"[done] {today} 브리핑 생성: {brief['headline']}")

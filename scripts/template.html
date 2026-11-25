@@ -42,6 +42,15 @@ h4{font-size:.85rem;color:var(--muted);font-weight:500;letter-spacing:.04em;marg
 .s h4:first-of-type{margin-top:0}
 .jr{font-size:.72rem;color:var(--skin);font-weight:500;letter-spacing:.03em}
 .papers p.so{margin-top:6px}
+.src{font-size:.72rem;color:var(--muted);font-weight:500;letter-spacing:.02em;margin-bottom:2px}
+.s .src{color:var(--skin)}
+.jr a{color:inherit}
+.lv{display:inline-block;margin-left:4px;padding:0 7px;border-radius:999px;border:1px solid currentColor;font-size:.68rem}
+.lv0{color:var(--muted)} .lv1{color:var(--money)} .lv2{color:var(--it)}
+.papers p.ds{color:var(--ink);font-weight:500;font-size:.85rem}
+.papers p.lim{font-size:.84rem}
+.basic p.small{margin-top:8px}
+.basic p.small a{color:var(--skin)}
 .basic{background:var(--skin-soft);border-radius:12px;padding:14px 16px}
 .basic b{font-size:1.05rem}
 .basic p{margin:4px 0 0}
@@ -107,10 +116,10 @@ a:focus-visible,summary:focus-visible{outline:2px solid var(--it);outline-offset
     <h2>피부미용의료 <span class="chip">기술·논문</span></h2>
     <h4>새 기술 · 기기 소식</h4>
     %%skin_tech%%
-    <h4>이번 주 논문</h4>
+    <h4>최근 논문</h4>
     %%skin_papers%%
     <h4>기초 지식</h4>
-    <div class="basic"><b>%%skin_basic_name%%</b><p>%%skin_basic_explain%%</p></div>
+    <div class="basic"><b>%%skin_basic_name%%</b><p>%%skin_basic_explain%%</p>%%skin_basic_review%%</div>
   </section>
 
   <details>
@@ -123,6 +132,7 @@ a:focus-visible,summary:focus-visible{outline:2px solid var(--it);outline-offset
     <div class="arch">%%archive%%</div>
   </details>
 
+  <p class="small">피부미용 소식은 규제기관·학회와 의학 전문지만, 논문은 저널과 연구 설계를 보고 골라요. ‘근거’ 표시는 초록만 보고 AI가 어림한 것이에요.</p>
   <p class="small">공부용 요약이에요. 특정 종목·코인 매매나 특정 시술·제품을 권하는 내용이 아니에요. 숫자는 표시된 시점 기준이에요.</p>
   <p class="small">%%updated%% 업데이트 · %%mode%%</p>
 </div>
