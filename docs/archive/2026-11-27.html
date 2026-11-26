@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>매일 아침 피드</title>
+<meta name="description" content="AI·IT, 주식·코인, 피부미용의료 소식을 쉽게 정리한 아침 브리핑">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="아침 피드">
+<meta name="theme-color" content="#f3f5f8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f141c" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231f5fd1'/%3E%3Ctext x='32' y='44' font-size='34' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='700'%3E아%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=IBM+Plex+Sans+KR:wght@400;500;700&display=swap">
+<style>
+:root{
+  --bg:#f3f5f8; --surface:#ffffff; --ink:#152033; --muted:#5a6678; --line:#dde3ec;
+  --it:#1f5fd1; --it-soft:#e6eefc; --money:#b86a00; --money-soft:#fbf0de;
+  --up:#d1342f; --down:#1f5fd1; --skin:#b0306a; --skin-soft:#fbe8f0;
+  --display:"Do Hyeon","Apple SD Gothic Neo",sans-serif;
+  --body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#0f141c; --surface:#18202c; --ink:#e7ecf3; --muted:#9aa6b8; --line:#2a3443;
+  --it:#7aa7ff; --it-soft:#1c2a44; --money:#f0b356; --money-soft:#33280f;
+  --up:#ff7a70; --down:#7aa7ff; --skin:#f58bb8; --skin-soft:#3a1a29; color-scheme:dark}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.65;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-top:max(20px,env(safe-area-inset-top,0px));padding-bottom:max(40px,env(safe-area-inset-bottom,0px))}
+.wrap{max-width:600px;margin:0 auto;display:flex;flex-direction:column;gap:26px}
+.date{font-size:.8rem;letter-spacing:.06em;color:var(--muted);font-weight:500}
+h1{font-family:var(--display);font-weight:400;font-size:2rem;line-height:1.2;margin:2px 0 0;text-wrap:balance}
+.lede{margin:10px 0 0;font-size:1.02rem}
+h2{font-family:var(--display);font-weight:400;font-size:1.4rem;margin:0 0 10px;display:flex;align-items:center;gap:8px}
+h2 .chip{font-family:var(--body);font-size:.72rem;padding:1px 8px;border-radius:999px;font-weight:500}
+.m .chip{background:var(--money-soft);color:var(--money)}
+.a .chip{background:var(--it-soft);color:var(--it)}
+.s .chip{background:var(--skin-soft);color:var(--skin)}
+h4{font-size:.85rem;color:var(--muted);font-weight:500;letter-spacing:.04em;margin:16px 0 8px}
+.s h4:first-of-type{margin-top:0}
+.jr{font-size:.72rem;color:var(--skin);font-weight:500;letter-spacing:.03em}
+.papers p.so{margin-top:6px}
+.src{font-size:.72rem;color:var(--muted);font-weight:500;letter-spacing:.02em;margin-bottom:2px}
+.s .src{color:var(--skin)}
+.jr a{color:inherit}
+.lv{display:inline-block;margin-left:4px;padding:0 7px;border-radius:999px;border:1px solid currentColor;font-size:.68rem}
+.lv0{color:var(--muted)} .lv1{color:var(--money)} .lv2{color:var(--it)}
+.papers p.ds{color:var(--ink);font-weight:500;font-size:.85rem}
+.papers p.lim{font-size:.84rem}
+.basic p.small{margin-top:8px}
+.basic p.small a{color:var(--skin)}
+.basic{background:var(--skin-soft);border-radius:12px;padding:14px 16px}
+.basic b{font-size:1.05rem}
+.basic p{margin:4px 0 0}
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-width:0}
+.tile .k{font-size:.75rem;color:var(--muted)}
+.tile .v{font-weight:700;font-size:1.05rem;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tile .d{font-size:.78rem;font-variant-numeric:tabular-nums}
+.dn{color:var(--down)} .up{color:var(--up)}
+.tile .when{font-size:.68rem;color:var(--muted)}
+ul.why{margin:12px 0 0;padding-left:1.1em}
+ul.why li+li{margin-top:6px}
+.term{background:var(--money-soft);border-radius:12px;padding:14px 16px}
+.term b{font-size:1.05rem}
+.term p{margin:4px 0 0}
+ol.news{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+ol.news li{padding:14px 16px;border-top:1px solid var(--line)}
+ol.news li:first-child{border-top:0}
+ol.news h3{margin:0;font-size:1rem;line-height:1.45;text-wrap:balance}
+ol.news h3 a{color:var(--ink);text-decoration:none}
+ol.news h3 a::after{content:" ↗";color:var(--muted);font-weight:400}
+ol.news p{margin:4px 0 0;color:var(--muted);font-size:.92rem;overflow-wrap:anywhere}
+ol.news .so{color:var(--ink)}
+details{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 16px;font-size:.88rem}
+summary{cursor:pointer;font-weight:500}
+details ul{margin:8px 0 0;padding-left:1.1em}
+details a{color:var(--it);overflow-wrap:anywhere}
+.arch{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.arch a{color:var(--it);border:1px solid var(--line);border-radius:6px;padding:2px 8px;text-decoration:none;font-variant-numeric:tabular-nums}
+.home{color:var(--it);text-decoration:none;font-size:.9rem}
+.small{color:var(--muted);font-size:.8rem;margin:0}
+a:focus-visible,summary:focus-visible{outline:2px solid var(--it);outline-offset:2px}
+@media (max-width:420px){.tile{padding:8px 9px}.tile .v{font-size:.92rem}}
+@media (max-width:330px){.tiles{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="home" href="../index.html">← 오늘 브리핑</a>
+  <header>
+    <div class="date">2026년 11월 27일 (금) · 약 15분 읽기</div>
+    <h1>비트코인 6만달러 회복, 엔비디아는 수출 중단·신용 경고</h1>
+    <p class="lede">코인 시장은 급락 뒤 숨을 고르고 있지만, 큰손 이탈과 ETF 자금 유출로 아직 불안해요. AI 대장주 엔비디아는 미국 수출 규제와 신용등급 경고를 함께 받아 AI 업계 전체가 지켜보고 있어요.</p>
+  </header>
+
+  <section class="m">
+    <h2>시장 한눈에 <span class="chip">주식·코인</span></h2>
+    <div class="tiles"><div class="tile"><div class="k">코스피</div><div class="v">4,711.21</div><div class="d dn">▼ 5.89%</div><div class="when">11/26 기준</div></div><div class="tile"><div class="k">나스닥</div><div class="v">23,586</div><div class="d dn">▼ 0.62%</div><div class="when">11/26 기준</div></div><div class="tile"><div class="k">비트코인</div><div class="v">$60,748</div><div class="d up">▲ 0.93%</div><div class="when">11/27 6시 (24시간)</div></div></div>
+    <ul class="why"><li><b>코스피 막판 반납:</b> 마감시황 기사에 따르면 코스피는 장 막판 상승폭을 줄이며 0.29% 오른 4711.21에 마감했어요. 막판에 밀린 이유는 아직 뚜렷하게 보도되지 않았어요.</li><li><b>기업심리 소폭 하락:</b> 한국은행 발표에 따르면 11월 기업심리지수는 제조업 104.8(전월보다 0.8p 하락), 비제조업 102.5(0.7p 하락)였어요. 기업들 체감 경기가 조금 식었다는 뜻이에요.</li><li><b>저가 매수 반등:</b> 비트코인은 최근 급락 뒤 저가 매수가 들어와 6만달러선을 회복했어요. 다만 큰손(고래) 보유량 감소와 미국 현물 ETF 자금 유출이 반등을 누르고 있어요.</li><li><b>추가 하락 경계:</b> 갤럭시 디지털은 5만8525달러가 깨지면 더 크게 내려갈 수 있다는 의견을 냈어요. 반대로 하락 베팅이 많이 쌓여 있어 오르면 숏스퀴즈가 생길 수 있다는 의견도 있어요.</li></ul>
+  </section>
+
+  <section class="term">
+    <b>오늘의 용어 · 숏스퀴즈 (Short Squeeze)</b>
+    <p>가격 하락에 돈을 건 사람(숏 포지션)들이 가격이 오르면 손실을 줄이려고 급하게 되사야 해요. 이 &#x27;되사기&#x27;가 한꺼번에 몰리면 가격이 더 빨리 오르는 현상을 숏스퀴즈라고 불러요. 오늘 비트코인 기사에서도 하락 베팅이 크게 늘어 추가 상승 시 숏스퀴즈가 생길 수 있다는 이야기가 나왔어요.</p>
+  </section>
+
+  <section class="a">
+    <h2>AI · IT 소식 <span class="chip">IT</span></h2>
+    <ol class="news"><li><div class="src">AI타임스</div><h3><a href="https://www.aitimes.com/news/articleView.html?idxno=217837" target="_blank" rel="noopener">엔비디아, 동남아 4개국에 AI 서버 출하 멈춰</a></h3><p>미국의 AI 반도체 수출 규제가 강해지자 엔비디아가 말레이시아 등 동남아 4개국으로 가는 AI 서버 출하를 중단했다고 FT가 보도했어요. 중국 기업에 컴퓨팅을 빌려주는 클라우드 업체에 대한 GPU 공급도 제한하기 시작했어요. <span class="so">중국이 동남아를 거쳐 AI 칩을 쓰던 길이 막히면 중국 AI 개발과 동남아 데이터센터 산업 모두 영향을 받을 수 있어요.</span></p></li><li><div class="src">AI타임스</div><h3><a href="https://www.aitimes.com/news/articleView.html?idxno=217811" target="_blank" rel="noopener">S&amp;P, 엔비디아 신용등급 낮출지 검토</a></h3><p>신용평가사 S&amp;P가 엔비디아의 &#x27;AA&#x27; 등급을 &#x27;부정적 관찰 대상&#x27;에 올렸어요. 젠슨 황 CEO의 사임과 복귀 과정에서 이사회의 감독 기능에 약점이 드러났다는 이유예요. <span class="so">실적이 좋아도 경영 구조(지배구조)가 불안하면 회사 평가가 깎일 수 있다는 걸 보여 줘요.</span></p></li><li><div class="src">OpenAI · 공식 발표</div><h3><a href="https://openai.com/index/gpt-6-models-demonstrate-intrinsic-protein-design-capabilities" target="_blank" rel="noopener">오픈AI, &#x27;GPT-6가 단백질도 설계한다&#x27; 발표</a></h3><p>오픈AI는 GPT-6 모델이 추론과 코드로 단백질 구조와 서열을 설계할 수 있다고 밝혔어요. 실험실 테스트에서 다섯 가지 표적에 결합한 증거를 찾았다고 해요. <span class="so">범용 AI가 신약·바이오 연구 같은 과학 분야로 넓어지고 있다는 신호예요.</span></p></li><li><div class="src">AI타임스</div><h3><a href="https://www.aitimes.com/news/articleView.html?idxno=217833" target="_blank" rel="noopener">뉴욕주, 어린이용 AI 챗봇 장난감 5년간 판매 금지</a></h3><p>뉴욕주지사가 13세 미만 어린이 대상 AI 챗봇 장난감의 제조·유통·판매를 5년간 금지하는 법안에 서명했어요. 부적절한 대화, 정서적 의존, 개인정보 침해를 막으려는 조치예요. <span class="so">AI 제품을 아이들에게 쓰는 문제에 대해 정부가 직접 강하게 규제한 사례라 다른 지역에도 영향을 줄 수 있어요.</span></p></li><li><div class="src">Google AI · 공식 발표</div><h3><a href="https://blog.google/products-and-platforms/products/search/google-search-personal-intelligence-apps/" target="_blank" rel="noopener">구글 검색, 내 드라이브·월렛과 연결해 맞춤 답변</a></h3><p>구글 검색의 AI 모드에서 사용자가 동의하면 구글 월렛, 드라이브, 제미나이 앱을 &#x27;개인 지능(Personal Intelligence)&#x27;에 연결할 수 있게 됐어요. 그만큼 나에게 맞춘 답을 준다는 거예요. <span class="so">검색이 &#x27;모두에게 같은 답&#x27;에서 &#x27;내 정보 기반 답&#x27;으로 바뀌는 흐름이라 편리함과 개인정보 문제를 함께 봐야 해요.</span></p></li></ol>
+  </section>
+
+  <section class="s">
+    <h2>피부미용의료 <span class="chip">기술·논문</span></h2>
+    <h4>새 기술 · 기기 소식</h4>
+    <ol class="news"><li><div class="src">연합뉴스 · 규제기관 발표</div><h3><a href="https://news.google.com/rss/articles/CBMiW0FVX3lxTE5uRnh6NkpzV0MyNmNxWUxkSll5c0dQOUF4b280aGI3VGRNbjlqWmJEN19zcUFSOHI3MW9YWlQybFhLbjlGNDlybnBBckJZVFA2eWNySlV3b20wdknSAWBBVV95cUxOYnZ3Y0I4aHZRN0s1NE1HTGpWVmpRZDlqbk1HWWhWUXgwcnJzYWQ4UUVqUDg3a05ORVlyc3NCeVl1bGJTMEFZeUdXYkZZWGNpb202YTlsRF94ak5tNU1hZFY?oc=5" target="_blank" rel="noopener">&#x27;바디 시술 받다 화상&#x27;…피부미용 소비자 피해 두 배로 늘어</a></h3><p>피부미용 시술 관련 소비자 피해가 두 배로 급증했다는 보도예요. 바디 에너지 기기 시술 중 화상을 입은 사례가 제목에 나와 있어요. 자료에는 기사 제목만 있어 구체적인 건수와 집계 기관은 확인되지 않아요. <span class="so">에너지 기기 시술에서 화상은 실제로 반복되는 피해라, 시술 전 설명과 기기 설정 관리가 중요하다는 점을 다시 보여 줘요.</span></p></li><li><div class="src">Healio · 학회·전문가 의견</div><h3><a href="https://www.healio.com/news/dermatology/20261118/8-common-misconceptions-about-botox-and-fillers-explained" target="_blank" rel="noopener">피부과 전문의가 짚은 보톡스·필러에 대한 오해 8가지</a></h3><p>미국 샌디에이고 학술 행사에서 한 피부과 전문의가 소셜미디어에 퍼진 보툴리눔 톡신·필러 관련 잘못된 정보 8가지를 설명했어요. 잘못된 정보가 필요한 치료를 피하게 하거나 위험한 시술을 부추길 수 있다고 지적했어요. <span class="so">환자 상담 때 흔히 듣는 오해를 정리하는 데 참고할 수 있는 전문가 의견이에요.</span></p></li><li><div class="src">약업신문 · 업체 발표</div><h3><a href="https://news.google.com/rss/articles/CBMimAFBVV95cUxNdFlLMmxYLTVJZEhRMHZIRk1aZ0lKNFZ3OGcxYVRPMDhaaW9VdWJsU2hYdC1rQUNTVE96RERfZUJzYUFNOGpHQTlnLXFHT1Zlc09oaUVvUDJTU09UaUIzU0w3TmttRmZJZ1B0VkFLeERjQmxMZXZENHNIdVVDSW1fc2thYW5IUExMWXpNNmlYT0VOR0x5MEx5TQ?oc=5" target="_blank" rel="noopener">클래시스 &#x27;슈퍼벨로체4800&#x27;, 유럽 MDR 인증 획득</a></h3><p>클래시스의 미용의료기기 &#x27;슈퍼벨로체4800&#x27;이 유럽 의료기기 규정(MDR, Medical Device Regulation) 인증을 받았고, 케이바이오솔루션이 인증 과정을 도왔다는 기사예요. 업체 발표이며 독립적으로 검증된 자료는 아니에요. <span class="so">유럽 MDR은 기준이 까다로운 편이라, 국산 미용기기의 해외 허가 흐름을 보여 주는 사례예요.</span></p></li></ol>
+    <h4>최근 논문</h4>
+    <ol class="news papers"><li><div class="jr">J Cosmet Dermatol 2026 · <a href="https://doi.org/10.1111/jocd.71141" target="_blank" rel="noopener">DOI</a> <span class="lv lv2">근거 높음</span></div><h3><a href="https://pubmed.ncbi.nlm.nih.gov/43047201/" target="_blank" rel="noopener">위축성 여드름 흉터에서 프랙셔널 CO2 레이저 단독 대 PRP 병용: 체계적 문헌고찰과 메타분석</a></h3><p class="ds">무작위 대조시험 메타분석 · 7개 시험 · 165명</p><p>PRP(혈소판 풍부 혈장)를 함께 쓴 군이 레이저 단독군보다 75% 넘는 &#x27;매우 좋은 개선&#x27; 비율이 높았어요(OR 3.21, 95% CI 1.04–9.83, p=0.04). &#x27;매우 만족&#x27; 비율도 높았어요(OR 3.05, 95% CI 1.27–7.29, p=0.01). 홍반·부종 기간, 과색소침착 빈도는 두 군 간 차이가 없었어요(모두 p&gt;0.05).</p><p class="so">PRP를 더하면 단기 효과와 만족도가 조금 나아질 수 있고, 부작용이 늘지는 않았다는 정도의 근거예요.</p><p class="lim">한계: 포함된 시험들이 작고 추적 기간이 모두 6개월 이하이며, 대상이 주로 중동·동아시아 피부(Fitzpatrick III–V)에 치우쳐 있어요. 신뢰구간이 넓어 효과 크기는 불확실하고, 이해관계 문구는 자료에서 잘려 확인이 어려워요.</p></li><li><div class="jr">Aesthet Surg J 2026 · <a href="https://doi.org/10.1093/asj/sjag198" target="_blank" rel="noopener">DOI</a> <span class="lv lv1">근거 중간</span></div><h3><a href="https://pubmed.ncbi.nlm.nih.gov/42926352/" target="_blank" rel="noopener">중등도~중증 미간 주름에서 트레니보툴리눔톡신E의 효과와 안전성: 톡신 경험자·미경험자 대상 3상 핵심 시험</a></h3><p class="ds">이중눈가림 위약 대조 무작위 3상 시험 · 3:1 배정 · 21일 관찰</p><p>7일째 주된 반응률은 톡신E군 60.0%, 위약군 0.6%였어요(P&lt;.0001). 효과는 8시간째부터 나타나 7일째 가장 컸고, 21일째에는 다시 중등도~중증으로 돌아갔어요. 7일째 치료 만족도도 77.6% 대 5.1%였어요.</p><p class="so">E형 톡신은 A형과 달리 &#x27;빨리 나타나고 빨리 사라지는&#x27; 성격이라, 처음 시술이 망설여지는 사람에게 짧게 경험해 보는 선택지가 될 수 있다는 의미예요.</p><p class="lim">한계: 자료로 받은 초록 부분에는 전체 대상 수와 시험 기관 수가 없어서 규모를 판단하기 어려워 &#x27;중간&#x27;으로 매겼어요. 효과 지속 기간이 약 3주로 짧고, 이해관계 정보는 자료에 없어요.</p></li></ol>
+    <h4>기초 지식</h4>
+    <div class="basic"><b>피부 광유형 (Fitzpatrick Skin Type)과 레이저 안전</b><p>피츠패트릭 피부 유형은 햇볕을 쬐었을 때 &#x27;잘 타는지, 잘 그을리는지&#x27;를 기준으로 피부를 I~VI형으로 나눈 분류예요. 숫자가 클수록 멜라닌(Melanin, 피부 색소)이 많아요. 레이저와 빛 기기는 멜라닌에도 흡수되기 때문에, 유형이 높을수록 표피가 열을 더 받아 화상이나 염증 후 과색소침착이 생기기 쉬워요. 그래서 실제 시술에서는 피부 유형에 따라 에너지를 낮추거나 파장·냉각·간격을 조절해요. 오늘 PRP 병용 메타분석도 대상이 주로 III~V형이라 다른 피부 유형에는 결과를 그대로 적용하기 어렵다고 밝혔어요. 오늘 보도된 에너지 기기 화상 피해 역시 피부 상태를 고려한 설정이 왜 중요한지 보여 줘요.</p><p class="small">더 읽을 종설(자동 검색): <a href="https://pubmed.ncbi.nlm.nih.gov/35604505/" target="_blank" rel="noopener">Laser tattoo removal: laser principles and an updated guide for clinicians.</a> Lasers Med Sci 2022</p></div>
+  </section>
+
+  <details>
+    <summary>출처 보기</summary>
+    <ul><li><a href="https://www.bok.or.kr/portal/bbs/B0000501/view.do?nttId=11066975&amp;menuNo=201264" target="_blank" rel="noopener">한국은행 · 2026년 11월 기업경기조사 결과 및 경제심리지수</a></li><li><a href="https://www.hankyung.com/article/202611262700i" target="_blank" rel="noopener">한국경제 증권 · [마감시황] 장 막판 상승폭 반납한 코스피…0.29% 오른 4711.21</a></li><li><a href="https://www.blockmedia.co.kr/archives/1171211" target="_blank" rel="noopener">블록미디어 · [뉴욕 코인시황] 비트코인 6만달러 회복…고래 떠났지만 160억달러 숏 </a></li><li><a href="https://www.blockmedia.co.kr/archives/1171139" target="_blank" rel="noopener">블록미디어 · 비트코인 6만달러 유지, 유럽 증시 상승…미국은 추수감사절 휴장</a></li><li><a href="https://www.blockmedia.co.kr/archives/1170851" target="_blank" rel="noopener">블록미디어 · ‘비트코인 바닥론’ 접은 갤럭시…5만8525달러 깨지면 2만8200달러까</a></li><li><a href="https://openai.com/index/gpt-6-models-demonstrate-intrinsic-protein-design-capabilities" target="_blank" rel="noopener">OpenAI · GPT-6 models demonstrate intrinsic prote</a></li><li><a href="https://blog.google/products-and-platforms/products/search/google-search-personal-intelligence-apps/" target="_blank" rel="noopener">Google AI · A more tailored Google Search that’s uni</a></li><li><a href="https://www.aitimes.com/news/articleView.html?idxno=217837" target="_blank" rel="noopener">AI타임스 · 엔비디아, 동남아 4개국 AI 서버 출하 중단…중국 우회 접근 차단</a></li><li><a href="https://www.aitimes.com/news/articleView.html?idxno=217833" target="_blank" rel="noopener">AI타임스 · 뉴욕주, 어린이용 AI 챗봇 장난감 제조·판매 5년간 금지</a></li><li><a href="https://www.aitimes.com/news/articleView.html?idxno=217811" target="_blank" rel="noopener">AI타임스 · S&amp;P, 엔비디아 신용등급 하향 검토…황 복귀에도 지배구조 불안</a></li><li><a href="https://news.google.com/rss/articles/CBMiW0FVX3lxTE5uRnh6NkpzV0MyNmNxWUxkSll5c0dQOUF4b280aGI3VGRNbjlqWmJEN19zcUFSOHI3MW9YWlQybFhLbjlGNDlybnBBckJZVFA2eWNySlV3b20wdknSAWBBVV95cUxOYnZ3Y0I4aHZRN0s1NE1HTGpWVmpRZDlqbk1HWWhWUXgwcnJzYWQ4UUVqUDg3a05ORVlyc3NCeVl1bGJTMEFZeUdXYkZZWGNpb202YTlsRF94ak5tNU1hZFY?oc=5" target="_blank" rel="noopener">연합뉴스 · &quot;&#x27;바디 인모드&#x27; 받다 화상&quot;…피부미용 소비자 피해 두배로 급증</a></li><li><a href="https://news.google.com/rss/articles/CBMimAFBVV95cUxNdFlLMmxYLTVJZEhRMHZIRk1aZ0lKNFZ3OGcxYVRPMDhaaW9VdWJsU2hYdC1rQUNTVE96RERfZUJzYUFNOGpHQTlnLXFHT1Zlc09oaUVvUDJTU09UaUIzU0w3TmttRmZJZ1B0VkFLeERjQmxMZXZENHNIdVVDSW1fc2thYW5IUExMWXpNNmlYT0VOR0x5MEx5TQ?oc=5" target="_blank" rel="noopener">약업신문 · 케이바이오솔루션, 클래시스 ‘슈퍼벨로체4800’ 유럽 미용의료기기 MDR</a></li><li><a href="https://www.healio.com/news/dermatology/20261118/8-common-misconceptions-about-botox-and-fillers-explained" target="_blank" rel="noopener">Healio · Dermatologist debunks 8 Botox, filler my</a></li><li><a href="https://pubmed.ncbi.nlm.nih.gov/42926352/" target="_blank" rel="noopener">Aesthet Surg J · Efficacy and Safety Results From a Pivot</a></li><li><a href="https://pubmed.ncbi.nlm.nih.gov/43047201/" target="_blank" rel="noopener">J Cosmet Dermatol · Adjunctive Use of Platelet-Rich Plasma W</a></li></ul>
+  </details>
+
+  <details>
+    <summary>지난 브리핑</summary>
+    <div class="arch"><a href="2026-11-27.html">11/27</a><a href="2026-11-26.html">11/26</a><a href="2026-11-25.html">11/25</a><a href="2026-11-24.html">11/24</a><a href="2026-11-23.html">11/23</a><a href="2026-11-22.html">11/22</a><a href="2026-11-21.html">11/21</a><a href="2026-11-20.html">11/20</a><a href="2026-11-19.html">11/19</a><a href="2026-11-18.html">11/18</a><a href="2026-11-17.html">11/17</a><a href="2026-11-16.html">11/16</a><a href="2026-11-15.html">11/15</a><a href="2026-11-14.html">11/14</a></div>
+  </details>
+
+  <p class="small">피부미용 소식은 규제기관·학회와 의학 전문지만, 논문은 저널과 연구 설계를 보고 골라요. ‘근거’ 표시는 초록만 보고 AI가 어림한 것이에요.</p>
+  <p class="small">공부용 요약이에요. 특정 종목·코인 매매나 특정 시술·제품을 권하는 내용이 아니에요. 숫자는 표시된 시점 기준이에요.</p>
+  <p class="small">2026-11-27 06:18 업데이트 · Claude 요약</p>
+</div>
+</body>
+</html>

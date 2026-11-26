@@ -1,6 +1,5 @@
 {
   "recent_terms": [
-    "순매도 (Net Selling)",
     "IPO (기업공개, Initial Public Offering)",
     "사이드카 (Sidecar)",
     "빅스텝 (Big Step)",
@@ -19,11 +18,11 @@
     "목표주가 (Target Price)",
     "풋옵션 (Put Option)",
     "프로그램 매매 (Program Trading)",
-    "근원 PCE (Core Personal Consumption Expenditures, 근원 개인소비지출 물가)"
+    "근원 PCE (Core Personal Consumption Expenditures, 근원 개인소비지출 물가)",
+    "숏스퀴즈 (Short Squeeze)"
   ],
-  "last_run": "2026-11-26T06:18:00.973506+09:00",
+  "last_run": "2026-11-27T06:18:20.313821+09:00",
   "recent_skin": [
-    "HIFU(고강도 집속 초음파)의 원리와 안전",
     "마이크로니들 고주파(MNRF)의 원리",
     "선택적 광열분해 (Selective Photothermolysis)",
     "콜라겐 재생 유도 (Neocollagenesis)와 스킨부스터·바이오스티뮬레이터",
@@ -42,7 +41,8 @@
     "세포외기질 (ECM, Extracellular Matrix): 피부를 받치는 '틀'",
     "각질층 장벽 (Stratum Corneum Barrier)과 경피 약물 전달",
     "이물 육아종 (Foreign Body Granuloma): 주사 후 생기는 '늦은 혹'",
-    "보툴리눔 톡신 (Botulinum Toxin)의 작용 원리: 신경 신호를 '잠시' 끊기"
+    "보툴리눔 톡신 (Botulinum Toxin)의 작용 원리: 신경 신호를 '잠시' 끊기",
+    "피부 광유형 (Fitzpatrick Skin Type)과 레이저 안전"
   ],
   "seen_skin": [
     "https://news.google.com/rss/articles/CBMiaEFVX3lxTE5wSmJ2cllPSzR2MUxtekJSYjY4S0p4eFFTRlVsa2dfbGVGcENpbm5Ec1hJMFZ0NlRYbmNSZnlBelY4S09SM3V4aFMzcUdVaDVadzFlOF9BeUhYN0kzTU1vQTlDZlBTTnY40gFsQVVfeXFMT19QU05vSGp1SnVILXQ1bkMyM3VoZk1xem1PcDF4RmpGeVJnTEFDUDl5SlRRc19DOE9haEdNX2MzNGhhMmRrX2VPakVlUUV0N3lXUHllQ0dyRWpwSS0zSXY0MHBoQVNDWHNQWXVa?oc=5",
@@ -123,7 +123,12 @@
     "https://news.google.com/rss/articles/CBMinwFBVV95cUxOd0J5UVBTMDVmWWNDNGZBYTZzRDBJTC10SFJIMjJaelNnbTU2OGpaZmZiUlVOWWc0dlZhNXhDRnNlcXVsY1MtUjdreE9rNmxyaFJ6M1J5el9sTEg3SlpyQnJZMlo3VXpyVnMzRHVTeDJfN1hmR2xqYWYxOE14b1pPd0Z4amNXSDdBMEJrYTZjRU5kNklNQlBTWUEzSE5VWXc?oc=5",
     "https://news.google.com/rss/articles/CBMimwFBVV95cUxPVmNob3FqVTl5X2RpWnZvd0pZMUFKLW1BTGx2aFVucU9VVGEyTmRZaEpWUG9qdDZ0WDdKT3pwZ2duZlJZaXhQT0ZpNnBBR3NHUTJ6dWNVYnV6c2hCVDVUeW5RSXZGLVhHMEw3LVB2bHpQRnFCSWtDOHJMcGhHazZPcmR3cUxYcFQtTWZJT25ZRkp5YjVfSmhvLUlEdw?oc=5",
     "https://pubmed.ncbi.nlm.nih.gov/43035579/",
-    "https://pubmed.ncbi.nlm.nih.gov/43020920/"
+    "https://pubmed.ncbi.nlm.nih.gov/43020920/",
+    "https://news.google.com/rss/articles/CBMiW0FVX3lxTE5uRnh6NkpzV0MyNmNxWUxkSll5c0dQOUF4b280aGI3VGRNbjlqWmJEN19zcUFSOHI3MW9YWlQybFhLbjlGNDlybnBBckJZVFA2eWNySlV3b20wdknSAWBBVV95cUxOYnZ3Y0I4aHZRN0s1NE1HTGpWVmpRZDlqbk1HWWhWUXgwcnJzYWQ4UUVqUDg3a05ORVlyc3NCeVl1bGJTMEFZeUdXYkZZWGNpb202YTlsRF94ak5tNU1hZFY?oc=5",
+    "https://www.healio.com/news/dermatology/20261118/8-common-misconceptions-about-botox-and-fillers-explained",
+    "https://news.google.com/rss/articles/CBMimAFBVV95cUxNdFlLMmxYLTVJZEhRMHZIRk1aZ0lKNFZ3OGcxYVRPMDhaaW9VdWJsU2hYdC1rQUNTVE96RERfZUJzYUFNOGpHQTlnLXFHT1Zlc09oaUVvUDJTU09UaUIzU0w3TmttRmZJZ1B0VkFLeERjQmxMZXZENHNIdVVDSW1fc2thYW5IUExMWXpNNmlYT0VOR0x5MEx5TQ?oc=5",
+    "https://pubmed.ncbi.nlm.nih.gov/43047201/",
+    "https://pubmed.ncbi.nlm.nih.gov/42926352/"
   ],
   "recent_skin_titles": [
     "미국 미용 에너지 기기 회수, 가장 흔한 이유는 '허가 외 마케팅'",
@@ -134,6 +139,11 @@
     "\"이름은 하나, 제품은 여덟 개\"…보툴리눔 톡신은 서로 바꿔 쓸 수 없다",
     "라메디텍, 스킨부스터용 레이저 '레인젯' 식약처 허가",
     "성인의 경도~중등도 무턱(턱 후퇴) 교정을 위한 폴리카프로락톤(PCL) 주사 필러의 효과와 안전성: 무치료 대조 다기관 무작위 연구",
-    "비후성 반흔·켈로이드에서 레이저 보조 국소 스테로이드 전달 대 병변 내 스테로이드 주사: 메타분석"
+    "비후성 반흔·켈로이드에서 레이저 보조 국소 스테로이드 전달 대 병변 내 스테로이드 주사: 메타분석",
+    "'바디 시술 받다 화상'…피부미용 소비자 피해 두 배로 늘어",
+    "피부과 전문의가 짚은 보톡스·필러에 대한 오해 8가지",
+    "클래시스 '슈퍼벨로체4800', 유럽 MDR 인증 획득",
+    "위축성 여드름 흉터에서 프랙셔널 CO2 레이저 단독 대 PRP 병용: 체계적 문헌고찰과 메타분석",
+    "중등도~중증 미간 주름에서 트레니보툴리눔톡신E의 효과와 안전성: 톡신 경험자·미경험자 대상 3상 핵심 시험"
   ]
 }
