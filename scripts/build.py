@@ -444,6 +444,19 @@ def pubmed_review(query):
 
 # ---------- Claude로 초보용 설명 쓰기 ----------
 
+VISUAL = {
+    "picture": {"type": "object", "properties": {
+        "steps": {"type": "array", "items": {"type": "object", "properties": {
+            "emoji": {"type": "string"}, "label": {"type": "string"}},
+            "required": ["emoji", "label"], "additionalProperties": False}},
+        "caption": {"type": "string"}},
+        "required": ["steps", "caption"], "additionalProperties": False},
+    "comic": {"type": "array", "items": {"type": "object", "properties": {
+        "scene": {"type": "string"}, "who": {"type": "string", "enum": ["초보", "선배"]},
+        "line": {"type": "string"}},
+        "required": ["scene", "who", "line"], "additionalProperties": False}},
+}
+
 SCHEMA = {
     "type": "object",
     "properties": {
@@ -451,8 +464,8 @@ SCHEMA = {
         "lede": {"type": "string"},
         "market_why": {"type": "array", "items": {"type": "string"}},
         "market_links": {"type": "array", "items": {"type": "string"}},
-        "term": {"type": "object", "properties": {"name": {"type": "string"}, "explain": {"type": "string"}},
-                 "required": ["name", "explain"], "additionalProperties": False},
+        "term": {"type": "object", "properties": {"name": {"type": "string"}, "explain": {"type": "string"}, **VISUAL},
+                 "required": ["name", "explain", "picture", "comic"], "additionalProperties": False},
         "news": {"type": "array", "items": {
             "type": "object",
             "properties": {"title": {"type": "string"}, "body": {"type": "string"},
@@ -472,8 +485,8 @@ SCHEMA = {
                            "limits": {"type": "string"}, "link": {"type": "string"}},
             "required": ["title", "design", "level", "finding", "meaning", "limits", "link"], "additionalProperties": False}},
         "skin_basic": {"type": "object", "properties": {"name": {"type": "string"}, "explain": {"type": "string"},
-                                                        "pubmed_query": {"type": "string"}},
-                       "required": ["name", "explain", "pubmed_query"], "additionalProperties": False},
+                                                        "pubmed_query": {"type": "string"}, **VISUAL},
+                       "required": ["name", "explain", "pubmed_query", "picture", "comic"], "additionalProperties": False},
     },
     "required": ["headline", "lede", "market_why", "market_links", "term", "news", "skin_tech", "skin_papers", "skin_basic"],
     "additionalProperties": False,
@@ -498,6 +511,10 @@ PROMPT = """너는 주식·코인 초보이면서 AI·IT에 관심 있는 한국
 - skin_papers: 아래 PubMed 논문(좋은 설계·저널 순으로 정렬돼 있음) 중 피부미용 실무에 의미 있는 것 2개. 서로 다른 주제로 골라. title은 한국어로 옮긴 제목. design은 연구 설계와 규모(예: "무작위 대조시험 · 42명 · 12주"), 초록에 없는 값은 빼. finding은 비교군과 주요 수치(p값·신뢰구간이 있으면 포함)로 2~3문장. meaning은 "그래서 실제로 무슨 의미인지" 한 문장. limits는 한계와 이해관계(업체 지원·저자 소속이 자료에 있으면 포함)를 한두 문장. link는 PubMed 링크 그대로. 초록에 없는 내용은 쓰지 마.
   · level 기준: 높음 = 진료지침, 무작위시험을 모은 메타분석, 여러 기관의 큰 무작위시험(대략 100명 이상). 중간 = 작은 무작위시험, 반쪽 얼굴 비교, 체계적 문헌고찰. 낮음 = 비교군 없는 연구, 후향 연구, 종설, 전문가 의견. 초록에 GRADE 확실성이 있으면 그것을 우선해(여러 개면 주된 결과의 것). 애매하면 낮은 쪽으로 매겨.
 - skin_basic: 피부미용의료 기초 지식 하나(피부 구조, 레이저·기기 원리, 주사 시술 기전, 합병증, 피부 질환 등). 4~6문장으로, 원리 → 실제 시술에서 왜 중요한지 순서로. 교과서 수준에서 널리 받아들여지는 내용만 쓰고, 근거가 엇갈리면 엇갈린다고 써. 가능하면 오늘 skin_tech나 skin_papers 내용과 연결해. pubmed_query는 이 주제의 종설을 찾을 영어 검색어 2~4단어(예: "picosecond laser pigmentation").
+- term과 skin_basic에는 글을 읽기 전에 한눈에 이해되도록 그림과 만화를 붙여. 이모지는 휴대폰에서 바로 보이는 흔한 것만 써.
+  · picture: 원리를 보여 주는 흐름 그림. steps는 정확히 3~4칸이고, 칸마다 emoji 1개와 label 8자 이내(예: 📉 "주가 급락" → 🚨 "8% 하락" → ⏸️ "20분 멈춤" → 😮‍💨 "숨 고르기"). 원인 → 과정 → 결과 순서로. caption은 그림을 한 문장으로 정리한 비유(예: "축구 경기 중 다친 선수가 생기면 잠깐 경기를 멈추는 것과 같아요").
+  · comic: 정확히 4컷 대화 만화. 등장인물은 "초보"(궁금한 게 많은 사람)와 "선배"(쉽게 알려주는 사람). 1컷 초보의 궁금증(오늘 뉴스에서 출발) → 2컷 선배의 일상 비유 → 3컷 실제 원리 → 4컷 초보가 "아하" 하고 한 줄로 정리. line은 말풍선이라 35자 이내의 입말로. scene은 그 컷 장면을 나타내는 이모지 1~2개.
+  · 비유는 정확해야 해. 비유 때문에 사실이 틀리게 이해될 것 같으면 3컷에서 "다만 ~는 달라요"처럼 바로잡아. explain은 만화 아래에 붙는 정리라서 2~3문장으로 줄여 써(skin_basic은 3~4문장).
 - 말투는 친근한 해요체, 짧은 문장. 전문용어는 처음 나올 때 영어나 원어를 괄호로 함께 쓰고 바로 풀어서 설명해.
 - link는 반드시 아래 자료에 있는 링크를 글자 그대로 옮겨. 자료에 없는 링크는 자동으로 버려져.
 - 특정 종목·코인을 사라/팔라고 하거나 가격을 예측하지 마. 특정 병원·제품을 추천하거나 치료 효과를 장담하지 마.
@@ -651,6 +668,30 @@ def attach_sources(brief, items):
         brief[key] = kept
 
 
+def visual_html(obj, senior):
+    """오늘의 용어·기초 지식 위에 붙는 흐름 그림과 4컷 만화. 기본 모드처럼 없으면 빈 문자열."""
+    pic, comic = obj.get("picture") or {}, obj.get("comic") or []
+    out = ""
+    steps = [st for st in pic.get("steps", []) if st.get("label")][:4]
+    if steps:
+        cells = '<span class="ar" aria-hidden="true">→</span>'.join(
+            f'<div class="st"><div class="em">{esc(st["emoji"])}</div><div class="lb">{esc(st["label"])}</div></div>' for st in steps)
+        cap = f'<p class="cap">{esc(pic.get("caption"))}</p>' if pic.get("caption") else ""
+        out += f'<figure class="flow"><div class="steps">{cells}</div>{cap}</figure>'
+    panels = [c for c in comic if c.get("line")][:4]
+    if panels:
+        faces = {"초보": ("🐣", "초보"), "선배": senior}
+        cells = ""
+        for i, c in enumerate(panels, 1):
+            face, name = faces.get(c.get("who"), faces["초보"])
+            side = "me" if c.get("who") == "초보" else "you"
+            cells += (f'<div class="panel"><span class="no">{i}</span><div class="scene">{esc(c.get("scene"))}</div>'
+                      f'<div class="talk {side}"><span class="face" title="{name}">{face}</span>'
+                      f'<span class="bubble">{esc(c["line"])}</span></div></div>')
+        out += f'<div class="comic" role="group" aria-label="4컷 만화">{cells}</div>'
+    return out
+
+
 def render(today, brief, market, sources, archive_dates, is_index):
     wd = "월화수목금토일"[today.weekday()]
     why_html = ""
@@ -702,6 +743,8 @@ def render(today, brief, market, sources, archive_dates, is_index):
         nasdaq=tile("나스닥", market.get("nasdaq"), lambda v: f"{v:,.0f}"),
         btc=tile("비트코인", market.get("btc"), lambda v: f"${v:,.0f}"),
         why=why_html, term_name=esc(brief["term"]["name"]), term_explain=esc(brief["term"]["explain"]),
+        term_visual=visual_html(brief["term"], ("🦉", "선배")),
+        skin_basic_visual=visual_html(sb, ("🧑‍⚕️", "선생님")),
         news=news_html, skin_tech=skin_tech_block, skin_papers=paper_block,
         skin_basic_name=esc(sb["name"]), skin_basic_explain=esc(sb["explain"]), skin_basic_review=review_html,
         sources=src_html, archive=arch_html, home=home,
