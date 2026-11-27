@@ -1,6 +1,5 @@
 {
   "recent_terms": [
-    "IPO (기업공개, Initial Public Offering)",
     "사이드카 (Sidecar)",
     "빅스텝 (Big Step)",
     "매파 (Hawkish)",
@@ -19,11 +18,11 @@
     "풋옵션 (Put Option)",
     "프로그램 매매 (Program Trading)",
     "근원 PCE (Core Personal Consumption Expenditures, 근원 개인소비지출 물가)",
-    "숏스퀴즈 (Short Squeeze)"
+    "숏스퀴즈 (Short Squeeze)",
+    "채굴원가 (Mining Cost)"
   ],
-  "last_run": "2026-11-27T06:18:20.313821+09:00",
+  "last_run": "2026-11-27T09:49:57.247548+09:00",
   "recent_skin": [
-    "마이크로니들 고주파(MNRF)의 원리",
     "선택적 광열분해 (Selective Photothermolysis)",
     "콜라겐 재생 유도 (Neocollagenesis)와 스킨부스터·바이오스티뮬레이터",
     "혈관 레이저의 파장 선택: 왜 585~595nm 근처일까",
@@ -42,7 +41,8 @@
     "각질층 장벽 (Stratum Corneum Barrier)과 경피 약물 전달",
     "이물 육아종 (Foreign Body Granuloma): 주사 후 생기는 '늦은 혹'",
     "보툴리눔 톡신 (Botulinum Toxin)의 작용 원리: 신경 신호를 '잠시' 끊기",
-    "피부 광유형 (Fitzpatrick Skin Type)과 레이저 안전"
+    "피부 광유형 (Fitzpatrick Skin Type)과 레이저 안전",
+    "IPL (Intense Pulsed Light, 강력 펄스광)의 원리: 여러 파장을 한꺼번에"
   ],
   "seen_skin": [
     "https://news.google.com/rss/articles/CBMiaEFVX3lxTE5wSmJ2cllPSzR2MUxtekJSYjY4S0p4eFFTRlVsa2dfbGVGcENpbm5Ec1hJMFZ0NlRYbmNSZnlBelY4S09SM3V4aFMzcUdVaDVadzFlOF9BeUhYN0kzTU1vQTlDZlBTTnY40gFsQVVfeXFMT19QU05vSGp1SnVILXQ1bkMyM3VoZk1xem1PcDF4RmpGeVJnTEFDUDl5SlRRc19DOE9haEdNX2MzNGhhMmRrX2VPakVlUUV0N3lXUHllQ0dyRWpwSS0zSXY0MHBoQVNDWHNQWXVa?oc=5",
@@ -128,7 +128,11 @@
     "https://www.healio.com/news/dermatology/20261118/8-common-misconceptions-about-botox-and-fillers-explained",
     "https://news.google.com/rss/articles/CBMimAFBVV95cUxNdFlLMmxYLTVJZEhRMHZIRk1aZ0lKNFZ3OGcxYVRPMDhaaW9VdWJsU2hYdC1rQUNTVE96RERfZUJzYUFNOGpHQTlnLXFHT1Zlc09oaUVvUDJTU09UaUIzU0w3TmttRmZJZ1B0VkFLeERjQmxMZXZENHNIdVVDSW1fc2thYW5IUExMWXpNNmlYT0VOR0x5MEx5TQ?oc=5",
     "https://pubmed.ncbi.nlm.nih.gov/43047201/",
-    "https://pubmed.ncbi.nlm.nih.gov/42926352/"
+    "https://pubmed.ncbi.nlm.nih.gov/42926352/",
+    "https://www.dermatologytimes.com/view/rethinking-aesthetic-treatment-during-menopause",
+    "https://www.bosa.co.kr/news/articleView.html?idxno=3017418",
+    "https://pubmed.ncbi.nlm.nih.gov/43047432/",
+    "https://pubmed.ncbi.nlm.nih.gov/43007387/"
   ],
   "recent_skin_titles": [
     "미국 미용 에너지 기기 회수, 가장 흔한 이유는 '허가 외 마케팅'",
@@ -144,6 +148,10 @@
     "피부과 전문의가 짚은 보톡스·필러에 대한 오해 8가지",
     "클래시스 '슈퍼벨로체4800', 유럽 MDR 인증 획득",
     "위축성 여드름 흉터에서 프랙셔널 CO2 레이저 단독 대 PRP 병용: 체계적 문헌고찰과 메타분석",
-    "중등도~중증 미간 주름에서 트레니보툴리눔톡신E의 효과와 안전성: 톡신 경험자·미경험자 대상 3상 핵심 시험"
+    "중등도~중증 미간 주름에서 트레니보툴리눔톡신E의 효과와 안전성: 톡신 경험자·미경험자 대상 3상 핵심 시험",
+    "폐경기 얼굴 노화, 미용 시술 전략도 달라져야",
+    "보툴리눔 톡신 '뉴럭스', 콜롬비아 품목허가",
+    "입술 전체 색소침착에서 755nm 피코초 레이저 대 IPL: 전향적 무작위 대조 평가자 눈가림 시험",
+    "피부과 레이저·에너지 기기 시술의 의료법적 책임과 진료 관련 요인: 체계적 문헌고찰"
   ]
 }
