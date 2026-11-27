@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>매일 아침 피드</title>
+<meta name="description" content="AI·IT, 주식·코인, 피부미용의료 소식을 쉽게 정리한 아침 브리핑">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="아침 피드">
+<meta name="theme-color" content="#f3f5f8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f141c" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231f5fd1'/%3E%3Ctext x='32' y='44' font-size='34' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='700'%3E아%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=IBM+Plex+Sans+KR:wght@400;500;700&display=swap">
+<style>
+:root{
+  --bg:#f3f5f8; --surface:#ffffff; --ink:#152033; --muted:#5a6678; --line:#dde3ec;
+  --it:#1f5fd1; --it-soft:#e6eefc; --money:#b86a00; --money-soft:#fbf0de;
+  --up:#d1342f; --down:#1f5fd1; --skin:#b0306a; --skin-soft:#fbe8f0;
+  --display:"Do Hyeon","Apple SD Gothic Neo",sans-serif;
+  --body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#0f141c; --surface:#18202c; --ink:#e7ecf3; --muted:#9aa6b8; --line:#2a3443;
+  --it:#7aa7ff; --it-soft:#1c2a44; --money:#f0b356; --money-soft:#33280f;
+  --up:#ff7a70; --down:#7aa7ff; --skin:#f58bb8; --skin-soft:#3a1a29; color-scheme:dark}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.65;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-top:max(20px,env(safe-area-inset-top,0px));padding-bottom:max(40px,env(safe-area-inset-bottom,0px))}
+.wrap{max-width:600px;margin:0 auto;display:flex;flex-direction:column;gap:26px}
+.date{font-size:.8rem;letter-spacing:.06em;color:var(--muted);font-weight:500}
+h1{font-family:var(--display);font-weight:400;font-size:2rem;line-height:1.2;margin:2px 0 0;text-wrap:balance}
+.lede{margin:10px 0 0;font-size:1.02rem}
+h2{font-family:var(--display);font-weight:400;font-size:1.4rem;margin:0 0 10px;display:flex;align-items:center;gap:8px}
+h2 .chip{font-family:var(--body);font-size:.72rem;padding:1px 8px;border-radius:999px;font-weight:500}
+.m .chip{background:var(--money-soft);color:var(--money)}
+.a .chip{background:var(--it-soft);color:var(--it)}
+.s .chip{background:var(--skin-soft);color:var(--skin)}
+h4{font-size:.85rem;color:var(--muted);font-weight:500;letter-spacing:.04em;margin:16px 0 8px}
+.s h4:first-of-type{margin-top:0}
+.jr{font-size:.72rem;color:var(--skin);font-weight:500;letter-spacing:.03em}
+.papers p.so{margin-top:6px}
+.src{font-size:.72rem;color:var(--muted);font-weight:500;letter-spacing:.02em;margin-bottom:2px}
+.s .src{color:var(--skin)}
+.jr a{color:inherit}
+.lv{display:inline-block;margin-left:4px;padding:0 7px;border-radius:999px;border:1px solid currentColor;font-size:.68rem}
+.lv0{color:var(--muted)} .lv1{color:var(--money)} .lv2{color:var(--it)}
+.papers p.ds{color:var(--ink);font-weight:500;font-size:.85rem}
+.papers p.lim{font-size:.84rem}
+.basic p.small{margin-top:8px}
+.basic p.small a{color:var(--skin)}
+.basic{background:var(--skin-soft);border-radius:12px;padding:14px 16px}
+.basic b{font-size:1.05rem}
+.basic p{margin:4px 0 0}
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-width:0}
+.tile .k{font-size:.75rem;color:var(--muted)}
+.tile .v{font-weight:700;font-size:1.05rem;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tile .d{font-size:.78rem;font-variant-numeric:tabular-nums}
+.dn{color:var(--down)} .up{color:var(--up)}
+.tile .when{font-size:.68rem;color:var(--muted)}
+ul.why{margin:12px 0 0;padding-left:1.1em}
+ul.why li+li{margin-top:6px}
+.term{background:var(--money-soft);border-radius:12px;padding:14px 16px}
+.term b{font-size:1.05rem}
+.term p{margin:4px 0 0}
+ol.news{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+ol.news li{padding:14px 16px;border-top:1px solid var(--line)}
+ol.news li:first-child{border-top:0}
+ol.news h3{margin:0;font-size:1rem;line-height:1.45;text-wrap:balance}
+ol.news h3 a{color:var(--ink);text-decoration:none}
+ol.news h3 a::after{content:" ↗";color:var(--muted);font-weight:400}
+ol.news p{margin:4px 0 0;color:var(--muted);font-size:.92rem;overflow-wrap:anywhere}
+ol.news .so{color:var(--ink)}
+details{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 16px;font-size:.88rem}
+summary{cursor:pointer;font-weight:500}
+details ul{margin:8px 0 0;padding-left:1.1em}
+details a{color:var(--it);overflow-wrap:anywhere}
+.arch{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.arch a{color:var(--it);border:1px solid var(--line);border-radius:6px;padding:2px 8px;text-decoration:none;font-variant-numeric:tabular-nums}
+.home{color:var(--it);text-decoration:none;font-size:.9rem}
+.small{color:var(--muted);font-size:.8rem;margin:0}
+.flow{margin:10px 0 0;background:var(--surface);border-radius:10px;padding:12px 10px}
+.steps{display:flex;align-items:center;justify-content:space-between;gap:2px}
+.st{flex:1 1 0;min-width:0;text-align:center}
+.st .em{font-size:1.9rem;line-height:1.2}
+.st .lb{font-size:.74rem;font-weight:500;line-height:1.3;margin-top:2px;overflow-wrap:anywhere}
+.ar{color:var(--muted);font-size:.9rem;flex:none}
+.cap{margin:8px 2px 0;font-size:.86rem;color:var(--muted);text-align:center}
+.comic{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px}
+.panel{position:relative;background:var(--surface);border:1.5px solid var(--ink);border-radius:8px;padding:8px 8px 10px;min-width:0;display:flex;flex-direction:column;gap:6px}
+.panel .no{position:absolute;top:4px;left:6px;font-size:.66rem;color:var(--muted);font-weight:700}
+.panel .scene{text-align:center;font-size:1.6rem;line-height:1.3;padding-top:4px}
+.talk{display:flex;align-items:flex-start;gap:4px}
+.talk.you{flex-direction:row-reverse}
+.talk .face{font-size:1.25rem;line-height:1.2;flex:none}
+.bubble{background:var(--bg);border-radius:10px;padding:5px 8px;font-size:.8rem;line-height:1.4;overflow-wrap:anywhere}
+.talk.you .bubble{background:var(--it-soft)}
+.term p,.basic p{margin:8px 0 0}
+@media (max-width:330px){.comic{grid-template-columns:1fr}}
+a:focus-visible,summary:focus-visible{outline:2px solid var(--it);outline-offset:2px}
+@media (max-width:420px){.tile{padding:8px 9px}.tile .v{font-size:.92rem}}
+@media (max-width:330px){.tiles{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="home" href="../index.html">← 오늘 브리핑</a>
+  <header>
+    <div class="date">2026년 11월 28일 (토) · 약 15분 읽기</div>
+    <h1>코스피 4.6% 급반등, 비트코인은 6만 달러 아래로</h1>
+    <p class="lede">한국 증시는 증안펀드 증액 기대에 크게 올랐지만, 코인 시장은 돈이 빠져나가며 약세를 이어갔어요. 같은 날 주식과 코인이 반대로 움직인 이유를 알면 시장 흐름이 보여요.</p>
+  </header>
+
+  <section class="m">
+    <h2>시장 한눈에 <span class="chip">주식·코인</span></h2>
+    <div class="tiles"><div class="tile"><div class="k">코스피</div><div class="v">4,915.68</div><div class="d up">▲ 4.64%</div><div class="when">11/27 기준</div></div><div class="tile"><div class="k">나스닥</div><div class="v">24,130</div><div class="d up">▲ 2.31%</div><div class="when">11/28 기준</div></div><div class="tile"><div class="k">비트코인</div><div class="v">$59,799</div><div class="d dn">▼ 1.54%</div><div class="when">11/28 6시 (24시간)</div></div></div>
+    <ul class="why"><li><b>증안펀드 기대:</b> 증권시장안정펀드(증안펀드)를 늘릴 수 있다는 기대에 코스닥이 급등했다는 보도가 나왔어요. 바이오·로봇·배터리 종목이 특히 많이 올랐어요.</li><li><b>코인 돈줄 위축:</b> 스테이블코인 테더(USDT) 공급이 2022년 8월 이후 가장 크게 줄었다는 분석이 나왔어요. 블랙록 현물 ETF의 코인 보유량도 줄었고, 비트코인은 11월 한 달 26% 넘게 떨어졌어요.</li><li><b>바닥론은 의견:</b> 코인베이스 CEO는 비트코인이 바닥에 도달했을 가능성이 높다고 했어요. 다만 한 사람의 전망이라 &#x27;그런 의견도 있어요&#x27; 정도로 보면 돼요.</li><li><b>기업심리 주춤:</b> 한국은행 발표로 11월 제조업 기업심리지수는 104.8로 0.8p 내렸어요. 주가가 올랐다고 경기 체감까지 좋아진 건 아니에요. 나스닥 상승은 아직 뚜렷한 이유가 보도되지 않았어요.</li></ul>
+  </section>
+
+  <section class="term">
+    <b>오늘의 용어 · 유동성 (Liquidity)</b>
+    <figure class="flow"><div class="steps"><div class="st"><div class="em">💵</div><div class="lb">돈 공급 줄어</div></div><span class="ar" aria-hidden="true">→</span><div class="st"><div class="em">🚰</div><div class="lb">거래 마름</div></div><span class="ar" aria-hidden="true">→</span><div class="st"><div class="em">📉</div><div class="lb">가격 흔들</div></div></div><p class="cap">수도관 물이 줄면 수도꼭지를 틀어도 물줄기가 약해지는 것과 같아요.</p></figure><div class="comic" role="group" aria-label="4컷 만화"><div class="panel"><span class="no">1</span><div class="scene">📱🤔</div><div class="talk me"><span class="face" title="초보">🐣</span><span class="bubble">테더가 줄어서 비트코인이 약하대요. 왜요?</span></div></div><div class="panel"><span class="no">2</span><div class="scene">🏊</div><div class="talk you"><span class="face" title="선배">🦉</span><span class="bubble">수영장에 물이 빠지면 배가 잘 안 뜨잖아.</span></div></div><div class="panel"><span class="no">3</span><div class="scene">💵📉</div><div class="talk you"><span class="face" title="선배">🦉</span><span class="bubble">코인 살 돈이 줄면 작은 매도에도 값이 크게 흔들려.</span></div></div><div class="panel"><span class="no">4</span><div class="scene">💡😀</div><div class="talk me"><span class="face" title="초보">🐣</span><span class="bubble">아하, 시장에 도는 돈이 유동성이구나!</span></div></div></div>
+    <p>유동성은 시장에 돌아다니는 돈의 양, 그리고 사고팔기가 얼마나 쉬운지를 뜻해요. 돈이 많이 돌면 가격이 오르기 쉽고, 돈이 빠지면 작은 매도에도 가격이 크게 흔들려요. 오늘 코인 시장에서는 테더(USDT) 공급이 줄어 &#x27;유동성 위축&#x27;이 비트코인 약세 이유로 꼽혔어요.</p>
+  </section>
+
+  <section class="a">
+    <h2>AI · IT 소식 <span class="chip">IT</span></h2>
+    <ol class="news"><li><div class="src">AI타임스</div><h3><a href="https://www.aitimes.com/news/articleView.html?idxno=217875" target="_blank" rel="noopener">뉴럴링크, 뇌 임플란트 본격 임상 FDA 승인</a></h3><p>뇌-컴퓨터 인터페이스(BCI, 뇌 신호로 기기를 조종하는 기술) 기업 뉴럴링크가 미국 FDA로부터 &#x27;핵심 임상시험(pivotal trial)&#x27; 개시를 승인받았어요. 판매 허가에 필요한 안전성·효과를 증명하는 단계예요. <span class="so">뇌 임플란트가 실험 단계를 넘어 상용화 검증에 들어섰다는 뜻이에요.</span></p></li><li><div class="src">AI타임스</div><h3><a href="https://www.aitimes.com/news/articleView.html?idxno=217871" target="_blank" rel="noopener">EU, AI·양자 키우려 최대 73조원 펀드 추진</a></h3><p>유럽연합이 미국·중국 기술 의존을 줄이려고 최대 500억유로(약 73조원) 규모 &#x27;기술 주권 펀드&#x27;를 추진해요. 장기 지분 투자로 유럽 기술 기업을 키우겠다는 구상이에요. <span class="so">AI 패권 경쟁이 기업을 넘어 나라·지역 단위 투자 경쟁으로 커지고 있어요.</span></p></li><li><div class="src">AI타임스</div><h3><a href="https://www.aitimes.com/news/articleView.html?idxno=217882" target="_blank" rel="noopener">AI 해킹 늘며 개인정보 유출 신고 2배 넘어</a></h3><p>올해 10월까지 개인정보 유출 신고가 1019건으로 작년 전체(447건)의 2배를 넘었어요. 개인정보위는 AI 기반 해킹에 맞선 긴급대응 체계를 가동했어요. <span class="so">AI가 해킹을 쉽고 빠르게 만들면서 내 정보도 더 위험해질 수 있어요.</span></p></li><li><div class="src">OpenAI · 공식 발표</div><h3><a href="https://openai.com/index/gpt-6-models-demonstrate-intrinsic-protein-design-capabilities" target="_blank" rel="noopener">오픈AI &quot;GPT-6, 단백질 설계 능력 보여&quot;</a></h3><p>오픈AI는 GPT-6 모델이 추론과 코드로 단백질 구조·서열을 설계했고, 실험실 검사에서 5개 표적에 결합한 증거를 찾았다고 밝혔어요. <span class="so">범용 AI가 신약·바이오 연구 도구로 쓰일 가능성을 보여 줘요.</span></p></li></ol>
+  </section>
+
+  <section class="s">
+    <h2>피부미용의료 <span class="chip">기술·논문</span></h2>
+    <h4>새 기술 · 기기 소식</h4>
+    <ol class="news"><li><div class="src">히트뉴스 · 학회·전문가 의견</div><h3><a href="https://www.hitnews.co.kr/news/articleView.html?idxno=81139" target="_blank" rel="noopener">다크서클부터 매부리코까지, 필러는 어디까지 쓰일까</a></h3><p>전문의 인터뷰에서 눈 밑 다크서클은 원인에 따라 필러로 개선될 수도, 아닐 수도 있다고 설명했어요. 같은 증상이라도 원인을 먼저 가려야 한다는 취지예요. <span class="so">필러가 모든 고민의 답이 아니라 원인에 맞춰 선택해야 한다는 점을 짚어 줘요.</span></p></li><li><div class="src">약업신문 · 업체 발표</div><h3><a href="https://news.google.com/rss/articles/CBMid0FVX3lxTFBnWXpvVEc3TkVWaUJlaFM4ZDB5Um5FcnV4S0ZHTkpfY0F4Y20xUmNGdE85UEdTR2hVNDJEcC02SnM0Y2dDWnFEbzFaRGVhTklBZ0JiRVRhMnlKTV9WYTd4WGhieDZyUXVERUw5c3VCY0Z2QUpwTjhF?oc=5" target="_blank" rel="noopener">동방메디컬, ECM 스킨부스터 &#x27;벨루셀&#x27; 출시</a></h3><p>동방메디컬이 세포외기질(ECM) 성분 스킨부스터 &#x27;벨루셀&#x27;을 내놓고 미용의료 사업을 넓힌다고 밝혔어요. 업체 발표이며 독립적으로 검증된 자료는 아니에요. <span class="so">ECM 계열 스킨부스터 제품군이 늘고 있다는 흐름을 보여 줘요.</span></p></li></ol>
+    <h4>최근 논문</h4>
+    <ol class="news papers"><li><div class="jr">Aesthet Surg J Open Forum 2026 · <a href="https://doi.org/10.1093/asjof/ojag200" target="_blank" rel="noopener">DOI</a> <span class="lv lv1">근거 중간</span></div><h3><a href="https://pubmed.ncbi.nlm.nih.gov/42979324/" target="_blank" rel="noopener">눈가 회춘을 위한 폴리뉴클레오티드(PN) 주사의 효과: 체계적 문헌고찰</a></h3><p class="ds">체계적 문헌고찰 · 6개 연구(무작위 반쪽 얼굴 시험 5개, 전향 증례 1개) · 350명</p><p>12주째 눈가 주름(까마귀발) 등급이 1단계 이상 좋아진 쪽 얼굴은 40~70%였어요. 2개 시험(30명, 215명)에서 PN은 폴리카프로락톤(PCL) 필러에 비해 열등하지 않았고, 1개 시험(30명)에서는 히알루론산보다 피부 물성 지표가 유리했어요. 안전성은 전반적으로 양호했어요.</p><p class="so">PN 눈가 주사는 단기(6개월 이내) 개선과 안전성 근거가 있지만 아직 예비 수준이에요.</p><p class="lim">한계: 연구가 모두 한국·태국 중년 여성(피부형 III~V) 대상이고, 6개월 넘게 추적한 연구가 없어요. 메타분석 없이 서술 종합이며, 이해관계 정보는 자료에 없어요.</p></li><li><div class="jr">J Cosmet Dermatol 2026 · <a href="https://doi.org/10.1111/jocd.71298" target="_blank" rel="noopener">DOI</a> <span class="lv lv1">근거 중간</span></div><h3><a href="https://pubmed.ncbi.nlm.nih.gov/43047373/" target="_blank" rel="noopener">미용 윤곽·피부 탄력 개선에서 고강도 집속 초음파(HIFU)의 효과와 안전성: 체계적 문헌고찰</a></h3><p class="ds">체계적 문헌고찰 · 60개 연구(무작위시험·관찰연구) · 2010~2025년</p><p>지방 두께는 약 2.2~9.0mm, 둘레는 약 1~4cm 줄었고, 셀룰라이트 중증도는 1.61점 낮아졌어요. 3~6개월째 의사 평가 개선은 81.5~89.5%였고, 눈썹은 최대 약 2mm 올라갔어요. 부작용은 대부분 가볍고 일시적이었어요.</p><p class="so">HIFU는 비수술 탄력·윤곽 개선의 선택지가 될 수 있지만 효과 크기는 대체로 수 mm 단위로 크지 않아요.</p><p class="lim">한계: 연구 방법이 제각각이고 비뚤림 위험이 커서 결과의 확실성이 낮아요. 비교 연구가 부족하고, 이해관계 내용은 자료에서 잘려 확인이 어려워요.</p></li></ol>
+    <h4>기초 지식</h4>
+    <div class="basic"><b>고강도 집속 초음파 (HIFU, High-Intensity Focused Ultrasound)의 원리: 열을 &#x27;한 점&#x27;에 모으기</b><figure class="flow"><div class="steps"><div class="st"><div class="em">🔊</div><div class="lb">초음파 발사</div></div><span class="ar" aria-hidden="true">→</span><div class="st"><div class="em">🎯</div><div class="lb">한 점 집중</div></div><span class="ar" aria-hidden="true">→</span><div class="st"><div class="em">🔥</div><div class="lb">깊은 층 응고</div></div><span class="ar" aria-hidden="true">→</span><div class="st"><div class="em">🧱</div><div class="lb">조직 수축</div></div></div><p class="cap">돋보기로 햇빛을 모으면 종이 한 점만 뜨거워지는 것과 비슷해요.</p></figure><div class="comic" role="group" aria-label="4컷 만화"><div class="panel"><span class="no">1</span><div class="scene">📰🤔</div><div class="talk me"><span class="face" title="초보">🐣</span><span class="bubble">HIFU는 피부 안 뚫고 어떻게 조여요?</span></div></div><div class="panel"><span class="no">2</span><div class="scene">🔍☀️</div><div class="talk you"><span class="face" title="선생님">🧑‍⚕️</span><span class="bubble">돋보기로 햇빛 모으면 한 점만 뜨겁잖아.</span></div></div><div class="panel"><span class="no">3</span><div class="scene">🔊🎯</div><div class="talk you"><span class="face" title="선생님">🧑‍⚕️</span><span class="bubble">초음파를 깊은 층 한 점에 모아 작은 열점을 만들어.</span></div></div><div class="panel"><span class="no">4</span><div class="scene">💡😀</div><div class="talk me"><span class="face" title="초보">🐣</span><span class="bubble">아하, 겉은 두고 속만 데우는 거구나!</span></div></div></div><p>HIFU는 초음파를 렌즈처럼 한 점에 모아, 피부 겉은 비교적 지키면서 깊은 층에 작은 열응고점(thermal coagulation point)을 만드는 기기예요. 열로 손상된 조직이 회복되며 조이는 반응과 콜라겐 재생이 일어난다고 설명돼요. 초점 깊이는 카트리지마다 달라서, 어떤 층을 겨냥하느냐가 효과와 안전에 직결돼요. 오늘 소개한 문헌고찰처럼 개선 폭은 대개 수 mm 수준이고 연구마다 차이가 커서, 기대치를 현실적으로 잡는 게 중요해요.</p><p class="small">더 읽을 종설(자동 검색): <a href="https://pubmed.ncbi.nlm.nih.gov/40184185/" target="_blank" rel="noopener">A Systematic Review of High-Intensity Focused Ultrasound in Skin Tightening and Body Contouring.</a> Aesthet Surg J 2025</p></div>
+  </section>
+
+  <details>
+    <summary>출처 보기</summary>
+    <ul><li><a href="https://www.bok.or.kr/portal/bbs/B0000501/view.do?nttId=11066975&amp;menuNo=201264" target="_blank" rel="noopener">한국은행 · 2026년 11월 기업경기조사 결과 및 경제심리지수</a></li><li><a href="https://www.hankyung.com/article/2026112753921" target="_blank" rel="noopener">한국경제 증권 · 바이오·로봇·배터리 급등…코스닥 간만에 웃었다</a></li><li><a href="https://www.hankyung.com/article/2026112754441" target="_blank" rel="noopener">한국경제 증권 · &#x27;증안펀드 증액&#x27; 기대에 코스닥 급등</a></li><li><a href="https://www.blockmedia.co.kr/archives/1171648" target="_blank" rel="noopener">블록미디어 · 블랙록 디지털자산가치 11월에만 223억달러 증발… “하락장 속 31% </a></li><li><a href="https://www.blockmedia.co.kr/archives/1171645" target="_blank" rel="noopener">블록미디어 · “USDT 공급 감소 시 BTC 9.5% 하락”… 유동성 위축 경고</a></li><li><a href="https://openai.com/index/gpt-6-models-demonstrate-intrinsic-protein-design-capabilities" target="_blank" rel="noopener">OpenAI · GPT-6 models demonstrate intrinsic prote</a></li><li><a href="https://www.aitimes.com/news/articleView.html?idxno=217875" target="_blank" rel="noopener">AI타임스 · 뉴럴링크, 미 최초 BCI 핵심 임상시험 승인…상용화 검증 돌입</a></li><li><a href="https://www.aitimes.com/news/articleView.html?idxno=217882" target="_blank" rel="noopener">AI타임스 · AI 기반 해킹 확산에 올해 개인정보유출 신고 전년 2배 훌쩍</a></li><li><a href="https://www.aitimes.com/news/articleView.html?idxno=217871" target="_blank" rel="noopener">AI타임스 · EU, AI·양자컴퓨팅 육성에 최대 73조원 &#x27;기술 주권 펀드&#x27; 추진</a></li><li><a href="https://www.hitnews.co.kr/news/articleView.html?idxno=81139" target="_blank" rel="noopener">히트뉴스 · [영상] 다크서클부터 매부리코까지...필러의 활용 범위 어디까지</a></li><li><a href="https://news.google.com/rss/articles/CBMid0FVX3lxTFBnWXpvVEc3TkVWaUJlaFM4ZDB5Um5FcnV4S0ZHTkpfY0F4Y20xUmNGdE85UEdTR2hVNDJEcC02SnM0Y2dDWnFEbzFaRGVhTklBZ0JiRVRhMnlKTV9WYTd4WGhieDZyUXVERUw5c3VCY0Z2QUpwTjhF?oc=5" target="_blank" rel="noopener">약업신문 · 동방메디컬, ECM 스킨부스터 &#x27;벨루셀&#x27; 출시…메디컬 에스테틱 사업 확대</a></li><li><a href="https://pubmed.ncbi.nlm.nih.gov/43047373/" target="_blank" rel="noopener">J Cosmet Dermatol · Efficacy and Safety of High-Intensity Fo</a></li><li><a href="https://pubmed.ncbi.nlm.nih.gov/42979324/" target="_blank" rel="noopener">Aesthet Surg J Open Forum · Efficacy of Polynucleotides in Periorbit</a></li></ul>
+  </details>
+
+  <details>
+    <summary>지난 브리핑</summary>
+    <div class="arch"><a href="2026-11-28.html">11/28</a><a href="2026-11-27.html">11/27</a><a href="2026-11-26.html">11/26</a><a href="2026-11-25.html">11/25</a><a href="2026-11-24.html">11/24</a><a href="2026-11-23.html">11/23</a><a href="2026-11-22.html">11/22</a><a href="2026-11-21.html">11/21</a><a href="2026-11-20.html">11/20</a><a href="2026-11-19.html">11/19</a><a href="2026-11-18.html">11/18</a><a href="2026-11-17.html">11/17</a><a href="2026-11-16.html">11/16</a><a href="2026-11-15.html">11/15</a></div>
+  </details>
+
+  <p class="small">피부미용 소식은 규제기관·학회와 의학 전문지만, 논문은 저널과 연구 설계를 보고 골라요. ‘근거’ 표시는 초록만 보고 AI가 어림한 것이에요.</p>
+  <p class="small">공부용 요약이에요. 특정 종목·코인 매매나 특정 시술·제품을 권하는 내용이 아니에요. 숫자는 표시된 시점 기준이에요.</p>
+  <p class="small">2026-11-28 06:18 업데이트 · Claude 요약</p>
+</div>
+</body>
+</html>
